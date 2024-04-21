@@ -13,6 +13,7 @@
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
+		"db:studio": "drizzle-kit studio",
 		"db:generate": "drizzle-kit generate:sqlite",
 		"db:push": "drizzle-kit push:sqlite",
 		"db:migrate": "tsx migrate.ts"
@@ -28,7 +29,7 @@
 		"@typescript-eslint/parser": "^7.0.0",
 		"autoprefixer": "^10.4.16",
 		"dotenv": "^16.4.5",
-		"drizzle-kit": "^0.20.14",
+		"drizzle-kit": "^0.20.17",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",

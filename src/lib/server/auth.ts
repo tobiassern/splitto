@@ -13,13 +13,14 @@ export function initializeLucia() {
 				name: string;
 				avatar_url: string | null;
 				email: string;
-				is_super_admin?: boolean | undefined;
+				super_admin?: boolean | undefined;
 			} = {
 				name: attributes.name,
 				avatar_url: attributes.avatar_url,
 				email: attributes.email
 			};
-			if (attributes.is_super_admin) userAttr.is_super_admin = true;
+			console.log(attributes)
+			if (attributes.super_admin) userAttr.super_admin = true;
 			return userAttr;
 		},
 		getSessionAttributes: (attributes) => {
@@ -52,5 +53,5 @@ interface DatabaseUserAttributes {
 	email: string;
 	name: string;
 	avatar_url: string | null;
-	is_super_admin?: boolean;
+	super_admin: boolean | null
 }

@@ -18,7 +18,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 			if (['/sign-in/verify-email', '/sign-in', '/sign-up'].includes(event.url.pathname)) {
 				return resolve(event);
 			} else {
+				if(event.url.hostname === PUBLIC_APP_HOSTNAME) {
 				redirect(303, '/sign-in');
+				} else {
+					error(401, 'Unauthorized')
+				}
 			}
 		}
 
