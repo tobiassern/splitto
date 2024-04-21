@@ -6,6 +6,7 @@ import { sql } from 'drizzle-orm';
 import { generateRandomString, alphabet } from 'oslo/crypto';
 export const userTable = sqliteTable('user', {
 	id: integer('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+	created_at: integer('created_at', { mode: 'timestamp_ms' }).default(sql`(CURRENT_TIMESTAMP)`),
 	email: text('email').notNull().unique(),
 	name: text('name').notNull(),
 	avatar_url: text('avatar_url'),

@@ -17,6 +17,7 @@ CREATE TABLE `session` (
 --> statement-breakpoint
 CREATE TABLE `user` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`created_at` integer DEFAULT (CURRENT_TIMESTAMP),
 	`email` text NOT NULL,
 	`name` text NOT NULL,
 	`avatar_url` text,

@@ -22,6 +22,7 @@
 					<Table.Row>
 						<Table.Head>Name</Table.Head>
 						<Table.Head>Email</Table.Head>
+						<Table.Head>Created</Table.Head>
 						<Table.Head><span class="sr-only">Actions</span></Table.Head>
 					</Table.Row>
 				</Table.Header>
@@ -39,6 +40,7 @@
 										>Not verified</Badge
 									>{/if}
 							</Table.Cell>
+							<Table.Cell>{user.created_at}</Table.Cell>
 							<Table.Cell class="text-right">
 								<UserActions {user} />
 							</Table.Cell>
