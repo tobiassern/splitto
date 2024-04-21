@@ -6,6 +6,10 @@
 	import { getInitials } from '$lib/helpers';
 	import { PUBLIC_SITE_HOSTNAME } from '$env/static/public';
 	import ExternalLink from 'lucide-svelte/icons/external-link';
+	import MoonIcon from 'lucide-svelte/icons/moon';
+	import SunIcon from 'lucide-svelte/icons/sun';
+	import MonitorIcon from 'lucide-svelte/icons/monitor';
+	import { setMode } from 'mode-watcher';
 
 	export let user: import('lucia').User | null;
 
@@ -46,6 +50,23 @@
 			<DropdownMenu.Separator />
 			<DropdownMenu.Item href="/">Switch group</DropdownMenu.Item>
 			<DropdownMenu.Item href="/profile">Profile</DropdownMenu.Item>
+			<DropdownMenu.Sub>
+				<DropdownMenu.SubTrigger
+					>Theme<SunIcon class="ml-2 size-4 dark:hidden" />
+					<MoonIcon class="ml-2 hidden size-4 dark:block" /></DropdownMenu.SubTrigger
+				>
+				<DropdownMenu.SubContent>
+					<DropdownMenu.Item on:click={() => setMode('light')}
+						><SunIcon class="mr-2 size-4" />Light</DropdownMenu.Item
+					>
+					<DropdownMenu.Item on:click={() => setMode('dark')}
+						><MoonIcon class="mr-2 size-4" />Dark</DropdownMenu.Item
+					>
+					<DropdownMenu.Item on:click={() => setMode('system')}
+						><MonitorIcon class="mr-2 size-4" />System</DropdownMenu.Item
+					>
+				</DropdownMenu.SubContent>
+			</DropdownMenu.Sub>
 			<DropdownMenu.Item
 				href={generateSitePath('/support')}
 				class="items-center justify-between gap-1"
