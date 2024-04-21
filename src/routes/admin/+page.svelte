@@ -9,7 +9,7 @@
 </script>
 
 <main class="mx-auto grid w-full max-w-7xl grid-cols-12 gap-4 px-4 py-6 md:px-6 lg:gap-8 lg:px-8">
-	<Card.Root class="col-span-12 lg:col-span-6">
+	<Card.Root class="col-span-12">
 		<Card.Header class="flex flex-row items-center">
 			<div class="grid gap-2">
 				<Card.Title>Users</Card.Title>
@@ -31,18 +31,24 @@
 				<Table.Body>
 					{#each data.users as user}
 						<Table.Row>
-							<Table.Cell class="flex items-center gap-2 font-medium"
-								>{user.name}{#if user.super_admin}<Badge variant="secondary">Super Admin</Badge
-									>{/if}</Table.Cell
-							>
-							<Table.Cell>{user.email}</Table.Cell>
+							<Table.Cell class="font-medium">
+								{user.name}{#if user.super_admin}<Badge class="ml-2" variant="secondary"
+										>Super Admin</Badge
+									>{/if}
+							</Table.Cell>
+							<Table.Cell>
+								{user.email}
+								{#if !user.email_verified}<Badge variant="destructive" class="ml-2"
+										>Not verified</Badge
+									>{/if}
+							</Table.Cell>
 						</Table.Row>
 					{/each}
 				</Table.Body>
 			</Table.Root>
 		</Card.Content>
 	</Card.Root>
-	<Card.Root class="col-span-12 lg:col-span-6">
+	<Card.Root class="col-span-12">
 		<Card.Header class="flex flex-row items-center">
 			<div class="grid gap-2">
 				<Card.Title>Groups</Card.Title>
