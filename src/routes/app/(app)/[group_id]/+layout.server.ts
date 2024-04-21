@@ -9,11 +9,14 @@ import {
 } from '$lib/schema';
 export const load: LayoutServerLoad = async (event) => {
 	const { user, group } = isGroupMember(event);
+
+	console.log(group);
+	console.log(user);
 	return {
 		group,
 		create_expense_form: await superValidate(
 			{
-				group_member_id: user.id,
+				group_member_id: group.members.find(member => member.user_id === user.id)?.id,
 				splits: group.members.map((member) => {
 					return { amount: null, group_member_id: member.id };
 				})

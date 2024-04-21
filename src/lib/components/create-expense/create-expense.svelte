@@ -64,6 +64,22 @@
 			method="POST"
 			action="/{$page.params.group_id}/expenses/?/create"
 		>
+			<Form.Field {form} name="amount">
+				<Form.Control let:attrs>
+					<Form.Label>How much?</Form.Label>
+					<Input {...attrs} bind:value={$formData.amount} type="number" />
+				</Form.Control>
+				<Form.FieldErrors />
+			</Form.Field>
+
+			<Form.Field {form} name="label">
+				<Form.Control let:attrs>
+					<Form.Label>Label</Form.Label>
+					<Input {...attrs} bind:value={$formData.label} />
+				</Form.Control>
+				<Form.FieldErrors />
+			</Form.Field>
+
 			<Form.Field {form} name="group_member_id">
 				<Form.Control let:attrs>
 					<Form.Label>Who paid?</Form.Label>
@@ -99,22 +115,6 @@
 					<Form.Label>When</Form.Label>
 					<DatePicker bind:value={whenValue} />
 					<input value={$formData.when} name={attrs.name} />
-				</Form.Control>
-				<Form.FieldErrors />
-			</Form.Field>
-
-			<Form.Field {form} name="label">
-				<Form.Control let:attrs>
-					<Form.Label>Label</Form.Label>
-					<Input {...attrs} bind:value={$formData.label} />
-				</Form.Control>
-				<Form.FieldErrors />
-			</Form.Field>
-
-			<Form.Field {form} name="amount">
-				<Form.Control let:attrs>
-					<Form.Label>How much?</Form.Label>
-					<Input {...attrs} bind:value={$formData.amount} type="number" />
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>

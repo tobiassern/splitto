@@ -9,6 +9,8 @@
 	import { sign_in_schema } from '$lib/schema';
 	import autoAnimate from '@formkit/auto-animate';
 	import { toast } from 'svelte-sonner';
+	import { applyAction } from '$app/forms';
+	import { goto } from '$app/navigation';
 
 	export let data;
 
@@ -20,6 +22,8 @@
 			} else if (result.type === 'failure') {
 				toast.error('An error occurred');
 			}
+			console.log(result);
+			toast("hej")
 		}
 	});
 

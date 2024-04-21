@@ -8,6 +8,8 @@
 	import { sign_up_schema } from '$lib/schema';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import { toast } from 'svelte-sonner';
+	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 
 	export let data;
 
@@ -23,6 +25,11 @@
 	});
 
 	const { form: formData, enhance, errors, delayed, submitting } = form;
+
+	onMount(() => {
+		$formData.name = $page.url.searchParams.get('name') ?? '';
+		$formData.email = $page.url.searchParams.get('email') ?? '';
+	});
 </script>
 
 <Card.Root class="mx-auto w-full max-w-sm">

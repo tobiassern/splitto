@@ -32,7 +32,7 @@ export const actions: Actions = {
 		});
 
 		if (!user) {
-			redirect(302, `/sign-in/verify-email?email=${form.data.email}`);
+			redirect(302, `/sign-up?email=${form.data.email}`);
 		}
 
 		await event.locals.db
