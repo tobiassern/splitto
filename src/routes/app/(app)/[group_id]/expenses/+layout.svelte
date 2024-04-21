@@ -86,6 +86,8 @@
 								</a>
 							</Table.Cell>
 						</Table.Row>
+					{:else}
+						<p class="py-2 px-2 text-muted-foreground italic">No expenses found...</p>
 					{/each}
 				{/await}
 			</Table.Body>

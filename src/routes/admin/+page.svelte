@@ -40,7 +40,7 @@
 										>Not verified</Badge
 									>{/if}
 							</Table.Cell>
-							<Table.Cell>{user.created_at}</Table.Cell>
+							<Table.Cell>{user.created_at?.toLocaleString('sv-SE')}</Table.Cell>
 							<Table.Cell class="text-right">
 								<UserActions {user} />
 							</Table.Cell>
@@ -63,6 +63,7 @@
 					<Table.Row>
 						<Table.Head>Name</Table.Head>
 						<Table.Head>Group owner</Table.Head>
+						<Table.Head>Created</Table.Head>
 						<Table.Head><span class="sr-only">Actions</span></Table.Head>
 					</Table.Row>
 				</Table.Header>
@@ -73,6 +74,7 @@
 							<Table.Cell
 								>{group.owner ? `${group.owner.name} (${group.owner.email})` : '-'}</Table.Cell
 							>
+							<Table.Cell>{group.created_at?.toLocaleString('sv-SE')}</Table.Cell>
 							<Table.Cell class="text-right">
 								<GroupActions {group} />
 							</Table.Cell>

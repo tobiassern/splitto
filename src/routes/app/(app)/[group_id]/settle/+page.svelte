@@ -7,11 +7,7 @@
 </script>
 
 <div class="col-span-12">
-	<h3 class="font-semibold leading-none tracking-tight">
-		Balances {data.balances.reduce((acc, curr) => {
-			return acc + Number(curr.amount ?? 0);
-		}, 0)}
-	</h3>
+	<h3 class="font-semibold leading-none tracking-tight">Balances</h3>
 	<ul class="-mx-3 flex snap-x gap-4 overflow-x-scroll px-3 py-2">
 		{#each data.balances as balance}
 			<Card.Root class="w-full min-w-56 max-w-56 snap-center">
