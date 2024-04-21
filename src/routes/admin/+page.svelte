@@ -32,7 +32,8 @@
 					{#each data.users as user}
 						<Table.Row>
 							<Table.Cell class="flex items-center gap-2 font-medium"
-								>{user.name} <Badge variant="secondary">Super Admin</Badge></Table.Cell
+								>{user.name}{#if user.super_admin}<Badge variant="secondary">Super Admin</Badge
+									>{/if}</Table.Cell
 							>
 							<Table.Cell>{user.email}</Table.Cell>
 						</Table.Row>
