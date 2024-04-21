@@ -3,6 +3,7 @@ import { dev } from '$app/environment';
 import { DrizzleSQLiteAdapter } from '@lucia-auth/adapter-drizzle';
 import { sessionTable, userTable } from '$lib/schema';
 import { db } from './db';
+import { PUBLIC_APP_HOSTNAME, PUBLIC_SITE_HOSTNAME } from '$env/static/public';
 
 export function initializeLucia() {
 	const adapter = new DrizzleSQLiteAdapter(db, sessionTable, userTable);
@@ -28,11 +29,9 @@ export function initializeLucia() {
 		},
 		sessionCookie: {
 			attributes: {
-				// set to `true` when using HTTPS
 				secure: !dev,
-				sameSite: 'lax'
-				// domain: dev ? '.platform.localhost' : PUBLIC_HOST
-				// domain: `.${PUBLIC_HOSTNAME}`
+				sameSite: 'lax',
+				domain: `.${PUBLIC_SITE_HOSTNAME}`
 			}
 		}
 	});
