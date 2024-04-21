@@ -32,7 +32,6 @@
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content align="end">
 		<DropdownMenu.Item>Edit</DropdownMenu.Item>
-		<DropdownMenu.Item>Export</DropdownMenu.Item>
 		<DropdownMenu.Separator />
 		<DropdownMenu.Item on:click={() => deleteFormEl.requestSubmit()}>Remove</DropdownMenu.Item>
 	</DropdownMenu.Content>

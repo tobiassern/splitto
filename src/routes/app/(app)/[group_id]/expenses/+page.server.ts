@@ -31,7 +31,8 @@ export const actions: Actions = {
 					type: 'expense',
 					group_id: group.id,
 					group_member_id: create_expense_form.data.group_member_id,
-					label: create_expense_form.data.label
+					label: create_expense_form.data.label,
+					when: new Date(create_expense_form.data.when)
 				})
 				.returning();
 			const insert_splits: (typeof transactionSplitsTable.$inferInsert)[] =

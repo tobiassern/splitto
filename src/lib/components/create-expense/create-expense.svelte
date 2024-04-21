@@ -9,7 +9,7 @@
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import * as Form from '$lib/components/ui/form';
-	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
+	import { type SuperValidated, type Infer, superForm, dateProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { create_expense_schema } from '$lib/schema';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
@@ -20,8 +20,7 @@
 	import { cn } from '$lib/utils';
 	import { Separator } from '$lib/components/ui/separator';
 	import { toast } from 'svelte-sonner';
-	import { DatePicker } from '$lib/components/date-picker';
-	import { type DateValue, parseDate } from '@internationalized/date';
+	import DatePicker from '../date-picker/date-picker.svelte';
 
 	export let data: SuperValidated<Infer<typeof create_expense_schema>>;
 
@@ -45,10 +44,6 @@
 				value: $formData.group_member_id
 			}
 		: undefined;
-
-	let whenValue: DateValue | undefined = $formData.when ? parseDate($formData.when) : undefined;
-
-	$: $formData.when = whenValue ? whenValue.toString() : '';
 </script>
 
 <Dialog.Root bind:open={$showCreateExpenseForm}>
@@ -57,7 +52,7 @@
 			<Dialog.Title>Add expense</Dialog.Title>
 		</Dialog.Header>
 		<form
-			class="grid items-start gap-3"
+			class="grid items-start gap-1"
 			use:enhance
 			method="POST"
 			action="/{$page.params.group_id}/expenses/?/create"
@@ -108,18 +103,47 @@
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
+
 			<Form.Field {form} name="when">
 				<Form.Control let:attrs>
 					<Form.Label>When</Form.Label>
-					<DatePicker bind:value={whenValue} />
-					<input value={$formData.when} name={attrs.name} />
+					<DatePicker bind:value={$formData.when} />
+					<input hidden={true} {...attrs} bind:value={$formData.when} />
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
 
-			<Form.Fieldset {form} name="splits" class="grid gap-1">
+			<Form.Fieldset {form} name="splits" class="grid mt-3 gap-1">
 				<Form.FieldErrors />
 				<Form.Legend class="w-full border-b pb-1">Splits</Form.Legend>
+				<div>
+					<Button
+						on:click={() => {
+							if ($formData.amount) {
+								$formData.splits = $formData.splits.map((split) => {
+									return {
+										...split,
+										amount: $formData.amount / $formData.splits.length
+									};
+								});
+							}
+						}}
+						size="sm">All</Button
+					>
+					<Button
+						on:click={() => {
+							if ($formData.amount) {
+								$formData.splits = $formData.splits.map((split) => {
+									return {
+										...split,
+										amount: null
+									};
+								});
+							}
+						}}
+						size="sm">None</Button
+					>
+				</div>
 				{#each $formData.splits as split, i}
 					<Form.ElementField
 						{form}

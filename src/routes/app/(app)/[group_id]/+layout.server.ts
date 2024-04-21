@@ -15,6 +15,7 @@ export const load: LayoutServerLoad = async (event) => {
 		create_expense_form: await superValidate(
 			{
 				group_member_id: group.members.find((member) => member.user_id === user.id)?.id,
+				when: new Date().toLocaleDateString('sv-SE'),
 				splits: group.members.map((member) => {
 					return { amount: null, group_member_id: member.id };
 				})
