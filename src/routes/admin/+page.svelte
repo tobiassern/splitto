@@ -4,6 +4,8 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
+	import UserActions from './(components)/user-actions.svelte';
+	import GroupActions from './(components)/group-actions.svelte';
 
 	export let data;
 </script>
@@ -26,6 +28,7 @@
 					<Table.Row>
 						<Table.Head>Name</Table.Head>
 						<Table.Head>Email</Table.Head>
+						<Table.Head><span class="sr-only">Actions</span></Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
@@ -41,6 +44,9 @@
 								{#if !user.email_verified}<Badge variant="destructive" class="ml-2"
 										>Not verified</Badge
 									>{/if}
+							</Table.Cell>
+							<Table.Cell class="text-right">
+								<UserActions {user} />
 							</Table.Cell>
 						</Table.Row>
 					{/each}
@@ -65,6 +71,7 @@
 					<Table.Row>
 						<Table.Head>Name</Table.Head>
 						<Table.Head>Group owner</Table.Head>
+						<Table.Head><span class="sr-only">Actions</span></Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
@@ -74,6 +81,9 @@
 							<Table.Cell
 								>{group.owner ? `${group.owner.name} (${group.owner.email})` : '-'}</Table.Cell
 							>
+							<Table.Cell class="text-right">
+								<GroupActions {group} />
+							</Table.Cell>
 						</Table.Row>
 					{/each}
 				</Table.Body>
