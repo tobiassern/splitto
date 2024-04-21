@@ -1,7 +1,5 @@
 <script lang="ts">
-	import ArrowUpRight from 'lucide-svelte/icons/arrow-up-right';
 	import { Badge } from '$lib/components/ui/badge/index.js';
-	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
 	import UserActions from './(components)/user-actions.svelte';
@@ -17,10 +15,6 @@
 				<Card.Title>Users</Card.Title>
 				<Card.Description>All registered users.</Card.Description>
 			</div>
-			<!-- <Button href="##" size="sm" class="ml-auto gap-1">
-				View All
-				<ArrowUpRight class="h-4 w-4" />
-			</Button> -->
 		</Card.Header>
 		<Card.Content>
 			<Table.Root>
@@ -60,10 +54,6 @@
 				<Card.Title>Groups</Card.Title>
 				<Card.Description>All groups created.</Card.Description>
 			</div>
-			<!-- <Button href="##" size="sm" class="ml-auto gap-1">
-				View All
-				<ArrowUpRight class="h-4 w-4" />
-			</Button> -->
 		</Card.Header>
 		<Card.Content>
 			<Table.Root>

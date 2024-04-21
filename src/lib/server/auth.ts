@@ -3,7 +3,7 @@ import { dev } from '$app/environment';
 import { DrizzleSQLiteAdapter } from '@lucia-auth/adapter-drizzle';
 import { sessionTable, userTable } from '$lib/schema';
 import { db } from './db';
-import { PUBLIC_APP_HOSTNAME, PUBLIC_SITE_HOSTNAME } from '$env/static/public';
+import { PUBLIC_SITE_HOSTNAME } from '$env/static/public';
 
 export function initializeLucia() {
 	const adapter = new DrizzleSQLiteAdapter(db, sessionTable, userTable);
@@ -19,7 +19,6 @@ export function initializeLucia() {
 				avatar_url: attributes.avatar_url,
 				email: attributes.email
 			};
-			console.log(attributes)
 			if (attributes.super_admin) userAttr.super_admin = true;
 			return userAttr;
 		},
@@ -53,5 +52,5 @@ interface DatabaseUserAttributes {
 	email: string;
 	name: string;
 	avatar_url: string | null;
-	super_admin: boolean | null
+	super_admin: boolean | null;
 }

@@ -56,7 +56,7 @@
 							<Select.Value placeholder="Select a currency" />
 						</Select.Trigger>
 						<Select.Content fitViewport class="overflow-y-scroll">
-							{#each Object.entries(currencies) as [key, currency]}
+							{#each Object.values(currencies) as currency}
 								<Select.Item value={currency.code} label={currency.name} />
 							{/each}
 						</Select.Content>

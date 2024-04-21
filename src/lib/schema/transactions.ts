@@ -42,7 +42,7 @@ export const transactionsRelations = relations(transactionsTable, ({ one, many }
 	splits: many(transactionSplitsTable)
 }));
 
-export const transactionSplitsRelations = relations(transactionSplitsTable, ({ one, many }) => ({
+export const transactionSplitsRelations = relations(transactionSplitsTable, ({ one }) => ({
 	transaction: one(transactionsTable, {
 		fields: [transactionSplitsTable.transaction_id],
 		references: [transactionsTable.id]

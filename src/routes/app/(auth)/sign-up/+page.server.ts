@@ -31,7 +31,7 @@ export const actions: Actions = {
 			return setError(form, '', 'User already exist. Try to sign in instead.');
 		}
 
-		const [newUser, emailVerificationToken] = await event.locals.db.transaction(async (tx) => {
+		const emailVerificationToken = await event.locals.db.transaction(async (tx) => {
 			const [newUser] = await tx
 				.insert(userTable)
 				.values({
@@ -45,7 +45,7 @@ export const actions: Actions = {
 				.values({ user_id: newUser.id, email: newUser.email })
 				.returning();
 
-			return [newUser, emailVerificationToken];
+			return emailVerificationToken;
 		});
 
 		if (!emailVerificationToken) {

@@ -7,6 +7,7 @@
 	import { Badge } from '$lib/components/ui/badge';
 	import { enhance, applyAction } from '$app/forms';
 	import { toast } from 'svelte-sonner';
+	import autoAnimate from '@formkit/auto-animate';
 
 	export let data;
 </script>
@@ -31,42 +32,51 @@
 		<Card.Header>
 			<Card.Title>Sessions</Card.Title>
 		</Card.Header>
-		<Card.Content class="grid gap-6">
-			{#each data.sessions as session, index}
-				<Card.Root>
-					<Card.Header>
-						<Card.Description class="flex items-center justify-between gap-2"
-							><span>Expires: {new Date(session.expiresAt).toLocaleString()}</span
-							>{#if data.session?.id === session.id}<Badge>Current</Badge>{/if}</Card.Description
-						>
-					</Card.Header>
-					<Card.Content>
-						<p class="text-xs"><span class="text-muted-foreground">User agent:</span> {session.user_agent ?? '-'}</p>
-					</Card.Content>
-					<Card.Footer class="justify-end">
-						<form
-							method="POST"
-							action="?/sign-out-session"
-							use:enhance={() => {
-								return async ({ result }) => {
-									if (result.type === 'redirect') {
-										toast.success('You are signed out');
-									} else if (result.type === 'success') {
-										toast.success('Session signed out');
-									} else {
-										toast.error('An error occurred');
-									}
-									applyAction(result);
-								};
-							}}
-						>
-							<Button type="submit" size="sm" variant="outline" name="session_id" value={session.id}
-								>Sign out session</Button
+		<Card.Content>
+			<div class="grid gap-6" use:autoAnimate>
+				{#each data.sessions as session (session.id)}
+					<Card.Root>
+						<Card.Header>
+							<Card.Description class="flex items-center justify-between gap-2"
+								><span>Expires: {new Date(session.expiresAt).toLocaleString()}</span
+								>{#if data.session?.id === session.id}<Badge>Current</Badge>{/if}</Card.Description
 							>
-						</form>
-					</Card.Footer>
-				</Card.Root>
-			{/each}
+						</Card.Header>
+						<Card.Content>
+							<p class="text-xs">
+								<span class="text-muted-foreground">User agent:</span>
+								{session.user_agent ?? '-'}
+							</p>
+						</Card.Content>
+						<Card.Footer class="justify-end">
+							<form
+								method="POST"
+								action="?/sign-out-session"
+								use:enhance={() => {
+									return async ({ result }) => {
+										if (result.type === 'redirect') {
+											toast.success('You are signed out');
+										} else if (result.type === 'success') {
+											toast.success('Session signed out');
+										} else {
+											toast.error('An error occurred');
+										}
+										applyAction(result);
+									};
+								}}
+							>
+								<Button
+									type="submit"
+									size="sm"
+									variant="outline"
+									name="session_id"
+									value={session.id}>Sign out session</Button
+								>
+							</form>
+						</Card.Footer>
+					</Card.Root>
+				{/each}
+			</div>
 		</Card.Content>
 		<Card.Footer class="justify-end">
 			<form

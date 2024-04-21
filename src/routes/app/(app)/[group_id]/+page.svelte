@@ -9,9 +9,6 @@
 	import { Progress } from '$lib/components/ui/progress/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
-
-	export let data;
-	$: console.log(data.user);
 </script>
 
 <div class="col-span-12 grid auto-rows-max items-start gap-4 md:gap-8">

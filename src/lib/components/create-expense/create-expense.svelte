@@ -48,8 +48,6 @@
 
 	let whenValue: DateValue | undefined = $formData.when ? parseDate($formData.when) : undefined;
 
-	$: console.log(whenValue);
-
 	$: $formData.when = whenValue ? whenValue.toString() : '';
 </script>
 

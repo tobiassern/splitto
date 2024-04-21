@@ -12,8 +12,6 @@
 	let signOutFormEl: HTMLFormElement;
 
 	const generateSitePath = (path: string) => {
-		// return $page.url.p
-		console.log($page.url.port);
 		return `${$page.url.protocol}//${PUBLIC_SITE_HOSTNAME}${$page.url.port ? `:${$page.url.port}` : ''}${path}`;
 	};
 </script>

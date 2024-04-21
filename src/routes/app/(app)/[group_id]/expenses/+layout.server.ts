@@ -4,7 +4,7 @@ import { isGroupMember } from '$lib/helpers';
 import { transactionsTable } from '$lib/schema';
 
 export const load: LayoutServerLoad = async (event) => {
-	const { user, group } = isGroupMember(event);
+	const { group } = isGroupMember(event);
 
 	return {
 		transactions: event.locals.db.query.transactionsTable.findMany({

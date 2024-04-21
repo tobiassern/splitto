@@ -109,7 +109,7 @@ export const actions: Actions = {
 			});
 		}
 
-		const [result, error] = await event.locals.db.transaction(async (tx) => {
+		const error = await event.locals.db.transaction(async (tx) => {
 			const [transaction] = await tx
 				.insert(transactionsTable)
 				.values({
@@ -140,11 +140,11 @@ export const actions: Actions = {
 
 			if (check_transaction_split_sum !== 0) {
 				await tx.rollback();
-				return [null, 'Total transaction volumne does not sum up correctly'];
+				return 'Total transaction volumne does not sum up correctly';
 			}
-			const splits = await tx.insert(transactionSplitsTable).values(insert_splits);
+			await tx.insert(transactionSplitsTable).values(insert_splits);
 
-			return [{ ...transaction, splits: splits }, null];
+			return null;
 		});
 
 		if (error) {

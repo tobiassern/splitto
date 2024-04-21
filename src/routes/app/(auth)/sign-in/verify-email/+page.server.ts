@@ -64,7 +64,9 @@ export const actions: Actions = {
 			.set({ email_verified: true })
 			.where(eq(userTable.id, user.id));
 
-		const session = await event.locals.lucia.createSession(user.id, { user_agent: event.request.headers.get('user-agent') });
+		const session = await event.locals.lucia.createSession(user.id, {
+			user_agent: event.request.headers.get('user-agent')
+		});
 		const sessionCookie = event.locals.lucia.createSessionCookie(session.id);
 		event.cookies.set(sessionCookie.name, sessionCookie.value, {
 			path: '.',

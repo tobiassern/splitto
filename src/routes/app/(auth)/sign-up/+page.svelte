@@ -58,7 +58,7 @@
 				</Form.Field>
 			</div>
 			<FormErrors errors={$errors._errors} />
-			<Form.Button class="w-full"
+			<Form.Button class="w-full" disabled={$submitting}
 				>Create an account{#if $delayed}<LoaderCircle
 						class="ml-2 size-4 animate-spin"
 					/>{/if}</Form.Button

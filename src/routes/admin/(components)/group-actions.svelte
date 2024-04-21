@@ -1,10 +1,8 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import EllipsisVertical from 'lucide-svelte/icons/ellipsis-vertical';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-	import { goto } from '$app/navigation';
-	import { applyAction, enhance } from '$app/forms';
+	import { enhance } from '$app/forms';
 	import { toast } from 'svelte-sonner';
 	import type { groupsTable } from '$lib/schema';
 

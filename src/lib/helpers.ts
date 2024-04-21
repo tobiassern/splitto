@@ -34,13 +34,12 @@ export const isGroupOwner = (event: ServerLoadEvent | RequestEvent) => {
 };
 
 export const isSuperAdmin = (event: ServerLoadEvent | RequestEvent) => {
-
 	const { user, session } = isAuthenticated(event);
-	console.log(user);
+
 	if (!user.super_admin) error(403, 'Forbidden');
-	
-	return { user, session }
-}
+
+	return { user, session };
+};
 
 export const getInitials = (text: string | null) => {
 	if (!text) return '';

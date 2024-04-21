@@ -4,8 +4,6 @@
 	import HandCoins from 'lucide-svelte/icons/hand-coins';
 	import { settlementFormStore } from '$lib/components/create-settlement/create-settlement.svelte';
 	export let data;
-	$: console.log(data.balances);
-	$: console.log(data.settles);
 </script>
 
 <div class="col-span-12">

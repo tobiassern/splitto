@@ -3,7 +3,6 @@ import { isGroupMember } from '$lib/helpers';
 import { create_expense_schema, transactionSplitsTable, transactionsTable } from '$lib/schema';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { eq } from 'drizzle-orm';
 import { fail } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async (event) => {
@@ -14,7 +13,7 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions: Actions = {
 	create: async (event) => {
-		const { user, group } = isGroupMember(event);
+		const { group } = isGroupMember(event);
 		const create_expense_form = await superValidate(event, zod(create_expense_schema), {
 			id: 'create-expense-form'
 		});
@@ -25,7 +24,7 @@ export const actions: Actions = {
 			});
 		}
 
-		const [result, error] = await event.locals.db.transaction(async (tx) => {
+		const error = await event.locals.db.transaction(async (tx) => {
 			const [transaction] = await tx
 				.insert(transactionsTable)
 				.values({
@@ -58,11 +57,11 @@ export const actions: Actions = {
 
 			if (check_transaction_split_sum !== 0) {
 				await tx.rollback();
-				return [null, 'Total transaction volumne does not sum up correctly'];
+				return 'Total transaction volumne does not sum up correctly';
 			}
-			const splits = await tx.insert(transactionSplitsTable).values(insert_splits);
+			await tx.insert(transactionSplitsTable).values(insert_splits);
 
-			return [{ ...transaction, splits: splits }, null];
+			return null;
 		});
 
 		if (error) {

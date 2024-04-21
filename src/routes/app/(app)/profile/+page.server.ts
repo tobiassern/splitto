@@ -1,7 +1,12 @@
 import { superValidate, setError } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
-import { update_user_name_schema, update_user_email__schema, userTable, sessionTable } from '$lib/schema';
+import {
+	update_user_name_schema,
+	update_user_email__schema,
+	userTable,
+	sessionTable
+} from '$lib/schema';
 import { isAuthenticated } from '$lib/helpers';
 
 import { and, eq } from 'drizzle-orm';
@@ -85,7 +90,6 @@ export const actions: Actions = {
 		await event.locals.lucia.invalidateUserSessions(user.id);
 
 		redirect(302, '/sign-in');
-
 	},
 	'sign-out-session': async (event) => {
 		const { user, session } = isAuthenticated(event);
@@ -97,7 +101,9 @@ export const actions: Actions = {
 			error(400, 'No session ID provided');
 		}
 
-		const session_to_delete = await event.locals.db.query.sessionTable.findFirst({ where: and(eq(sessionTable.id, session_id), eq(sessionTable.userId, user.id)) });
+		const session_to_delete = await event.locals.db.query.sessionTable.findFirst({
+			where: and(eq(sessionTable.id, session_id), eq(sessionTable.userId, user.id))
+		});
 		if (!session_to_delete) {
 			error(400, 'No session found');
 		}
@@ -106,8 +112,7 @@ export const actions: Actions = {
 		if (session_to_delete.id === session.id) {
 			redirect(302, '/sign-in');
 		} else {
-			return { success: true }
+			return { success: true };
 		}
-
 	}
 };

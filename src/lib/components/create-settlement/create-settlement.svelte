@@ -33,7 +33,6 @@
 		dataType: 'json',
 		validators: zodClient(create_settlement_schema),
 		onResult: ({ result }) => {
-			console.log(result);
 			if (result.type === 'success') {
 				toast.success('Settlement added');
 				$settlementFormStore = {
