@@ -10,15 +10,7 @@
 
 	export let data;
 
-	let selectedGroupMember = $page.url.searchParams.get('member')
-		? {
-				value: $page.url.searchParams.get('member') as string,
-				label:
-					data.group.members.find(
-						(member) => member.id === Number($page.url.searchParams.get('member'))
-					)?.name ?? ('Unknown member' as string)
-			}
-		: undefined;
+	$: selectedGroupMember = $page.url.searchParams.get('member') ?? undefined;
 </script>
 
 <div class="col-span-12 grid auto-rows-max items-start gap-4 md:gap-8">
@@ -39,19 +31,19 @@
 		</Card.Root>
 		<BudgetReport
 			type="week"
-			who={selectedGroupMember?.value ? 'person' : 'group'}
+			who={selectedGroupMember ? 'person' : 'group'}
 			amount={data.total_week?.amount}
-			budget={selectedGroupMember?.value
-				? data.group.members.find((member) => member.id === Number(selectedGroupMember?.value))
+			budget={selectedGroupMember
+				? data.group.members.find((member) => member.id === Number(selectedGroupMember))
 						?.weekly_budget
 				: data.group.weekly_budget}
 		/>
 		<BudgetReport
 			type="month"
-			who={selectedGroupMember?.value ? 'person' : 'group'}
+			who={selectedGroupMember ? 'person' : 'group'}
 			amount={data.total_month?.amount}
-			budget={selectedGroupMember?.value
-				? data.group.members.find((member) => member.id === Number(selectedGroupMember?.value))
+			budget={selectedGroupMember
+				? data.group.members.find((member) => member.id === Number(selectedGroupMember))
 						?.monthly_budget
 				: data.group.monthly_budget}
 		/>
