@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { isGroupMember } from '$lib/helpers';
-import { transactionSplitsTable, transactionsTable } from '$lib/schema';
-import { eq, sum, and, sql, between } from 'drizzle-orm';
+import { tagsTable, transactionSplitsTable, transactionTagsTable, transactionsTable } from '$lib/schema';
+import { eq, sum, and, sql, between, or, isNull } from 'drizzle-orm';
 
 export const load: PageServerLoad = async (event) => {
 	const { group } = isGroupMember(event);
@@ -31,7 +31,8 @@ export const load: PageServerLoad = async (event) => {
 		.groupBy(transactionsTable.group_id);
 	return {
 		total_week,
-		total_month
-		// .groupBy(transactionsTable.group_id, sql`(STRFTIME('%m-%Y', ${transactionsTable.when}))`)
+		total_month,
+		tags_amount: await event.locals.db.select({ monthly_budget: tagsTable.monthly_budget, id: tagsTable.id, label: tagsTable.label, amount: sum(transactionSplitsTable.amount) }).from(tagsTable).leftJoin(transactionTagsTable, eq(tagsTable.id, transactionTagsTable.tag_id)).leftJoin(transactionsTable, eq(transactionsTable.id, transactionTagsTable.transaction_id)).leftJoin(transactionSplitsTable, eq(transactionSplitsTable.transaction_id, transactionsTable.id)).groupBy(tagsTable.id).
+			where(or(and(eq(transactionSplitsTable.type, 'debit'), eq(transactionsTable.type, 'expense')), isNull(transactionsTable.type)))
 	};
 };

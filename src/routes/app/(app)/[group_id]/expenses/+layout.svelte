@@ -34,7 +34,6 @@
 		<div class="flex items-center justify-start gap-3">
 			<div>
 				<Input
-					type="search"
 					placeholder="Search expense..."
 					class="h-8"
 					bind:value={search}
