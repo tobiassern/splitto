@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "7714f1f2-b7fc-431b-a796-7e7fd6eebf32",
-  "prevId": "677b9fe3-3531-4d80-a899-7e2579f3a60e",
+  "id": "f8bcf914-ea54-4291-8d19-db579898bb8f",
+  "prevId": "7714f1f2-b7fc-431b-a796-7e7fd6eebf32",
   "tables": {
     "email_verification_tokens": {
       "name": "email_verification_tokens",
@@ -339,7 +339,21 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'449654'"
+          "default": "'366682'"
+        },
+        "weekly_budget": {
+          "name": "weekly_budget",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "monthly_budget": {
+          "name": "monthly_budget",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {},

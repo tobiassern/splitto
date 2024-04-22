@@ -14,9 +14,9 @@
 	export let data;
 
 	let weekly_budget_percentage =
-		(Number(data.total_week.amount ?? 0) / (data.group.weekly_budget ?? 0)) * 100;
+		(Number(data.total_week?.amount ?? 0) / (data.group.weekly_budget ?? 0)) * 100;
 	let monthly_budget_percentage =
-		(Number(data.total_month.amount ?? 0) / (data.group.monthly_budget ?? 0)) * 100;
+		(Number(data.total_month?.amount ?? 0) / (data.group.monthly_budget ?? 0)) * 100;
 </script>
 
 <div class="col-span-12 grid auto-rows-max items-start gap-4 md:gap-8">
@@ -35,8 +35,8 @@
 		<Card.Root>
 			<Card.Header class="pb-2">
 				<Card.Description class="flex items-center justify-between gap-2"
-					>This Week{#if data.group.weekly_budget && weekly_budget_percentage > 100}<Badge variant="destructive"
-							>Over budget</Badge
+					>This Week{#if data.group.weekly_budget && weekly_budget_percentage > 100}<Badge
+							variant="destructive">Over budget</Badge
 						>{/if}</Card.Description
 				>
 				<Card.Title class="text-3xl"
@@ -44,7 +44,7 @@
 						currency: data.group.currency,
 						style: 'currency',
 						maximumFractionDigits: 0
-					}).format(Number(data.total_week.amount ?? 0))}</Card.Title
+					}).format(Number(data.total_week?.amount ?? 0))}</Card.Title
 				>
 			</Card.Header>
 			{#if data.group.weekly_budget}
@@ -81,8 +81,8 @@
 		<Card.Root>
 			<Card.Header class="pb-2">
 				<Card.Description class="flex items-center justify-between gap-2"
-					>This Month{#if data.group.monthly_budget && monthly_budget_percentage > 100}<Badge variant="destructive"
-							>Over budget</Badge
+					>This Month{#if data.group.monthly_budget && monthly_budget_percentage > 100}<Badge
+							variant="destructive">Over budget</Badge
 						>{/if}</Card.Description
 				>
 				<Card.Title class="text-3xl"
@@ -90,7 +90,7 @@
 						currency: data.group.currency,
 						style: 'currency',
 						maximumFractionDigits: 0
-					}).format(Number(data.total_month.amount ?? 0))}</Card.Title
+					}).format(Number(data.total_month?.amount ?? 0))}</Card.Title
 				>
 			</Card.Header>
 			{#if data.group.monthly_budget}

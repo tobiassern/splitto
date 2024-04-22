@@ -19,7 +19,7 @@ export const groupsTable = sqliteTable('groups', {
 		.notNull()
 		.default('USD'),
 	invite_link_active: integer('invite_link_active', { mode: 'boolean' }).default(false),
-	invite_link_code: text('invite_link_code').default(generateRandomString(6, alphabet('0-9'))),
+	invite_link_code: text('invite_link_code').$defaultFn(() => generateRandomString(6, alphabet('0-9'))),
 	weekly_budget: real('weekly_budget'),
 	monthly_budget: real('monthly_budget')
 });
