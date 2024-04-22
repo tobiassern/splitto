@@ -10,6 +10,7 @@
 	import { cn } from '$lib/utils';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import FacetedFilter from './(components)/faceted-filter.svelte';
+	import ColumnHeader from './(components)/column-header.svelte';
 	export let data;
 </script>
 
@@ -42,7 +43,7 @@
 				<Table.Row>
 					<Table.Head>What</Table.Head>
 					<Table.Head>Who</Table.Head>
-					<Table.Head>When</Table.Head>
+					<Table.Head><ColumnHeader searchParam="when">When</ColumnHeader></Table.Head>
 					<Table.Head>Tags</Table.Head>
 					<Table.Head class="text-center">Type</Table.Head>
 					<Table.Head class="text-right">Amount</Table.Head>
@@ -60,7 +61,10 @@
 						<Table.Row>
 							<Table.Cell class="relative font-medium">
 								<a href="/{$page.params.group_id}/expenses/{transaction.id}">
-									<span class="absolute inset-0"></span>{#if transaction.label}{transaction.label}{:else}<span class="text-muted-foreground italic">No label</span>{/if}
+									<span class="absolute inset-0"
+									></span>{#if transaction.label}{transaction.label}{:else}<span
+											class="italic text-muted-foreground">No label</span
+										>{/if}
 								</a>
 							</Table.Cell>
 							<Table.Cell class="relative">
