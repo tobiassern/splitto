@@ -42,7 +42,7 @@ export const actions: Actions = {
 				.returning();
 
 			if (create_expense_form.data.tags.length) {
-				await event.locals.db.insert(transactionTagsTable).values(
+				await tx.insert(transactionTagsTable).values(
 					create_expense_form.data.tags.map((tag_id) => {
 						return { tag_id, transaction_id: transaction.id };
 					})

@@ -8,6 +8,7 @@
 	import PlusIcon from 'lucide-svelte/icons/plus';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import { cn } from '$lib/utils';
+	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 
 	export let data;
 </script>
@@ -63,8 +64,30 @@
 								</a>
 							</Table.Cell>
 							<Table.Cell class="relative">
-								<a href="/{$page.params.group_id}/expenses/{transaction.id}">
-									<span class="absolute inset-0"></span>Tags
+								<a
+									href="/{$page.params.group_id}/expenses/{transaction.id}"
+									class="flex items-center justify-start gap-1 whitespace-nowrap"
+								>
+									{#each transaction.tags.slice(0, 2) as tag}
+										<Badge>{tag.tag.label}</Badge>
+										{:else}
+										<span class="absolute inset-0"></span>
+										<span>-</span>
+									{/each}
+									{#if transaction.tags.length - 2 > 0}
+										<Tooltip.Root>
+											<Tooltip.Trigger>
+												<Badge variant="secondary">
+													+ {transaction.tags.length - 2}
+												</Badge>
+											</Tooltip.Trigger>
+											<Tooltip.Content side="right"
+												>{transaction.tags.slice(2)
+													.map((tag) => tag.tag.label)
+													.join(', ')}</Tooltip.Content
+											>
+										</Tooltip.Root>
+									{/if}
 								</a>
 							</Table.Cell>
 							<Table.Cell class="relative text-center">

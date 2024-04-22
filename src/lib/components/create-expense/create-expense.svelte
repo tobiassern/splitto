@@ -44,6 +44,15 @@
 				value: $formData.group_member_id
 			}
 		: undefined;
+
+	$: selectedTags = $formData.tags
+		? $formData.tags.map((tag) => {
+				return {
+					label: $page.data.group?.tags.find((_tag) => _tag.id === tag)?.label,
+					value: tag
+				};
+			})
+		: undefined;
 </script>
 
 <Dialog.Root bind:open={$showCreateExpenseForm}>
@@ -109,6 +118,39 @@
 					<Form.Label>When</Form.Label>
 					<DatePicker bind:value={$formData.when} />
 					<input hidden={true} {...attrs} bind:value={$formData.when} />
+				</Form.Control>
+				<Form.FieldErrors />
+			</Form.Field>
+
+			<Form.Field {form} name="tags">
+				<Form.Control let:attrs>
+					<Form.Label>Tags</Form.Label>
+					<Select.Root
+						multiple
+						selected={selectedTags}
+						onSelectedChange={(v) => {
+							// v && ($formData.tags = v.values);
+							v && ($formData.tags = v.map((val) => val.value));
+						}}
+					>
+						<Select.Trigger {...attrs}>
+							<Select.Value placeholder="Select tags" />
+						</Select.Trigger>
+						<Select.Content>
+							{#if $page.data.group?.tags}
+								{#each $page.data.group?.tags as tag}
+									<Select.Item value={tag.id} label={tag.label} />
+								{/each}
+							{/if}
+							<!-- <Select.Separator></Select.Separator>
+							<Button
+								on:click={() => ($showCreateGroupMemberForm = true)}
+								class="w-full gap-1"
+								variant="ghost"><PlusIcon class="size-4" />Add person</Button
+							> -->
+						</Select.Content>
+					</Select.Root>
+					<input hidden bind:value={$formData.group_member_id} name={attrs.name} />
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>

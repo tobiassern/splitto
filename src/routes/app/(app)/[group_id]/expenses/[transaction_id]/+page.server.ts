@@ -12,11 +12,16 @@ export const load: PageServerLoad = async (event) => {
 			eq(transactionsTable.group_id, group.id)
 		),
 		with: {
+			tags: {
+				with: {
+					tag: true
+				}
+			},
 			group_member: true,
 			splits: {
 				with: {
 					group_member: true
-				}
+				},
 			}
 		}
 	});

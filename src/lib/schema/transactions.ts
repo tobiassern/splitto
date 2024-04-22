@@ -74,14 +74,14 @@ export const transactionTagsRelations = relations(transactionTagsTable, ({ one }
 		references: [transactionsTable.id]
 	}),
 	tag: one(tagsTable, {
-		fields: [transactionTagsTable.transaction_id],
+		fields: [transactionTagsTable.tag_id],
 		references: [tagsTable.id]
 	})
 }));
 
 export const tagsRelations = relations(tagsTable, ({ many, one }) => ({
 	transaction_tags: many(transactionTagsTable),
-	transaction: one(groupsTable, {
+	group: one(groupsTable, {
 		fields: [tagsTable.group_id],
 		references: [groupsTable.id]
 	})

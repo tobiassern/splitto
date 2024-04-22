@@ -17,25 +17,32 @@
 
 {#if $isDesktop}
 	<Card.Root class="overflow-hidden">
-		<Card.Header class="flex flex-row items-start bg-muted/50">
-			<div class="grid gap-0.5">
-				<Card.Title class="group flex items-center gap-2 text-lg">
-					{data.transaction.label}
-				</Card.Title>
-				<Card.Description class="text-xs"
-					>Date: {data.transaction.when?.toLocaleDateString('sv-SE', {
-						weekday: 'short',
-						year: 'numeric',
-						month: 'short',
-						day: 'numeric'
-					}) ?? '-'}</Card.Description
-				>
+		<Card.Header class="grid gap-1 bg-muted/50">
+			<div class="flex flex-row items-start">
+				<div class="grid gap-0.5">
+					<Card.Title class="group flex items-center gap-2 text-lg">
+						{data.transaction.label}
+					</Card.Title>
+					<Card.Description class="text-xs"
+						>When: {data.transaction.when?.toLocaleDateString('sv-SE', {
+							weekday: 'short',
+							year: 'numeric',
+							month: 'short',
+							day: 'numeric'
+						}) ?? '-'}</Card.Description
+					>
+				</div>
+				<div class="ml-auto flex items-center gap-1">
+					{#if data.transaction.type === 'settlement'}
+						<Badge>Settlement</Badge>
+					{/if}
+					<ExpenseActions />
+				</div>
 			</div>
-			<div class="ml-auto flex items-center gap-1">
-				{#if data.transaction.type === 'settlement'}
-					<Badge>Settlement</Badge>
-				{/if}
-				<ExpenseActions />
+			<div class="flex gap-1">
+				{#each data.transaction.tags as tag (tag.tag_id)}
+					<Badge>{tag.tag.label}</Badge>
+				{/each}
 			</div>
 		</Card.Header>
 		<Card.Content class="p-6 text-sm">
