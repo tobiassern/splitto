@@ -1,13 +1,6 @@
-<script lang="ts" context="module">
-	import { writable } from 'svelte/store';
-	export const showCreateGroupMemberForm = writable(false);
-</script>
-
 <script lang="ts">
-	import { page } from '$app/stores';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
-
 	import * as Form from '$lib/components/ui/form';
 	import {
 		type SuperValidated,
@@ -17,44 +10,50 @@
 		numberProxy
 	} from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { insert_group_member_schema } from '$lib/schema';
+	import { update_group_member_schema } from '$lib/schema';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import FormErrors from '$lib/components/form-errors/form-errors.svelte';
+	import { groupMembersTable } from '$lib/schema';
 	import { toast } from 'svelte-sonner';
 
-	export let data: SuperValidated<Infer<typeof insert_group_member_schema>>;
-
+	export let data: SuperValidated<Infer<typeof update_group_member_schema>>;
+	export let member: typeof groupMembersTable.$inferSelect;
+	export let open = false;
+    
 	const form = superForm(data, {
-		validators: zodClient(insert_group_member_schema),
+		resetForm: false,
+		id: `update-group-member-form-${member.id}`,
+		validators: zodClient(update_group_member_schema),
 		onResult: ({ result }) => {
 			if (result.type === 'success') {
-				toast.success('Person added');
-				$showCreateGroupMemberForm = false;
-			} else if (result.type === 'error') {
-				toast.error(result.error ?? 'An error occurred');
-			} else if (result.type === 'failure') {
-				toast.error('An error occurred');
-			}
+				toast.success('Person updated');
+                open = false;
+			} else {
+                toast.error('An error occurred');
+            }
+			console.log(result);
 		}
 	});
 
 	const { form: formData, enhance, errors, delayed } = form;
-	const email = stringProxy(form, 'email', { empty: 'null' });
+
+
+
+	const emailProxy = stringProxy(form, 'email', { empty: 'null' });
 	const weeklyBudgetProxy = numberProxy(form, 'weekly_budget', { empty: 'null' });
 	const monthlyBudgetProxy = numberProxy(form, 'monthly_budget', { empty: 'null' });
+
+	$: if (member) $formData = member;
 </script>
 
-<Dialog.Root bind:open={$showCreateGroupMemberForm}>
+<Dialog.Root bind:open>
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
-			<Dialog.Title>Add Person</Dialog.Title>
+			<Dialog.Title>Edit person</Dialog.Title>
 		</Dialog.Header>
-		<form
-			class="grid items-start gap-4"
-			use:enhance
-			method="POST"
-			action="/{$page.params.group_id}/persons/?/create"
-		>
+		<form class="grid items-start gap-4" use:enhance method="POST" action="?/update-group-member">
+			<input bind:value={$formData.id} name="id" hidden />
+			<FormErrors errors={$errors._errors} />
 			<Form.Field {form} name="name">
 				<Form.Control let:attrs>
 					<Form.Label>Name</Form.Label>
@@ -65,28 +64,26 @@
 			<Form.Field {form} name="email">
 				<Form.Control let:attrs>
 					<Form.Label>Email</Form.Label>
-					<Input {...attrs} bind:value={$email} placeholder="m@example.com" />
+					<Input {...attrs} bind:value={$emailProxy} placeholder="m@example.com" />
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
 			<Form.Field {form} name="weekly_budget">
 				<Form.Control let:attrs>
 					<Form.Label>Weekly budget</Form.Label>
-					<Input {...attrs} bind:value={$weeklyBudgetProxy} placeholder="0.00" />
+					<Input {...attrs} bind:value={$weeklyBudgetProxy} placeholder="0.00" type="number" />
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
 			<Form.Field {form} name="monthly_budget">
 				<Form.Control let:attrs>
 					<Form.Label>Monthly budget</Form.Label>
-					<Input {...attrs} bind:value={$monthlyBudgetProxy} placeholder="0.00" />
+					<Input {...attrs} bind:value={$monthlyBudgetProxy} placeholder="0.00" type="number" />
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
-			<FormErrors errors={$errors._errors} />
-
 			<Form.Button type="submit" class="flex gap-1"
-				>Add{#if $delayed}<LoaderCircle class="size-4 animate-spin" />{/if}</Form.Button
+				>Update{#if $delayed}<LoaderCircle class="size-4 animate-spin" />{/if}</Form.Button
 			>
 		</form>
 	</Dialog.Content>

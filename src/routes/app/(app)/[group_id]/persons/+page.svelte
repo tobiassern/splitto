@@ -59,7 +59,7 @@
 							</p>
 						</div>
 					</div>
-					<PersonActions {member} />
+					<PersonActions {member} update_group_member_form={data.update_group_member_form}/>
 				</div>
 			{/each}
 		{/if}

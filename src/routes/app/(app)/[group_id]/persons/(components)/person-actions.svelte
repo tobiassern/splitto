@@ -7,8 +7,13 @@
 	import { enhance } from '$app/forms';
 	import { toast } from 'svelte-sonner';
 	import { groupMembersTable } from '$lib/schema';
+	import EditPersonForm from './edit-person-form.svelte';
+	import type { SuperValidated, Infer } from 'sveltekit-superforms';
+	import { update_group_member_schema } from '$lib/schema';
 
+	export let update_group_member_form: SuperValidated<Infer<typeof update_group_member_schema>>;
 	export let member: typeof groupMembersTable.$inferSelect;
+	let showEditForm = false;
 	let deleteFormEl: HTMLFormElement;
 </script>
 
@@ -25,6 +30,7 @@
 		};
 	}}
 />
+<EditPersonForm bind:open={showEditForm} data={update_group_member_form} {member}/>
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger asChild let:builder>
 		<Button builders={[builder]} size="icon" variant="outline" class="h-8 w-8">
@@ -42,9 +48,11 @@
 			</div>
 		</DropdownMenu.Label>
 		<DropdownMenu.Separator />
-		<DropdownMenu.Item disabled={member.user_id ? true : false}>Edit</DropdownMenu.Item>
-		<DropdownMenu.Item disabled={member.user_id || !member.email ? true : false}
-			>Send invite</DropdownMenu.Item
+
+		<DropdownMenu.Item
+			on:click={() => (showEditForm = true)}
+			disabled={member.user_id && member.user_id !== $page.data.user?.id ? true : false}
+			>Edit</DropdownMenu.Item
 		>
 		{#if $page.data.group?.owner_id === $page.data.user?.id}
 			<DropdownMenu.Separator />

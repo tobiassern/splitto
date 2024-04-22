@@ -1,25 +1,14 @@
 <script lang="ts">
-	import File from 'lucide-svelte/icons/file';
-	import ListFilter from 'lucide-svelte/icons/list-filter';
 	import { page } from '$app/stores';
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import { Progress } from '$lib/components/ui/progress/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
-	import * as Tabs from '$lib/components/ui/tabs/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { goto } from '$app/navigation';
-
-	const fruits = [
-		{ value: 'apple', label: 'Apple' },
-		{ value: 'banana', label: 'Banana' },
-		{ value: 'blueberry', label: 'Blueberry' },
-		{ value: 'grapes', label: 'Grapes' },
-		{ value: 'pineapple', label: 'Pineapple' }
-	];
+	import BudgetReport from '../(components)/budget-report.svelte';
 
 	export let data;
 
@@ -32,16 +21,14 @@
 					)?.name ?? ('Unknown member' as string)
 			}
 		: undefined;
-	let weekly_budget_percentage = Number(
-		((Number(-(data.total_week?.amount ?? 0)) / (data.group.weekly_budget ?? 0)) * 100).toFixed(0)
-	);
+
 	let monthly_budget_percentage = Number(
 		((Number(-(data.total_month?.amount ?? 0)) / (data.group.monthly_budget ?? 0)) * 100).toFixed(0)
 	);
 </script>
 
 <div class="col-span-12 grid auto-rows-max items-start gap-4 md:gap-8">
-	<div class="flex justify-start gap-3 items-center">
+	<div class="flex items-center justify-start gap-3">
 		<Select.Root
 			bind:selected={selectedGroupMember}
 			onSelectedChange={(val) => {
@@ -81,95 +68,24 @@
 				<Button>Create New Expense</Button>
 			</Card.Footer>
 		</Card.Root>
-		<Card.Root>
-			<Card.Header class="pb-2">
-				<Card.Description class="flex items-center justify-between gap-2"
-					>This Week{#if data.group.weekly_budget && weekly_budget_percentage > 100}<Badge
-							variant="destructive">Over budget</Badge
-						>{/if}</Card.Description
-				>
-				<Card.Title class="text-3xl"
-					>{Intl.NumberFormat('sv-SE', {
-						currency: data.group.currency,
-						style: 'currency',
-						maximumFractionDigits: 0
-					}).format(Number(data.total_week?.amount ? -data.total_week?.amount : 0))}</Card.Title
-				>
-			</Card.Header>
-			{#if data.group.weekly_budget}
-				<Card.Content>
-					<div class="text-xs text-muted-foreground">
-						{weekly_budget_percentage}% of weekly budget
-					</div>
-				</Card.Content>
-				<Card.Footer>
-					<Tooltip.Root>
-						<Tooltip.Trigger class="w-full">
-							<Progress value={weekly_budget_percentage} aria-label="{weekly_budget_percentage}%" />
-						</Tooltip.Trigger>
-						<Tooltip.Content>
-							Total budget: {Intl.NumberFormat('sv-SE', {
-								currency: data.group.currency,
-								style: 'currency',
-								maximumFractionDigits: 0
-							}).format(Number(data.group.weekly_budget ?? 0))}
-						</Tooltip.Content>
-					</Tooltip.Root>
-				</Card.Footer>
-			{:else}
-				<Card.Content>
-					<div class="text-xs text-muted-foreground">
-						Set a weekly group budget to keep track
-					</div></Card.Content
-				>
-			{/if}
-		</Card.Root>
-		<Card.Root>
-			<Card.Header class="pb-2">
-				<Card.Description class="flex items-center justify-between gap-2"
-					>This Month{#if data.group.monthly_budget && monthly_budget_percentage > 100}<Badge
-							variant="destructive">Over budget</Badge
-						>{/if}</Card.Description
-				>
-				<Card.Title class="text-3xl"
-					>{Intl.NumberFormat('sv-SE', {
-						currency: data.group.currency,
-						style: 'currency',
-						maximumFractionDigits: 0
-					}).format(Number(data.total_month?.amount ? -data.total_month.amount : 0))}</Card.Title
-				>
-			</Card.Header>
-			{#if data.group.monthly_budget}
-				<Card.Content>
-					<div class="text-xs text-muted-foreground">
-						{monthly_budget_percentage}% of monthly budget
-					</div>
-				</Card.Content>
-				<Card.Footer>
-					<Tooltip.Root>
-						<Tooltip.Trigger class="w-full">
-							<Progress
-								value={monthly_budget_percentage}
-								aria-label="{monthly_budget_percentage}% increase"
-							/>
-						</Tooltip.Trigger>
-						<Tooltip.Content>
-							Total budget: {Intl.NumberFormat('sv-SE', {
-								currency: data.group.currency,
-								style: 'currency',
-								maximumFractionDigits: 0
-							}).format(Number(data.group.monthly_budget ?? 0))}
-						</Tooltip.Content>
-					</Tooltip.Root>
-				</Card.Footer>
-			{:else}
-				<Card.Content>
-					<div class="text-xs text-muted-foreground">
-						Set a monthly group budget to keep track
-					</div></Card.Content
-				>
-			{/if}
-		</Card.Root>
+		<BudgetReport
+			type="week"
+			who={selectedGroupMember?.value ? 'person' : 'group'}
+			amount={data.total_week?.amount}
+			budget={selectedGroupMember?.value
+				? data.group.weekly_budget
+				: data.group.members.find((member) => member.id === Number(selectedGroupMember?.value))
+						?.weekly_budget}
+		/>
+		<BudgetReport
+			type="month"
+			who={selectedGroupMember?.value ? 'person' : 'group'}
+			amount={data.total_month?.amount}
+			budget={selectedGroupMember?.value
+				? data.group.monthly_budget
+				: data.group.members.find((member) => member.id === Number(selectedGroupMember?.value))
+						?.monthly_budget}
+		/>
 	</div>
 	<Card.Root>
 		<Card.Header class="px-7">
