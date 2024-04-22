@@ -73,18 +73,18 @@
 			who={selectedGroupMember?.value ? 'person' : 'group'}
 			amount={data.total_week?.amount}
 			budget={selectedGroupMember?.value
-				? data.group.weekly_budget
-				: data.group.members.find((member) => member.id === Number(selectedGroupMember?.value))
-						?.weekly_budget}
+				? data.group.members.find((member) => member.id === Number(selectedGroupMember?.value))
+						?.weekly_budget
+				: data.group.weekly_budget}
 		/>
 		<BudgetReport
 			type="month"
 			who={selectedGroupMember?.value ? 'person' : 'group'}
 			amount={data.total_month?.amount}
 			budget={selectedGroupMember?.value
-				? data.group.monthly_budget
-				: data.group.members.find((member) => member.id === Number(selectedGroupMember?.value))
-						?.monthly_budget}
+				? data.group.members.find((member) => member.id === Number(selectedGroupMember?.value))
+						?.monthly_budget
+				: data.group.monthly_budget}
 		/>
 	</div>
 	<Card.Root>
