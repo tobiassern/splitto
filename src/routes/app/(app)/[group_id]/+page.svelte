@@ -14,9 +14,9 @@
 	export let data;
 
 	let weekly_budget_percentage =
-		(Number(data.total_week?.amount ?? 0) / (data.group.weekly_budget ?? 0)) * 100;
+		((Number(data.total_week?.amount ?? 0) / (data.group.weekly_budget ?? 0)) * 100).toFixed(0);
 	let monthly_budget_percentage =
-		(Number(data.total_month?.amount ?? 0) / (data.group.monthly_budget ?? 0)) * 100;
+		((Number(data.total_month?.amount ?? 0) / (data.group.monthly_budget ?? 0)) * 100).toFixed(0);
 </script>
 
 <div class="col-span-12 grid auto-rows-max items-start gap-4 md:gap-8">
