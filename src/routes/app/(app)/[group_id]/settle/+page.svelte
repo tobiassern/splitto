@@ -13,7 +13,12 @@
 			<Card.Root class="w-full min-w-56 max-w-56 snap-center">
 				<Card.Header class="pb-2">
 					<Card.Description>{balance.name}</Card.Description>
-					<Card.Title class="text-2xl">{balance.amount ?? 0}</Card.Title>
+					<Card.Title class="text-2xl"
+						>{Intl.NumberFormat('sv-SE', {
+							currency: data.group.currency,
+							style: 'currency'
+						}).format(Number(balance.amount ?? 0))}</Card.Title
+					>
 				</Card.Header>
 				<Card.Footer></Card.Footer>
 			</Card.Root>
@@ -29,7 +34,12 @@
 					<Card.Description class="text-lg"
 						>{settle.from?.name} pays to {settle.to?.name}</Card.Description
 					>
-					<Card.Title class="text-3xl">{settle.amount ?? 0}</Card.Title>
+					<Card.Title class="text-3xl"
+						>{Intl.NumberFormat('sv-SE', {
+							currency: data.group.currency,
+							style: 'currency'
+						}).format(settle.amount ?? 0)}</Card.Title
+					>
 				</Card.Header>
 				<Card.Footer class="justify-end">
 					<Button
