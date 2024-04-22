@@ -141,11 +141,9 @@ export const actions: Actions = {
 			});
 		}
 
-		console.log('UPDATING TAG');
-
 		const result = await event.locals.db
 			.update(tagsTable)
-			.set({ label: update_tag_form.data.label })
+			.set({ label: update_tag_form.data.label, monthly_budget: update_tag_form.data.monthly_budget })
 			.where(and(eq(tagsTable.group_id, group.id), eq(tagsTable.id, update_tag_form.data.id)))
 			.returning();
 

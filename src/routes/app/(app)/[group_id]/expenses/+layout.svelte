@@ -8,11 +8,15 @@
 	import PlusIcon from 'lucide-svelte/icons/plus';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import { cn } from '$lib/utils';
+	import { Input } from '$lib/components/ui/input';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import FacetedFilter from './(components)/faceted-filter.svelte';
 	import ColumnHeader from './(components)/column-header.svelte';
 	import DateRangePicker from './(components)/date-range-picker.svelte';
+	import { goto } from '$app/navigation';
 	export let data;
+
+	let search: string | undefined = $page.url.searchParams.get('s') ?? undefined;
 </script>
 
 <Card.Root class={cn('col-span-12', $page.params.transaction_id && 'lg:col-span-8')}>
@@ -27,7 +31,25 @@
 		</Button>
 	</Card.Header>
 	<Card.Content>
-		<div class="flex gap-3 items-center">
+		<div class="flex items-center justify-start gap-3">
+			<div>
+				<Input
+					type="search"
+					placeholder="Search expense..."
+					class="h-8"
+					bind:value={search}
+					on:change={(event) => {
+						const newUrl = new URL($page.url);
+						if (search) {
+							newUrl.searchParams.set('s', search);
+						} else {
+							newUrl.searchParams.delete('s');
+						}
+
+						goto(newUrl);
+					}}
+				/>
+			</div>
 			<DateRangePicker />
 			<FacetedFilter
 				name="Tags"

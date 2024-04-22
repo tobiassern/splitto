@@ -7,7 +7,7 @@
 	import { enhance as skEnhance } from '$app/forms';
 
 	import * as Form from '$lib/components/ui/form';
-	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
+	import { type SuperValidated, type Infer, superForm, numberProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { toast } from 'svelte-sonner';
 	import { onMount } from 'svelte';
@@ -41,6 +41,8 @@
 		$formData.id = tag.id;
 		$formData.label = tag.label;
 	});
+
+	const monthlyBudgetProxy = numberProxy(form, 'monthly_budget', { empty: 'null' });
 </script>
 
 <form bind:this={deleteFormEl} method="POST" action="?/delete-tag" use:skEnhance hidden>
@@ -68,13 +70,21 @@
 				>View expenses</DropdownMenu.Item
 			>
 			<DropdownMenu.Sub>
-				<DropdownMenu.SubTrigger>Change label</DropdownMenu.SubTrigger>
+				<DropdownMenu.SubTrigger>Update tag</DropdownMenu.SubTrigger>
 				<DropdownMenu.SubContent>
-					<form class="grid gap-1" method="POST" action="?/update-tag" use:enhance>
+					<form class="grid gap-1 p-1" method="POST" action="?/update-tag" use:enhance>
 						<input value={tag.id} name="id" hidden />
 						<Form.Field {form} name="label">
 							<Form.Control let:attrs>
+								<Form.Label>Label</Form.Label>
 								<Input {...attrs} bind:value={$formData.label} placeholder="My tag" />
+							</Form.Control>
+							<Form.FieldErrors />
+						</Form.Field>
+						<Form.Field {form} name="monthly_budget">
+							<Form.Control let:attrs>
+								<Form.Label>Monthly budget</Form.Label>
+								<Input {...attrs} bind:value={$monthlyBudgetProxy} placeholder="0.00" />
 							</Form.Control>
 							<Form.FieldErrors />
 						</Form.Field>

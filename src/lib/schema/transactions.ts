@@ -148,6 +148,7 @@ export const insert_tag_schema = z.object({
 });
 
 export const update_tag_schema = z.object({
+	monthly_budget: z.coerce.number().nullable(),
 	label: z.string().min(2),
 	id: z.coerce.number().int()
 });
