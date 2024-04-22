@@ -126,7 +126,7 @@ export const actions: Actions = {
 
 		await event.locals.db
 			.insert(tagsTable)
-			.values({ label: create_tag_form.data.label, group_id: group.id });
+			.values({ label: create_tag_form.data.label, group_id: group.id, monthly_budget: create_tag_form.data.monthly_budget });
 
 		return { create_tag_form };
 	},

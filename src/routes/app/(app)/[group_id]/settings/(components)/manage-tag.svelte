@@ -52,7 +52,17 @@
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content align="start">
 		<DropdownMenu.Group>
-			<DropdownMenu.Label>{tag.label}</DropdownMenu.Label>
+			<DropdownMenu.Label>
+				<p>{tag.label}</p>
+				<p class="text-xs font-normal">
+					Budget: {#if tag.monthly_budget}{Intl.NumberFormat('sv-SE', {
+							currency: $page.data.group?.currency ?? undefined,
+							style: 'currency'
+						}).format(Number(tag.monthly_budget ?? 0))}{:else}<span
+							class="italic text-muted-foreground">Not set</span
+						>{/if}
+				</p>
+			</DropdownMenu.Label>
 			<DropdownMenu.Separator />
 			<DropdownMenu.Item href="/{$page.data.group?.id}/expenses?tag={tag.id}"
 				>View expenses</DropdownMenu.Item

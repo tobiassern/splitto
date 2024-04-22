@@ -33,6 +33,7 @@ export const transactionSplitsTable = sqliteTable('transaction_splits', {
 export const tagsTable = sqliteTable('tags', {
 	id: integer('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
 	label: text('label').notNull(),
+	monthly_budget: real('monthly_budget'),
 	group_id: integer('group_id', { mode: 'number' })
 		.references(() => groupsTable.id, { onDelete: 'cascade' })
 		.notNull()
@@ -142,7 +143,8 @@ export const create_settlement_schema = z.object({
 });
 
 export const insert_tag_schema = z.object({
-	label: z.string().min(2)
+	label: z.string().min(2),
+	monthly_budget: z.coerce.number().nullable()
 });
 
 export const update_tag_schema = z.object({
