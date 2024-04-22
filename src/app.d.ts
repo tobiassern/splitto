@@ -1,18 +1,13 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 import type { DB } from '$lib/server/db';
-import { groupMembersTable, groupsTable, tagsTable } from '$lib/schema';
+import { groupMembersTable, groupsTable, tagsTable, userTable } from '$lib/schema';
 
 type Group = typeof groupsTable.$inferSelect;
 type Member = typeof groupMembersTable.$inferSelect;
 type Tag = typeof tagsTable.$inferSelect;
 interface ExtendedMember extends Member {
-	user?: {
-		id: number;
-		email: string;
-		name: string;
-		avatar_url: string | null | undefined;
-	} | null;
+	user?: typeof userTable.$inferSelect;
 }
 interface ExtendedGroup extends Group {
 	members: ExtendedMember[];

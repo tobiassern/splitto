@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { Badge } from '$lib/components/ui/badge/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Progress } from '$lib/components/ui/progress/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
-	import * as Select from '$lib/components/ui/select/index.js';
-	import { goto } from '$app/navigation';
 	import BudgetReport from '../(components)/budget-report.svelte';
+	import GroupMemberSwitcher from '../(components)/group-member-switcher.svelte';
 
 	export let data;
 
@@ -21,40 +19,11 @@
 					)?.name ?? ('Unknown member' as string)
 			}
 		: undefined;
-
-	let monthly_budget_percentage = Number(
-		((Number(-(data.total_month?.amount ?? 0)) / (data.group.monthly_budget ?? 0)) * 100).toFixed(0)
-	);
 </script>
 
 <div class="col-span-12 grid auto-rows-max items-start gap-4 md:gap-8">
 	<div class="flex items-center justify-start gap-3">
-		<Select.Root
-			bind:selected={selectedGroupMember}
-			onSelectedChange={(val) => {
-				const newUrl = new URL($page.url);
-				if (val?.value) {
-					newUrl.searchParams.set('member', String(val.value));
-				} else {
-					newUrl.searchParams.delete('member');
-				}
-				goto(newUrl);
-			}}
-		>
-			<Select.Trigger class="w-40">
-				<Select.Value placeholder="Select a member" />
-			</Select.Trigger>
-			<Select.Content>
-				<Select.Group>
-					<Select.Label>Group members</Select.Label>
-					<Select.Item value={null} label="All members">All members</Select.Item>
-					{#each data.group.members as member}
-						<Select.Item value={member.id} label={member.name}>{member.name}</Select.Item>
-					{/each}
-				</Select.Group>
-			</Select.Content>
-			<Select.Input name="favoriteFruit" />
-		</Select.Root>
+		<GroupMemberSwitcher members={data.group.members} />
 	</div>
 	<div class="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
 		<Card.Root class="sm:col-span-2">
