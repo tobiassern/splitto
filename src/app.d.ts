@@ -15,7 +15,7 @@ interface ExtendedMember extends Member {
 }
 interface ExtendedGroup extends Group {
 	members: ExtendedMember[];
-	tags: typeof tagsTable$.$inferSelect[]
+	tags: (typeof tagsTable$.$inferSelect)[];
 }
 
 declare global {
@@ -38,4 +38,4 @@ declare global {
 	}
 }
 
-export { };
+export {};

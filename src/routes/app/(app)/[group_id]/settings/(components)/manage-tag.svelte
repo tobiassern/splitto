@@ -3,17 +3,12 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { tagsTable, update_tag_schema } from '$lib/schema';
 	import { page } from '$app/stores';
-	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 
 	import * as Form from '$lib/components/ui/form';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { insert_tag_schema } from '$lib/schema';
-	import FormErrors from '$lib/components/form-errors/form-errors.svelte';
 	import { toast } from 'svelte-sonner';
-	import { Button } from '$lib/components/ui/button';
-	import PlusIcon from 'lucide-svelte/icons/plus';
 	import { onMount } from 'svelte';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	export let data: SuperValidated<Infer<typeof update_tag_schema>>;
@@ -72,7 +67,9 @@
 							</Form.Control>
 							<Form.FieldErrors />
 						</Form.Field>
-						<Form.Button size="sm" class="gap-1" disabled={$submitting}>Update{#if $delayed}<LoaderCircle class="size-4 animate-spin" />{/if}</Form.Button>
+						<Form.Button size="sm" class="gap-1" disabled={$submitting}
+							>Update{#if $delayed}<LoaderCircle class="size-4 animate-spin" />{/if}</Form.Button
+						>
 					</form>
 				</DropdownMenu.SubContent>
 			</DropdownMenu.Sub>

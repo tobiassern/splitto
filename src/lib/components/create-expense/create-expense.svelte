@@ -113,7 +113,7 @@
 				<Form.FieldErrors />
 			</Form.Field>
 
-			<Form.Fieldset {form} name="splits" class="grid mt-3 gap-1">
+			<Form.Fieldset {form} name="splits" class="mt-3 grid gap-1">
 				<Form.FieldErrors />
 				<Form.Legend class="w-full border-b pb-1">Splits</Form.Legend>
 				<div>

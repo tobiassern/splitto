@@ -4,7 +4,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 
 	import * as Form from '$lib/components/ui/form';
-	import { type SuperValidated, type Infer, superForm, stringProxy } from 'sveltekit-superforms';
+	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { insert_tag_schema } from '$lib/schema';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
@@ -22,7 +22,7 @@
 		onResult: ({ result }) => {
 			if (result.type === 'success') {
 				toast.success('Tag added');
-                open = false;
+				open = false;
 			} else if (result.type === 'error') {
 				toast.error(result.error ?? 'An error occurred');
 			} else if (result.type === 'failure') {

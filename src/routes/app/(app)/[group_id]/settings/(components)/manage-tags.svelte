@@ -1,7 +1,5 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card/index.js';
-	import { Badge } from '$lib/components/ui/badge';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
 	import { insert_tag_schema, tagsTable, update_tag_schema } from '$lib/schema';
 	import CreateTagForm from './create-tag-form.svelte';

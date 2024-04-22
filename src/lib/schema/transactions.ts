@@ -35,21 +35,25 @@ export const tagsTable = sqliteTable('tags', {
 	label: text('label').notNull(),
 	group_id: integer('group_id', { mode: 'number' })
 		.references(() => groupsTable.id, { onDelete: 'cascade' })
-		.notNull(),
+		.notNull()
 });
 
-export const transactionTagsTable = sqliteTable('transaction_tags', {
-	tag_id: integer('tag_id', { mode: 'number' })
-		.references(() => tagsTable.id, { onDelete: 'cascade' })
-		.notNull(),
-	transaction_id: integer('transaction_id', { mode: 'number' })
-		.references(() => transactionsTable.id, { onDelete: 'cascade' })
-		.notNull(),
-}, (table) => {
-	return {
-		pk: primaryKey({ columns: [table.tag_id, table.transaction_id] })
-	};
-});
+export const transactionTagsTable = sqliteTable(
+	'transaction_tags',
+	{
+		tag_id: integer('tag_id', { mode: 'number' })
+			.references(() => tagsTable.id, { onDelete: 'cascade' })
+			.notNull(),
+		transaction_id: integer('transaction_id', { mode: 'number' })
+			.references(() => transactionsTable.id, { onDelete: 'cascade' })
+			.notNull()
+	},
+	(table) => {
+		return {
+			pk: primaryKey({ columns: [table.tag_id, table.transaction_id] })
+		};
+	}
+);
 
 export const transactionsRelations = relations(transactionsTable, ({ one, many }) => ({
 	group: one(groupsTable, {
@@ -72,7 +76,7 @@ export const transactionTagsRelations = relations(transactionTagsTable, ({ one }
 	tag: one(tagsTable, {
 		fields: [transactionTagsTable.transaction_id],
 		references: [tagsTable.id]
-	}),
+	})
 }));
 
 export const tagsRelations = relations(tagsTable, ({ many, one }) => ({
@@ -80,7 +84,7 @@ export const tagsRelations = relations(tagsTable, ({ many, one }) => ({
 	transaction: one(groupsTable, {
 		fields: [tagsTable.group_id],
 		references: [groupsTable.id]
-	}),
+	})
 }));
 
 export const transactionSplitsRelations = relations(transactionSplitsTable, ({ one }) => ({
@@ -144,4 +148,4 @@ export const insert_tag_schema = z.object({
 export const update_tag_schema = z.object({
 	label: z.string().min(2),
 	id: z.coerce.number().int()
-})
+});

@@ -1,6 +1,13 @@
 import { superValidate } from 'sveltekit-superforms';
 import type { PageServerLoad, Actions } from './$types';
-import { groupsTable, update_group_name_schema, update_group_currency_schema, tagsTable, insert_tag_schema, update_tag_schema } from '$lib/schema';
+import {
+	groupsTable,
+	update_group_name_schema,
+	update_group_currency_schema,
+	tagsTable,
+	insert_tag_schema,
+	update_tag_schema
+} from '$lib/schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { isGroupMember, isGroupOwner } from '$lib/helpers';
 import { fail, redirect, error } from '@sveltejs/kit';
@@ -85,12 +92,9 @@ export const actions: Actions = {
 	'create-tag': async (event) => {
 		const { group } = isGroupMember(event);
 
-
-		const create_tag_form = await superValidate(
-			event,
-			zod(insert_tag_schema),
-			{ id: 'create-tag-form' }
-		);
+		const create_tag_form = await superValidate(event, zod(insert_tag_schema), {
+			id: 'create-tag-form'
+		});
 
 		if (!create_tag_form.valid) {
 			return fail(400, {
@@ -107,10 +111,7 @@ export const actions: Actions = {
 	'update-tag': async (event) => {
 		const { group } = isGroupMember(event);
 
-		const update_tag_form = await superValidate(
-			event,
-			zod(update_tag_schema)
-		);
+		const update_tag_form = await superValidate(event, zod(update_tag_schema));
 
 		if (!update_tag_form.valid) {
 			return fail(400, {
@@ -118,12 +119,13 @@ export const actions: Actions = {
 			});
 		}
 
-		console.log("UPDATING TAG");
+		console.log('UPDATING TAG');
 
 		const result = await event.locals.db
 			.update(tagsTable)
 			.set({ label: update_tag_form.data.label })
-			.where(and(eq(tagsTable.group_id, group.id), eq(tagsTable.id, update_tag_form.data.id))).returning();
+			.where(and(eq(tagsTable.group_id, group.id), eq(tagsTable.id, update_tag_form.data.id)))
+			.returning();
 
 		console.log(result);
 
@@ -138,7 +140,9 @@ export const actions: Actions = {
 
 		if (!tag_id) error(400, 'No tag ID provided');
 
-		await event.locals.db.delete(tagsTable).where(and(eq(tagsTable.group_id, group.id), eq(tagsTable.id, Number(tag_id))));
+		await event.locals.db
+			.delete(tagsTable)
+			.where(and(eq(tagsTable.group_id, group.id), eq(tagsTable.id, Number(tag_id))));
 
 		return { success: true };
 	}
