@@ -9,7 +9,7 @@
 	import MoonIcon from 'lucide-svelte/icons/moon';
 	import SunIcon from 'lucide-svelte/icons/sun';
 	import MonitorIcon from 'lucide-svelte/icons/monitor';
-	import { setMode } from 'mode-watcher';
+	import { setMode, mode } from 'mode-watcher';
 
 	export let user: import('lucia').User | null;
 
@@ -52,7 +52,7 @@
 			<DropdownMenu.Item href="/profile">Profile</DropdownMenu.Item>
 			<DropdownMenu.Sub>
 				<DropdownMenu.SubTrigger
-					>Theme<SunIcon class="ml-2 size-4 dark:hidden" />
+					>{$mode === 'light' ? 'Light' : 'Dark'}<SunIcon class="ml-2 size-4 dark:hidden" />
 					<MoonIcon class="ml-2 hidden size-4 dark:block" /></DropdownMenu.SubTrigger
 				>
 				<DropdownMenu.SubContent>

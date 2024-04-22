@@ -10,7 +10,6 @@ export const load: PageServerLoad = async (event) => {
 	const { group } = isGroupMember(event);
 
 	return {
-		tags: await event.locals.db.query.tagsTable.findMany({ where: eq(tagsTable.group_id, group.id) }),
 		create_tag_form: await superValidate(zod(insert_tag_schema), { id: 'create-tag-form' }),
 		update_tag_form: await superValidate(zod(update_tag_schema), { id: 'update-tag-form' }),
 		update_group_name_form: await superValidate(

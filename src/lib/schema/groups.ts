@@ -1,7 +1,7 @@
 import { text, integer, sqliteTable, unique } from 'drizzle-orm/sqlite-core';
 import { createInsertSchema } from 'drizzle-zod';
 import { z } from 'zod';
-import { transactionSplitsTable, transactionsTable, userTable } from '.';
+import { tagsTable, transactionSplitsTable, transactionsTable, userTable } from '.';
 import { sql, relations } from 'drizzle-orm';
 import { currencies } from '../currencies';
 const zodEnum = <T>(arr: T[]): [T, ...T[]] => arr as [T, ...T[]];
@@ -43,7 +43,8 @@ export const groupsRelations = relations(groupsTable, ({ one, many }) => ({
 		fields: [groupsTable.owner_id],
 		references: [userTable.id]
 	}),
-	members: many(groupMembersTable)
+	members: many(groupMembersTable),
+	tags: many(tagsTable)
 }));
 
 export const groupMembersRelations = relations(groupMembersTable, ({ one, many }) => ({

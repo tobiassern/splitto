@@ -1,7 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 import type { DB } from '$lib/server/db';
-import { groupMembersTable, groupsTable } from '$lib/schema';
+import { groupMembersTable, groupsTable, tagsTable } from '$lib/schema';
 
 type Group = typeof groupsTable.$inferSelect;
 type Member = typeof groupMembersTable.$inferSelect;
@@ -15,6 +15,7 @@ interface ExtendedMember extends Member {
 }
 interface ExtendedGroup extends Group {
 	members: ExtendedMember[];
+	tags: typeof tagsTable$.$inferSelect[]
 }
 
 declare global {
@@ -37,4 +38,4 @@ declare global {
 	}
 }
 
-export {};
+export { };

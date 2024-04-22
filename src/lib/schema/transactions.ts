@@ -75,8 +75,12 @@ export const transactionTagsRelations = relations(transactionTagsTable, ({ one }
 	}),
 }));
 
-export const tagsRelations = relations(tagsTable, ({ many }) => ({
+export const tagsRelations = relations(tagsTable, ({ many, one }) => ({
 	transaction_tags: many(transactionTagsTable),
+	transaction: one(groupsTable, {
+		fields: [tagsTable.group_id],
+		references: [groupsTable.id]
+	}),
 }));
 
 export const transactionSplitsRelations = relations(transactionSplitsTable, ({ one }) => ({
@@ -96,6 +100,7 @@ export const create_expense_schema = z
 		group_member_id: z.number().int().positive(),
 		amount: z.coerce.number().positive(),
 		when: z.string(),
+		tags: z.number().int().array(),
 		splits: z
 			.object({
 				group_member_id: z.number().int().positive(),

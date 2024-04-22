@@ -11,6 +11,6 @@
 <ManageTags
 	update_tag_form={data.update_tag_form}
 	create_tag_form={data.create_tag_form}
-	tags={data.tags}
+	tags={data.group.tags}
 />
 <DeleteGroupForm />

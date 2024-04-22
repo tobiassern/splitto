@@ -30,6 +30,7 @@
 					<Table.Head>What</Table.Head>
 					<Table.Head>Who</Table.Head>
 					<Table.Head>When</Table.Head>
+					<Table.Head>Tags</Table.Head>
 					<Table.Head class="text-center">Type</Table.Head>
 					<Table.Head class="text-right">Amount</Table.Head>
 				</Table.Row>
@@ -59,6 +60,11 @@
 									<span class="absolute inset-0"></span>{transaction.when?.toLocaleDateString(
 										'sv-SE'
 									) ?? '-'}
+								</a>
+							</Table.Cell>
+							<Table.Cell class="relative">
+								<a href="/{$page.params.group_id}/expenses/{transaction.id}">
+									<span class="absolute inset-0"></span>Tags
 								</a>
 							</Table.Cell>
 							<Table.Cell class="relative text-center">

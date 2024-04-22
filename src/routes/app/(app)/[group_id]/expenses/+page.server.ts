@@ -1,6 +1,6 @@
 import type { PageServerLoad, Actions } from './$types';
 import { isGroupMember } from '$lib/helpers';
-import { create_expense_schema, transactionSplitsTable, transactionsTable } from '$lib/schema';
+import { create_expense_schema, transactionSplitsTable, transactionTagsTable, transactionsTable } from '$lib/schema';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail } from '@sveltejs/kit';
@@ -35,6 +35,11 @@ export const actions: Actions = {
 					when: new Date(create_expense_form.data.when)
 				})
 				.returning();
+				
+			if (create_expense_form.data.tags.length) {
+				await event.locals.db.insert(transactionTagsTable).values(create_expense_form.data.tags.map(tag_id => { return { tag_id, transaction_id: transaction.id } }));
+			}
+
 			const insert_splits: (typeof transactionSplitsTable.$inferInsert)[] =
 				create_expense_form.data.splits
 					.filter((split) => split.amount !== null)

@@ -50,6 +50,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			const group = await event.locals.db.query.groupsTable.findFirst({
 				where: eq(groupsTable.id, Number(event.params.group_id)),
 				with: {
+					tags: true,
 					members: {
 						orderBy: [asc(groupMembersTable.created_at)],
 						with: {
