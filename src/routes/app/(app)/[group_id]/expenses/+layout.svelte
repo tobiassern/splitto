@@ -31,7 +31,7 @@
 		</Button>
 	</Card.Header>
 	<Card.Content>
-		<div class="flex items-center justify-start gap-3">
+		<div class="flex items-center justify-start gap-3 mb-2">
 			<div>
 				<Input
 					placeholder="Search expense..."

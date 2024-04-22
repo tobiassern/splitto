@@ -69,7 +69,7 @@
 					{:else}
 						{#each filterValues as option (option)}
 							<Badge class="rounded-sm px-1 font-normal">
-								{options.find((opt) => opt.value === option)?.label}
+								{options.find((opt) => opt.value === option)?.label ?? 'Unknown tag'}
 							</Badge>
 						{/each}
 					{/if}

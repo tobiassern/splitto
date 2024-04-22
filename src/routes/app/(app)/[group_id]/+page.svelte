@@ -138,6 +138,7 @@
 						<Table.Head>Tag</Table.Head>
 						<Table.Head>Monthly budget</Table.Head>
 						<Table.Head>Total spent</Table.Head>
+						<Table.Head><span class="sr-only">Actions</span></Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
@@ -179,6 +180,7 @@
 									style: 'currency'
 								}).format(Number(tag_amount.amount ?? 0))}
 							</Table.Cell>
+							<Table.Cell class="text-right"><Button href="/{data.group.id}/expenses?tag={tag_amount.id}" size="sm" variant="outline">View expenses</Button></Table.Cell>
 						</Table.Row>
 					{/each}
 				</Table.Body>

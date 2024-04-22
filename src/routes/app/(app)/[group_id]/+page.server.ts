@@ -33,6 +33,6 @@ export const load: PageServerLoad = async (event) => {
 		total_week,
 		total_month,
 		tags_amount: await event.locals.db.select({ monthly_budget: tagsTable.monthly_budget, id: tagsTable.id, label: tagsTable.label, amount: sum(transactionSplitsTable.amount) }).from(tagsTable).leftJoin(transactionTagsTable, eq(tagsTable.id, transactionTagsTable.tag_id)).leftJoin(transactionsTable, eq(transactionsTable.id, transactionTagsTable.transaction_id)).leftJoin(transactionSplitsTable, eq(transactionSplitsTable.transaction_id, transactionsTable.id)).groupBy(tagsTable.id).
-			where(or(and(eq(transactionSplitsTable.type, 'debit'), eq(transactionsTable.type, 'expense')), isNull(transactionsTable.type)))
+			where(or(and(eq(transactionSplitsTable.type, 'debit'), eq(transactionsTable.type, 'expense'), between(transactionsTable.when, firstDayOfMonth, lastDayOfMonth)), isNull(transactionsTable.type)))
 	};
 };
