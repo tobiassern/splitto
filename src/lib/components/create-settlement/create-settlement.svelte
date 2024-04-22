@@ -26,6 +26,7 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { Separator } from '$lib/components/ui/separator';
 	import { toast } from 'svelte-sonner';
+	import DatePicker from '../date-picker/date-picker.svelte';
 
 	export let data: SuperValidated<Infer<typeof create_settlement_schema>>;
 
@@ -150,35 +151,15 @@
 				<Form.FieldErrors />
 			</Form.Field>
 
-			<!-- <Form.Fieldset {form} name="splits" class="grid gap-1">
+			<Form.Field {form} name="when">
+				<Form.Control let:attrs>
+					<Form.Label>When</Form.Label>
+					<DatePicker bind:value={$formData.when} />
+					<input hidden={true} {...attrs} bind:value={$formData.when} />
+				</Form.Control>
 				<Form.FieldErrors />
-				<Form.Legend class="w-full border-b pb-1">Splits</Form.Legend>
-				{#each $formData.splits as split, i}
-					<Form.ElementField
-						{form}
-						name="splits[{i}].amount"
-						class={cn(!split.amount && 'opacity-50')}
-						on:change={(data) => {
-							console.log(data);
-						}}
-					>
-						<Form.Control let:attrs>
-							<Form.Label
-								>{$page.data.group?.members.find((member) => member.id === split.group_member_id)
-									?.name}</Form.Label
-							>
-							<Input {...attrs} bind:value={split.amount} type="number" placeholder="0.00" />
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.ElementField>
-				{/each}
-				<Button
-					size="sm"
-					on:click={() => ($showCreateGroupMemberForm = true)}
-					class="w-full gap-1"
-					variant="ghost"><PlusIcon class="size-4" />Add person</Button
-				>
-			</Form.Fieldset> -->
+			</Form.Field>
+
 			<Separator></Separator>
 			<FormErrors errors={$errors._errors} />
 			<Form.Button type="submit" class="flex w-full gap-1"

@@ -91,5 +91,6 @@ export const create_settlement_schema = z.object({
 	label: z.string().min(2).default('Settlement'),
 	from_id: z.number().int().positive(),
 	to_id: z.number().int().positive(),
-	amount: z.coerce.number()
+	amount: z.coerce.number(),
+	when: z.string()
 });

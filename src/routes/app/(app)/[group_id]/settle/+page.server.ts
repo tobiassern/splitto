@@ -116,7 +116,8 @@ export const actions: Actions = {
 					type: 'settlement',
 					group_id: group.id,
 					group_member_id: create_settlement_form.data.from_id,
-					label: create_settlement_form.data.label
+					label: create_settlement_form.data.label,
+					when: new Date(create_settlement_form.data.when)
 				})
 				.returning();
 			const insert_splits: (typeof transactionSplitsTable.$inferInsert)[] = [

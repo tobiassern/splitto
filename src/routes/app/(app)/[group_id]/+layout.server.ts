@@ -23,7 +23,7 @@ export const load: LayoutServerLoad = async (event) => {
 			zod(create_expense_schema),
 			{ id: 'create-expense-form', errors: false }
 		),
-		create_settlement_form: await superValidate(zod(create_settlement_schema), {
+		create_settlement_form: await superValidate({ when: new Date().toLocaleDateString('sv-SE') }, zod(create_settlement_schema), {
 			id: 'create-settlement-form'
 		}),
 		create_group_member_form: await superValidate(zod(insert_group_member_schema), {
