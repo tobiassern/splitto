@@ -5,6 +5,7 @@ import { groupMembersTable, groupsTable, tagsTable } from '$lib/schema';
 
 type Group = typeof groupsTable.$inferSelect;
 type Member = typeof groupMembersTable.$inferSelect;
+type Tag = typeof tagsTable.$inferSelect;
 interface ExtendedMember extends Member {
 	user?: {
 		id: number;
@@ -15,7 +16,7 @@ interface ExtendedMember extends Member {
 }
 interface ExtendedGroup extends Group {
 	members: ExtendedMember[];
-	tags: (typeof tagsTable$.$inferSelect)[];
+	tags: Tag[];
 }
 
 declare global {

@@ -19,6 +19,8 @@ module.exports = {
 		es2017: true,
 		node: true
 	},
+	// Added this as a workaround until this might be fixed https://github.com/huntabyte/shadcn-svelte/issues/489
+	ignorePatterns: ['src/lib/components/ui/*'],
 	overrides: [
 		{
 			files: ['*.svelte'],

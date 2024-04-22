@@ -6,7 +6,6 @@
 	import { cn } from '$lib/utils.js';
 
 	type $$Props = CalendarPrimitive.Props;
-	type $$Events = CalendarPrimitive.Events;
 
 	export let value: $$Props['value'] = undefined;
 	export let placeholder: $$Props['placeholder'] = today(getLocalTimeZone());
