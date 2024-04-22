@@ -4,6 +4,8 @@ import { z } from 'zod';
 import { tagsTable, transactionSplitsTable, transactionsTable, userTable } from '.';
 import { sql, relations } from 'drizzle-orm';
 import { currencies } from '../currencies';
+import { generateRandomString, alphabet } from 'oslo/crypto';
+
 const zodEnum = <T>(arr: T[]): [T, ...T[]] => arr as [T, ...T[]];
 
 export const groupsTable = sqliteTable('groups', {
@@ -15,7 +17,9 @@ export const groupsTable = sqliteTable('groups', {
 	}),
 	currency: text('currency', { enum: zodEnum(Object.keys(currencies)) })
 		.notNull()
-		.default('USD')
+		.default('USD'),
+	invite_link_active: integer('invite_link_active', { mode: 'boolean' }).default(false),
+	invite_link_code: text('invite_link_code').default(generateRandomString(6, alphabet('0-9')))
 });
 
 export const groupMembersTable = sqliteTable(

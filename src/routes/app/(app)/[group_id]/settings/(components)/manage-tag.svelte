@@ -4,6 +4,7 @@
 	import { tagsTable, update_tag_schema } from '$lib/schema';
 	import { page } from '$app/stores';
 	import { Input } from '$lib/components/ui/input/index.js';
+	import { enhance as skEnhance } from '$app/forms';
 
 	import * as Form from '$lib/components/ui/form';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
@@ -42,7 +43,7 @@
 	});
 </script>
 
-<form bind:this={deleteFormEl} method="POST" action="?/delete-tag" use:enhance hidden>
+<form bind:this={deleteFormEl} method="POST" action="?/delete-tag" use:skEnhance hidden>
 	<input value={tag.id} name="tag_id" />
 </form>
 <DropdownMenu.Root bind:open>

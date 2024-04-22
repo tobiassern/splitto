@@ -9,7 +9,7 @@
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import { cn } from '$lib/utils';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
-
+	import FacetedFilter from './(components)/faceted-filter.svelte';
 	export let data;
 </script>
 
@@ -25,6 +25,18 @@
 		</Button>
 	</Card.Header>
 	<Card.Content>
+		<FacetedFilter
+			name="Tags"
+			title="Tags"
+			searchParam="tag"
+			filterValues={$page.url.searchParams.getAll('tag')}
+			options={data.group.tags.map((tag) => {
+				return {
+					value: String(tag.id),
+					label: tag.label
+				};
+			})}
+		/>
 		<Table.Root>
 			<Table.Header>
 				<Table.Row>
@@ -48,7 +60,7 @@
 						<Table.Row>
 							<Table.Cell class="relative font-medium">
 								<a href="/{$page.params.group_id}/expenses/{transaction.id}">
-									<span class="absolute inset-0"></span>{transaction.label}
+									<span class="absolute inset-0"></span>{#if transaction.label}{transaction.label}{:else}<span class="text-muted-foreground italic">No label</span>{/if}
 								</a>
 							</Table.Cell>
 							<Table.Cell class="relative">
@@ -70,7 +82,7 @@
 								>
 									{#each transaction.tags.slice(0, 2) as tag}
 										<Badge>{tag.tag.label}</Badge>
-										{:else}
+									{:else}
 										<span class="absolute inset-0"></span>
 										<span>-</span>
 									{/each}
@@ -82,7 +94,8 @@
 												</Badge>
 											</Tooltip.Trigger>
 											<Tooltip.Content side="right"
-												>{transaction.tags.slice(2)
+												>{transaction.tags
+													.slice(2)
 													.map((tag) => tag.tag.label)
 													.join(', ')}</Tooltip.Content
 											>

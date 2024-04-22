@@ -8,7 +8,16 @@
 	import { showCreateGroupMemberForm } from '$lib/components/create-group-member/create-group-member.svelte';
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import PersonActions from './(components)/person-actions.svelte';
+	import { Label } from '$lib/components/ui/label/index.js';
+	import { Switch } from '$lib/components/ui/switch/index.js';
+	import { PUBLIC_APP_HOSTNAME } from '$env/static/public';
+	import Copy from 'lucide-svelte/icons/copy';
+	import { toast } from 'svelte-sonner';
+	import { applyAction, enhance } from '$app/forms';
+
 	export let data;
+
+	let inviteLinkActiveFormEl: HTMLFormElement;
 </script>
 
 <Card.Root class="col-span-12 lg:col-span-8 lg:col-start-3">
@@ -54,5 +63,95 @@
 				</div>
 			{/each}
 		{/if}
+	</Card.Content>
+</Card.Root>
+
+<Card.Root class="col-span-12 lg:col-span-8 lg:col-start-3">
+	<Card.Header>
+		<Card.Title>Invite Members</Card.Title>
+		<Card.Description
+			>You can invite new members to your group by adding them and using an email. Then when they
+			sign in / sign up for Splitto they can accept to join your group.</Card.Description
+		>
+	</Card.Header>
+	<Card.Content>
+		<Card.Root>
+			<Card.Header class="flex flex-row items-start justify-between gap-6">
+				<div class="space-y-1.5">
+					<Card.Title>Invite link</Card.Title>
+					<Card.Description
+						>Or you can copy the following link and anyone with the link can join your group.</Card.Description
+					>
+				</div>
+				<form
+					bind:this={inviteLinkActiveFormEl}
+					class="flex items-center space-x-2"
+					method="POST"
+					action="?/activate-invite-link"
+					use:enhance={(form) => {
+						return async ({ result }) => {
+							if (result.type === 'success') {
+								toast.success(
+									data.group.invite_link_active
+										? 'Invite link activated'
+										: 'Invite link deactivated'
+								);
+							}
+						};
+					}}
+				>
+					<Switch
+						id="invite-link-active"
+						name="invite-link-active"
+						checked={data.group.invite_link_active ? true : false}
+						onCheckedChange={(value) => {
+							data.group.invite_link_active = value;
+							console.log(data.group.invite_link_active);
+							setTimeout(() => {
+								inviteLinkActiveFormEl.requestSubmit();
+							}, 0);
+						}}
+					/>
+					<Label for="invite-link-active">Activate</Label>
+				</form>
+			</Card.Header>
+			<Card.Content class="flex items-center justify-start gap-4">
+				<Button
+					variant="secondary"
+					class="gap-1"
+					disabled={!data.group.invite_link_active}
+					on:click={() => {
+						navigator.clipboard.writeText(
+							`${$page.url.protocol}//${PUBLIC_APP_HOSTNAME}${$page.url.port ? `:${$page.url.port}` : ''}/${data.group.id}/join/${data.group.invite_link_code}`
+						);
+						toast('Invite link copied to clipboard');
+					}}
+				>
+					<span>{PUBLIC_APP_HOSTNAME}/{data.group.id}/join/{data.group.invite_link_code}</span><Copy
+						class="size-4"
+					></Copy>
+				</Button>
+				<form
+					method="POST"
+					action="?/generate-invite-link-code"
+					use:enhance={() => {
+						return async ({ result, update }) => {
+							if (result.type === 'success') {
+								toast.success('Invite link code updated');
+								update();
+							}
+							applyAction(result);
+						};
+					}}
+				>
+					<Button
+						disabled={!data.group.invite_link_active}
+						variant="outline"
+						size="sm"
+						type="submit">Generate new code</Button
+					>
+				</form>
+			</Card.Content>
+		</Card.Root>
 	</Card.Content>
 </Card.Root>

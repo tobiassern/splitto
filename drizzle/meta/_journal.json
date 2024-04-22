@@ -1,27 +1,55 @@
 {
-	"version": "5",
-	"dialect": "sqlite",
-	"entries": [
-		{
-			"idx": 0,
-			"version": "5",
-			"when": 1713727916630,
-			"tag": "0000_far_fixer",
-			"breakpoints": true
-		},
-		{
-			"idx": 1,
-			"version": "5",
-			"when": 1713733065796,
-			"tag": "0001_handy_paibok",
-			"breakpoints": true
-		},
-		{
-			"idx": 2,
-			"version": "5",
-			"when": 1713771568878,
-			"tag": "0002_bouncy_mentallo",
-			"breakpoints": true
-		}
-	]
+  "version": "5",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1713727916630,
+      "tag": "0000_far_fixer",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1713733065796,
+      "tag": "0001_handy_paibok",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1713771568878,
+      "tag": "0002_bouncy_mentallo",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1713806106252,
+      "tag": "0004_lethal_nova",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1713806226118,
+      "tag": "0005_volatile_christian_walker",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1713807151797,
+      "tag": "0006_exotic_karma",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1713808828279,
+      "tag": "0007_previous_excalibur",
+      "breakpoints": true
+    }
+  ]
 }

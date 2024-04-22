@@ -21,7 +21,9 @@
 			<div class="flex flex-row items-start">
 				<div class="grid gap-0.5">
 					<Card.Title class="group flex items-center gap-2 text-lg">
-						{data.transaction.label}
+						{#if data.transaction.label}{data.transaction.label}{:else}<span
+								class="italic text-muted-foreground">No label</span
+							>{/if}
 					</Card.Title>
 					<Card.Description class="text-xs"
 						>When: {data.transaction.when?.toLocaleDateString('sv-SE', {
@@ -58,7 +60,9 @@
 			<Drawer.Header class="flex flex-row items-start">
 				<div class="grid gap-0.5">
 					<Drawer.Title class="group flex items-center gap-2 text-lg"
-						>{data.transaction.label}</Drawer.Title
+						>{#if data.transaction.label}{data.transaction.label}{:else}<span
+								class="italic text-muted-foreground">No label</span
+							>{/if}</Drawer.Title
 					>
 					<Drawer.Description>Date: November 23, 2023</Drawer.Description>
 				</div>

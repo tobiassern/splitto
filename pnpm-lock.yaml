@@ -26,6 +26,9 @@ importers:
       clsx:
         specifier: ^2.1.0
         version: 2.1.0
+      cmdk-sv:
+        specifier: ^0.0.17
+        version: 0.0.17(svelte@4.2.15)
       drizzle-orm:
         specifier: ^0.30.8
         version: 0.30.8(@cloudflare/workers-types@4.20240405.0)(@libsql/client@0.6.0)
@@ -940,6 +943,11 @@ packages:
     peerDependencies:
       lucia: 3.x
 
+  '@melt-ui/svelte@0.61.2':
+    resolution: {integrity: sha512-BHkD9G31zQBToA4euDRBgTQRvWxT9scufOVCXgDO6HKTvyxFspbWT2bgiSFqAK4BbAGDn9Ao36Q8F9O71KN4OQ==}
+    peerDependencies:
+      svelte: '>=3 <5'
+
   '@melt-ui/svelte@0.68.0':
     resolution: {integrity: sha512-/QvA98hnYEodZtHJ71+ocum/WWp30hVNt3F8uiZKnNYwZDaiQYjlyR9AaGKYcZLCe6R68op1mfCzc0kTzJilyA==}
     peerDependencies:
@@ -1678,6 +1686,11 @@ packages:
     peerDependencies:
       svelte: ^4.0.0
 
+  bits-ui@0.9.9:
+    resolution: {integrity: sha512-LkdkyTtpXdkjBzPZJVJgpcre4fut6DONoprMfadHFo82HNUhph+02CxDjYEcZcThb5z4YjSxMlCYvQPZm+YtfQ==}
+    peerDependencies:
+      svelte: ^4.0.0
+
   blake3-wasm@2.1.5:
     resolution: {integrity: sha512-F1+K8EbfOZE49dtoPtmxUQrpXaBIl3ICvasLh+nJta0xkz+9kF/7uet9fLnwKqhDrmj6g+6K3Tw9yQPUg2ka5g==}
 
@@ -1757,6 +1770,11 @@ packages:
   clsx@2.1.0:
     resolution: {integrity: sha512-m3iNNWpd9rl3jvvcBnu70ylMdrXt8Vlq4HYadnU5fwcOtvkSQWPmj7amUcDT2qYI7risszBjI5AUIUox9D16pg==}
     engines: {node: '>=6'}
+
+  cmdk-sv@0.0.17:
+    resolution: {integrity: sha512-28QTrK1tT1TSNoGq9MVnzjeLNNjCgjmsM8c2HJfDpRt9t+GD+9m3wX/WdAPaP9jdoNYU0SSdZVdgsGgpaSQOYQ==}
+    peerDependencies:
+      svelte: ^4.0.0
 
   code-red@1.0.4:
     resolution: {integrity: sha512-7qJWqItLA8/VPVlKJlFXU+NBlo/qyfs39aJcuMT/2ere32ZqvF5OSxgdM5xOfJJ7O429gg2HM47y8v9P+9wrNw==}
@@ -2574,6 +2592,11 @@ packages:
   nanoid@3.3.7:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
+  nanoid@4.0.2:
+    resolution: {integrity: sha512-7ZtY5KTCNheRGfEFxnedV5zFiORN1+Y1N6zvPTnHQd8ENUvfaDBeuJDZb2bN/oXwXxu3qkTXDzy57W5vAmDTBw==}
+    engines: {node: ^14 || ^16 || >=18}
     hasBin: true
 
   nanoid@5.0.7:
@@ -4000,6 +4023,16 @@ snapshots:
     dependencies:
       lucia: 3.1.1
 
+  '@melt-ui/svelte@0.61.2(svelte@4.2.15)':
+    dependencies:
+      '@floating-ui/core': 1.6.0
+      '@floating-ui/dom': 1.6.3
+      '@internationalized/date': 3.5.2
+      dequal: 2.0.3
+      focus-trap: 7.5.4
+      nanoid: 4.0.2
+      svelte: 4.2.15
+
   '@melt-ui/svelte@0.68.0(svelte@4.2.15)':
     dependencies:
       '@floating-ui/core': 1.6.0
@@ -4680,6 +4713,12 @@ snapshots:
       nanoid: 5.0.7
       svelte: 4.2.15
 
+  bits-ui@0.9.9(svelte@4.2.15):
+    dependencies:
+      '@melt-ui/svelte': 0.61.2(svelte@4.2.15)
+      nanoid: 5.0.7
+      svelte: 4.2.15
+
   blake3-wasm@2.1.5: {}
 
   brace-expansion@1.1.11:
@@ -4770,6 +4809,12 @@ snapshots:
       timers-ext: 0.1.7
 
   clsx@2.1.0: {}
+
+  cmdk-sv@0.0.17(svelte@4.2.15):
+    dependencies:
+      bits-ui: 0.9.9(svelte@4.2.15)
+      nanoid: 5.0.7
+      svelte: 4.2.15
 
   code-red@1.0.4:
     dependencies:
@@ -5640,6 +5685,8 @@ snapshots:
       thenify-all: 1.6.0
 
   nanoid@3.3.7: {}
+
+  nanoid@4.0.2: {}
 
   nanoid@5.0.7: {}
 
