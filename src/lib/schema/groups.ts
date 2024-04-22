@@ -1,4 +1,4 @@
-import { text, integer, sqliteTable, unique } from 'drizzle-orm/sqlite-core';
+import { text, integer, sqliteTable, unique, real } from 'drizzle-orm/sqlite-core';
 import { createInsertSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { tagsTable, transactionSplitsTable, transactionsTable, userTable } from '.';
@@ -19,7 +19,9 @@ export const groupsTable = sqliteTable('groups', {
 		.notNull()
 		.default('USD'),
 	invite_link_active: integer('invite_link_active', { mode: 'boolean' }).default(false),
-	invite_link_code: text('invite_link_code').default(generateRandomString(6, alphabet('0-9')))
+	invite_link_code: text('invite_link_code').default(generateRandomString(6, alphabet('0-9'))),
+	weekly_budget: real('weekly_budget'),
+	monthly_budget: real('monthly_budget')
 });
 
 export const groupMembersTable = sqliteTable(
@@ -80,3 +82,8 @@ export const update_group_name_schema = z.object({
 export const update_group_currency_schema = z.object({
 	currency: z.enum(zodEnum(Object.keys(currencies)))
 });
+
+export const update_group_budget_schema = z.object({
+	weekly_budget: z.coerce.number().positive().nullable(),
+	monthly_budget: z.coerce.number().positive().nullable()
+})

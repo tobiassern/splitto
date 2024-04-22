@@ -6,7 +6,8 @@ import {
 	update_group_currency_schema,
 	tagsTable,
 	insert_tag_schema,
-	update_tag_schema
+	update_tag_schema,
+	update_group_budget_schema
 } from '$lib/schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { isGroupMember, isGroupOwner } from '$lib/helpers';
@@ -19,6 +20,7 @@ export const load: PageServerLoad = async (event) => {
 	return {
 		create_tag_form: await superValidate(zod(insert_tag_schema), { id: 'create-tag-form' }),
 		update_tag_form: await superValidate(zod(update_tag_schema), { id: 'update-tag-form' }),
+		update_budget_form: await superValidate(group, zod(update_group_budget_schema), { id: 'update-budget-form' }),
 		update_group_name_form: await superValidate(
 			{ name: group.name ?? undefined },
 			zod(update_group_name_schema),
@@ -52,6 +54,26 @@ export const actions: Actions = {
 			.where(eq(groupsTable.id, group.id));
 
 		return { update_group_name_form };
+	},
+	'update-group-budget': async (event) => {
+		const { group } = isGroupMember(event);
+
+		const update_budget_form = await superValidate(event, zod(update_group_budget_schema), {
+			id: 'update-budget-form'
+		});
+
+		if (!update_budget_form.valid) {
+			return fail(400, {
+				update_budget_form
+			});
+		}
+
+		await event.locals.db
+			.update(groupsTable)
+			.set(update_budget_form.data)
+			.where(eq(groupsTable.id, group.id));
+
+		return { update_budget_form };
 	},
 	'update-group-currency': async (event) => {
 		const { group } = isGroupMember(event);
