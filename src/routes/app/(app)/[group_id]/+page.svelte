@@ -14,13 +14,11 @@
 	export let data;
 
 	let weekly_budget_percentage = Number(
-		((Number(data.total_week?.amount ?? 0) / (data.group.weekly_budget ?? 0)) * 100).toFixed(0)
+		((Number(-(data.total_week?.amount ?? 0)) / (data.group.weekly_budget ?? 0)) * 100).toFixed(0)
 	);
 	let monthly_budget_percentage = Number(
-		((Number(data.total_month?.amount ?? 0) / (data.group.monthly_budget ?? 0)) * 100).toFixed(0)
+		((Number(-(data.total_month?.amount ?? 0)) / (data.group.monthly_budget ?? 0)) * 100).toFixed(0)
 	);
-
-	$: console.log(data.tags_amount);
 </script>
 
 <div class="col-span-12 grid auto-rows-max items-start gap-4 md:gap-8">
@@ -48,7 +46,7 @@
 						currency: data.group.currency,
 						style: 'currency',
 						maximumFractionDigits: 0
-					}).format(Number(data.total_week?.amount ?? 0))}</Card.Title
+					}).format(Number(data.total_week?.amount ? -data.total_week?.amount : 0))}</Card.Title
 				>
 			</Card.Header>
 			{#if data.group.weekly_budget}
@@ -91,7 +89,7 @@
 						currency: data.group.currency,
 						style: 'currency',
 						maximumFractionDigits: 0
-					}).format(Number(data.total_month?.amount ?? 0))}</Card.Title
+					}).format(Number(data.total_month?.amount ? -data.total_month.amount : 0))}</Card.Title
 				>
 			</Card.Header>
 			{#if data.group.monthly_budget}
@@ -151,7 +149,8 @@
 								>{#if tag_amount.monthly_budget}
 									{@const tag_amount_monthly_budget_percentage = Number(
 										(
-											(Number(tag_amount.amount ?? 0) / (tag_amount.monthly_budget ?? 0)) *
+											(Number(tag_amount.amount ? -tag_amount.amount : 0) /
+												(tag_amount.monthly_budget ?? 0)) *
 											100
 										).toFixed(0)
 									)}
@@ -178,9 +177,15 @@
 								{Intl.NumberFormat('sv-SE', {
 									currency: data.group.currency,
 									style: 'currency'
-								}).format(Number(tag_amount.amount ?? 0))}
+								}).format(Number(tag_amount.amount ? -tag_amount.amount : 0))}
 							</Table.Cell>
-							<Table.Cell class="text-right"><Button href="/{data.group.id}/expenses?tag={tag_amount.id}" size="sm" variant="outline">View expenses</Button></Table.Cell>
+							<Table.Cell class="text-right"
+								><Button
+									href="/{data.group.id}/expenses?tag={tag_amount.id}"
+									size="sm"
+									variant="outline">View expenses</Button
+								></Table.Cell
+							>
 						</Table.Row>
 					{/each}
 				</Table.Body>
