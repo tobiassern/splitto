@@ -8,8 +8,6 @@
 	import { getInitials } from '$lib/helpers';
 	import { goto } from '$app/navigation';
 
-	let isCollapsed: boolean;
-
 	type Member = typeof groupMembersTable.$inferSelect;
 	interface ExtendedMember extends Member {
 		user?: typeof userTable.$inferSelect;
@@ -39,11 +37,9 @@
 <Select.Root portal={null} bind:selected={selectedMember} onSelectedChange={handleSelectedChange}>
 	<Select.Trigger
 		class={cn(
-			'flex items-center gap-2 [&>span]:line-clamp-1 [&>span]:flex [&>span]:w-full [&>span]:items-center [&>span]:gap-1 [&>span]:truncate [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0',
-			isCollapsed &&
-				'flex h-9 w-9 shrink-0 items-center justify-center p-0 [&>div>svg]:hidden [&>span]:w-auto'
+			'flex items-center gap-2 [&>span]:line-clamp-1 [&>span]:flex [&>span]:w-full [&>span]:items-center [&>span]:gap-1 [&>span]:truncate [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0'
 		)}
-		aria-label="Select account"
+		aria-label="Select member"
 	>
 		<span class="pointer-events-none">
 			{#if selectedMember}
@@ -66,12 +62,12 @@
 					</Avatar.Root>
 				{/if}
 			{/if}
-			<span class={cn(isCollapsed ? '!ml-0 !hidden' : 'ml-2')}>
+			<span class={cn('ml-2')}>
 				{selectedMember?.label ?? 'Select member'}
 			</span>
 		</span>
 	</Select.Trigger>
-	<Select.Content sameWidth={!isCollapsed} align={isCollapsed ? 'start' : undefined}>
+	<Select.Content sameWidth={false} align="start">
 		<Select.Group>
 			<Select.Item value={null} label="All members">
 				<div
