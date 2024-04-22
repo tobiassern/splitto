@@ -1,4 +1,4 @@
-import { text, integer, sqliteTable, real } from 'drizzle-orm/sqlite-core';
+import { text, integer, sqliteTable, real, primaryKey } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
 import { relations, sql } from 'drizzle-orm';
 import { groupMembersTable, groupsTable } from './groups';
@@ -30,6 +30,27 @@ export const transactionSplitsTable = sqliteTable('transaction_splits', {
 		.notNull()
 });
 
+export const tagsTable = sqliteTable('tags', {
+	id: integer('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+	label: text('label').notNull(),
+	group_id: integer('group_id', { mode: 'number' })
+		.references(() => groupsTable.id, { onDelete: 'cascade' })
+		.notNull(),
+});
+
+export const transactionTagsTable = sqliteTable('transaction_tags', {
+	tag_id: integer('tag_id', { mode: 'number' })
+		.references(() => tagsTable.id, { onDelete: 'cascade' })
+		.notNull(),
+	transaction_id: integer('transaction_id', { mode: 'number' })
+		.references(() => transactionsTable.id, { onDelete: 'cascade' })
+		.notNull(),
+}, (table) => {
+	return {
+		pk: primaryKey({ columns: [table.tag_id, table.transaction_id] })
+	};
+});
+
 export const transactionsRelations = relations(transactionsTable, ({ one, many }) => ({
 	group: one(groupsTable, {
 		fields: [transactionsTable.group_id],
@@ -39,7 +60,23 @@ export const transactionsRelations = relations(transactionsTable, ({ one, many }
 		fields: [transactionsTable.group_member_id],
 		references: [groupMembersTable.id]
 	}),
-	splits: many(transactionSplitsTable)
+	splits: many(transactionSplitsTable),
+	tags: many(transactionTagsTable)
+}));
+
+export const transactionTagsRelations = relations(transactionTagsTable, ({ one }) => ({
+	transaction: one(transactionsTable, {
+		fields: [transactionTagsTable.transaction_id],
+		references: [transactionsTable.id]
+	}),
+	tag: one(tagsTable, {
+		fields: [transactionTagsTable.transaction_id],
+		references: [tagsTable.id]
+	}),
+}));
+
+export const tagsRelations = relations(tagsTable, ({ many }) => ({
+	transaction_tags: many(transactionTagsTable),
 }));
 
 export const transactionSplitsRelations = relations(transactionSplitsTable, ({ one }) => ({
@@ -94,3 +131,12 @@ export const create_settlement_schema = z.object({
 	amount: z.coerce.number(),
 	when: z.string()
 });
+
+export const insert_tag_schema = z.object({
+	label: z.string().min(2)
+});
+
+export const update_tag_schema = z.object({
+	label: z.string().min(2),
+	id: z.coerce.number().int()
+})
