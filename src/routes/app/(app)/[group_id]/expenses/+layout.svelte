@@ -11,6 +11,7 @@
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import FacetedFilter from './(components)/faceted-filter.svelte';
 	import ColumnHeader from './(components)/column-header.svelte';
+	import DateRangePicker from './(components)/date-range-picker.svelte';
 	export let data;
 </script>
 
@@ -26,18 +27,21 @@
 		</Button>
 	</Card.Header>
 	<Card.Content>
-		<FacetedFilter
-			name="Tags"
-			title="Tags"
-			searchParam="tag"
-			filterValues={$page.url.searchParams.getAll('tag')}
-			options={data.group.tags.map((tag) => {
-				return {
-					value: String(tag.id),
-					label: tag.label
-				};
-			})}
-		/>
+		<div class="flex gap-3 items-center">
+			<DateRangePicker />
+			<FacetedFilter
+				name="Tags"
+				title="Tags"
+				searchParam="tag"
+				filterValues={$page.url.searchParams.getAll('tag')}
+				options={data.group.tags.map((tag) => {
+					return {
+						value: String(tag.id),
+						label: tag.label
+					};
+				})}
+			/>
+		</div>
 		<Table.Root>
 			<Table.Header>
 				<Table.Row>

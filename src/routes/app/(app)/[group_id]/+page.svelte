@@ -21,17 +21,17 @@
 
 <div class="col-span-12 grid auto-rows-max items-start gap-4 md:gap-8">
 	<div class="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-		<!-- <Card.Root class="sm:col-span-2">
+		<Card.Root class="sm:col-span-2">
 			<Card.Header class="pb-3">
-				<Card.Title>Your Orders</Card.Title>
+				<Card.Title>Get Started</Card.Title>
 				<Card.Description class="max-w-lg text-balance leading-relaxed">
 					Introducing Our Dynamic Orders Dashboard for Seamless Management and Insightful Analysis.
 				</Card.Description>
 			</Card.Header>
 			<Card.Footer>
-				<Button>Create New Order</Button>
+				<Button>Create New Expense</Button>
 			</Card.Footer>
-		</Card.Root> -->
+		</Card.Root>
 		<Card.Root>
 			<Card.Header class="pb-2">
 				<Card.Description class="flex items-center justify-between gap-2"
