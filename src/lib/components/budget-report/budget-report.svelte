@@ -18,7 +18,7 @@
 			: 0;
 </script>
 
-<Card.Root>
+<Card.Root class="h-full">
 	<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
 		<Card.Title class="text-sm font-medium">{title}</Card.Title>
 		{#if budget && budget_percentage && budget_percentage > 100}
