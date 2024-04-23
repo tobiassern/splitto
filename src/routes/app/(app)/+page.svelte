@@ -9,22 +9,40 @@
 </script>
 
 <PageTitle text="Select group" />
-<main class="mx-auto grid w-full max-w-3xl grid-cols-12 items-start gap-4 p-4 sm:p-6 md:gap-8">
-	<div class="col-span-12 lg:col-span-6">
-		<BudgetReport
-			type="week"
-			amount={data.total_week?.amount}
-			budget={data.user?.budget_weekly}
-			currency={data.user?.default_currency ?? ''}
-		/>
-	</div>
-	<div class="col-span-12 lg:col-span-6">
-		<BudgetReport
-			type="month"
-			amount={data.total_month?.amount}
-			budget={data.user?.budget_monthly}
-			currency={data.user?.default_currency ?? ''}
-		/>
+<main class="mx-auto grid w-full max-w-7xl grid-cols-12 items-start gap-4 p-4 sm:p-6 md:gap-8">
+	<div class="col-span-12 grid grid-cols-12 gap-4 md:gap-8">
+		<div class="col-span-12 lg:col-span-3">
+			<BudgetReport
+				title="Average daily spending"
+				budget_type="average daily budget"
+				no_budget_text="Set an average daily budget to keep track"
+				amount={data.total_month?.amount
+					? Number(data.total_month?.amount) / data.daysSinceFirst
+					: 0}
+				budget={data.user?.budget_average_daily}
+				currency={data.user?.default_currency ?? ''}
+			/>
+		</div>
+		<div class="col-span-12 lg:col-span-3">
+			<BudgetReport
+				title="This Week"
+				budget_type="weekly budget"
+				amount={data.total_week?.amount}
+				budget={data.user?.budget_weekly}
+				no_budget_text="Set a weekly budget to keep track"
+				currency={data.user?.default_currency ?? ''}
+			/>
+		</div>
+		<div class="col-span-12 lg:col-span-3">
+			<BudgetReport
+				title="This Month"
+				budget_type="monthly budget"
+				amount={data.total_month?.amount}
+				budget={data.user?.budget_monthly}
+				no_budget_text="Set a monthly budget to keep track"
+				currency={data.user?.default_currency ?? ''}
+			/>
+		</div>
 	</div>
 	<Card.Root class="col-span-12">
 		<Card.Header class="flex flex-col items-start justify-between sm:flex-row sm:items-center">

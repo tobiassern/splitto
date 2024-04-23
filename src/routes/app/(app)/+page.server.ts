@@ -19,6 +19,7 @@ export const load: PageServerLoad = async (event) => {
 	const date = new Date();
 	const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
 	const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+	const daysSinceFirst = date.getDate();
 
 	const first = date.getDate() - date.getDay(); // First day is the day of the month - the day of the week
 	const last = first + 6; // last day is the first day + 6
@@ -94,7 +95,9 @@ export const load: PageServerLoad = async (event) => {
 			{ errors: false }
 		),
 		total_month,
-		total_week
+		total_week,
+		user,
+		daysSinceFirst
 	};
 };
 

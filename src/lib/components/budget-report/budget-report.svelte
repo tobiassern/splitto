@@ -4,8 +4,10 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Progress } from '$lib/components/ui/progress/index.js';
 
-	export let type: 'week' | 'month';
-	export let amount: string | null;
+	export let title: string;
+	export let budget_type: string;
+	export let no_budget_text: string;
+	export let amount: number | string | null;
 	export let budget: number | undefined | null;
 	export let currency: string;
 
@@ -15,10 +17,10 @@
 			: 0;
 </script>
 
-<Card.Root>
+<Card.Root class="h-full">
 	<Card.Header class="pb-2">
-		<Card.Description class="flex items-center justify-between gap-2"
-			><span>This {type === 'week' ? 'Week' : 'Month'}</span>
+		<Card.Description class="flex items-center justify-between gap-2">
+			<span>{title}</span>
 			{#if budget && budget_percentage && budget_percentage > 100}
 				<Badge variant="destructive">Over budget</Badge>
 			{/if}
@@ -34,7 +36,7 @@
 	{#if typeof budget === 'number'}
 		<Card.Content>
 			<div class="text-xs text-muted-foreground">
-				{budget_percentage}% of {type === 'week' ? 'weekly' : 'monthly'} budget
+				{budget_percentage}% of {budget_type}
 			</div>
 		</Card.Content>
 		<Card.Footer>
@@ -54,7 +56,7 @@
 	{:else}
 		<Card.Content>
 			<div class="text-xs text-muted-foreground">
-				Set a {type === 'week' ? 'weekly' : 'monthly'} budget to keep track
+				{no_budget_text}
 			</div>
 		</Card.Content>
 	{/if}

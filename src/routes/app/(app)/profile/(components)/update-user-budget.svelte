@@ -26,6 +26,7 @@
 
 	const { form: formData, enhance, delayed, errors } = form;
 
+	const budgetAverageDailyProxy = numberProxy(form, 'budget_average_daily', { empty: 'null' });
 	const budgetWeeklyProxy = numberProxy(form, 'budget_weekly', { empty: 'null' });
 	const budgetMonthlyProxy = numberProxy(form, 'budget_monthly', { empty: 'null' });
 
@@ -40,6 +41,14 @@
 </script>
 
 <form method="POST" use:enhance class="grid gap-4" action="?/update-budget">
+	<Form.Field {form} name="budget_average_daily">
+		<Form.Control let:attrs>
+			<Form.Label>Budget average daily</Form.Label>
+			<Input {...attrs} bind:value={$budgetAverageDailyProxy} type="number" />
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
+
 	<Form.Field {form} name="budget_weekly">
 		<Form.Control let:attrs>
 			<Form.Label>Budget weekly</Form.Label>
