@@ -54,14 +54,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 					members: {
 						orderBy: [asc(groupMembersTable.created_at)],
 						with: {
-							user: {
-								columns: {
-									id: true,
-									name: true,
-									email: true,
-									avatar_url: true
-								}
-							}
+							user: true
 						}
 					}
 				}

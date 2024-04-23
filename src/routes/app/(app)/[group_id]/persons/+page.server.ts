@@ -5,7 +5,7 @@ import { eq, and, ne } from 'drizzle-orm';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { insert_group_member_schema, update_group_member_schema } from '$lib/schema';
-import { fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { generateRandomString, alphabet } from 'oslo/crypto';
 
 export const load: PageServerLoad = async (event) => {
@@ -103,7 +103,15 @@ export const actions: Actions = {
 		if (!updated_group_member) return setError(update_group_member_form, '', 'Could not update person');
 		console.log(updated_group_member);
 		return { update_group_member_form };
+	},
+	'leave-group': async (event) => {
+		const { group, user } = isGroupMember(event);
+
+		if (group.owner_id === user.id) error(400, "Group owner can't leave the group");
+
+		await event.locals.db.update(groupMembersTable).set({ user_id: null, email: null }).where(and(eq(groupMembersTable.group_id, group.id), eq(groupMembersTable.user_id, user.id)));
+
+		redirect(302, '/')
+
 	}
-	// update: async (event) => { },
-	// delete: async (event) => { }
 };

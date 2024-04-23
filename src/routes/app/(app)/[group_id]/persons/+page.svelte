@@ -122,12 +122,12 @@
 					disabled={!data.group.invite_link_active}
 					on:click={() => {
 						navigator.clipboard.writeText(
-							`${$page.url.protocol}//${PUBLIC_APP_HOSTNAME}${$page.url.port ? `:${$page.url.port}` : ''}/${data.group.id}/join/${data.group.invite_link_code}`
+							`${$page.url.protocol}//${PUBLIC_APP_HOSTNAME}${$page.url.port ? `:${$page.url.port}` : ''}/join/${data.group.id}/${data.group.invite_link_code}`
 						);
 						toast('Invite link copied to clipboard');
 					}}
 				>
-					<span>{PUBLIC_APP_HOSTNAME}/{data.group.id}/join/{data.group.invite_link_code}</span><Copy
+					<span>{PUBLIC_APP_HOSTNAME}/join/{data.group.id}/{data.group.invite_link_code}</span><Copy
 						class="size-4"
 					></Copy>
 				</Button>

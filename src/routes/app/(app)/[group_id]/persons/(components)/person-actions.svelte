@@ -15,6 +15,7 @@
 	export let member: typeof groupMembersTable.$inferSelect;
 	let showEditForm = false;
 	let deleteFormEl: HTMLFormElement;
+	let leaveGroupFormEl: HTMLFormElement
 </script>
 
 <form
@@ -24,13 +25,30 @@
 	use:enhance={() => {
 		return async ({ result }) => {
 			if (result.type === 'success') {
-				toast.success('Expense removed');
-				goto(`/${$page.params.group_id}/expenses`, { invalidateAll: true });
+				toast.success('Group member removed');
+			} else {
+				toast.error('An error occurred');
 			}
 		};
 	}}
 />
-<EditPersonForm bind:open={showEditForm} data={update_group_member_form} {member}/>
+
+<form
+	bind:this={leaveGroupFormEl}
+	method="POST"
+	action="?/leave-group"
+	use:enhance={() => {
+		return async ({ result }) => {
+			if (result.type === 'redirect') {
+				toast.success('Group left');
+				goto(`/`, { invalidateAll: true });
+			} else {
+				toast.error('An error occurred');
+			}
+		};
+	}}
+/>
+<EditPersonForm bind:open={showEditForm} data={update_group_member_form} {member} />
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger asChild let:builder>
 		<Button builders={[builder]} size="icon" variant="outline" class="h-8 w-8">
@@ -59,6 +77,10 @@
 			<DropdownMenu.Item
 				on:click={() => deleteFormEl.requestSubmit()}
 				disabled={member.user_id === $page.data.user?.id}>Remove</DropdownMenu.Item
+			>
+		{:else if $page.data.user?.id === member.user_id}
+			<DropdownMenu.Item on:click={() => leaveGroupFormEl.requestSubmit()}
+				>Leave group</DropdownMenu.Item
 			>
 		{/if}
 	</DropdownMenu.Content>

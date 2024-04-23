@@ -7,7 +7,7 @@ type Group = typeof groupsTable.$inferSelect;
 type Member = typeof groupMembersTable.$inferSelect;
 type Tag = typeof tagsTable.$inferSelect;
 interface ExtendedMember extends Member {
-	user?: typeof userTable.$inferSelect;
+	user: typeof userTable.$inferSelect | null;
 }
 interface ExtendedGroup extends Group {
 	members: ExtendedMember[];

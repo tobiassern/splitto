@@ -10,7 +10,7 @@
 
 	type Member = typeof groupMembersTable.$inferSelect;
 	interface ExtendedMember extends Member {
-		user?: typeof userTable.$inferSelect;
+		user: typeof userTable.$inferSelect | null;
 	}
 	export let members: ExtendedMember[];
 
