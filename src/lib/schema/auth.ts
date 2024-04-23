@@ -16,8 +16,8 @@ export const userTable = sqliteTable('user', {
 	avatar_url: text('avatar_url'),
 	super_admin: integer('super_admin', { mode: 'boolean' }),
 	email_verified: integer('email_verified', { mode: 'boolean' }).default(false),
-	budget: real('budget'),
-	budget_per: text('budget_per', { enum: ['week', 'month'] }).default('month'),
+	budget_weekly: real('budget_weekly'),
+	budget_monthly: real('budget_monthly'),
 	default_currency: text('currency', { enum: zodEnum(Object.keys(currencies)) })
 		.notNull()
 		.default('USD'),
@@ -69,7 +69,7 @@ export const update_user_email_schema = z.object({
 });
 
 export const update_user_budget_schema = z.object({
-	budget: z.coerce.number().nullable(),
-	budget_per: z.enum(['week', 'month']).default('month'),
+	budget_weekly: z.coerce.number().nullable(),
+	budget_monthly: z.coerce.number().nullable(),
 	default_currency: z.enum(zodEnum(Object.keys(currencies)))
 })

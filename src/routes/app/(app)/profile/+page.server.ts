@@ -17,7 +17,7 @@ export const load: PageServerLoad = async (event) => {
 	const { user } = isAuthenticated(event);
 	return {
 		sessions: await event.locals.lucia.getUserSessions(user.id),
-		update_user_budget_form: await superValidate({ budget: user.budget, budget_per: user.budget_per ?? 'month' }, zod(update_user_budget_schema)),
+		update_user_budget_form: await superValidate(user, zod(update_user_budget_schema)),
 		update_user_name_form: await superValidate(user, zod(update_user_name_schema)),
 		update_user_email_form: await superValidate(user, zod(update_user_email_schema))
 	};

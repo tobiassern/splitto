@@ -18,7 +18,7 @@
 		<BudgetReport
 			type="week"
 			amount={data.total_week?.amount}
-			budget={data.user?.budget_per === 'week' ? data.user.budget : null}
+			budget={data.user?.budget_weekly}
 			currency={data.user?.default_currency ?? ''}
 		/>
 	</div>
@@ -26,7 +26,7 @@
 		<BudgetReport
 			type="month"
 			amount={data.total_month?.amount}
-			budget={data.user?.budget_per === 'month' ? data.user.budget : null}
+			budget={data.user?.budget_monthly}
 			currency={data.user?.default_currency ?? ''}
 		/>
 	</div>

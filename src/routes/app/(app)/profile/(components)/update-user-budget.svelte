@@ -27,45 +27,36 @@
 
 	const { form: formData, enhance, delayed, errors } = form;
 
-	const budgetProxy = numberProxy(form, 'budget', { empty: 'null' });
+	const budgetWeeklyProxy = numberProxy(form, 'budget_weekly', { empty: 'null' });
+	const budgetMonthlyProxy = numberProxy(form, 'budget_monthly', { empty: 'null' });
 
 	$: selectedCurrency = $formData.default_currency
 		? {
 				label:
-					Object.values(currencies).find((item) => item.code === $formData.default_currency)?.name ??
-					'Unknown currency',
+					Object.values(currencies).find((item) => item.code === $formData.default_currency)
+						?.name ?? 'Unknown currency',
 				value: $formData.default_currency
 			}
 		: undefined;
 </script>
 
 <form method="POST" use:enhance class="grid gap-4" action="?/update-budget">
-	<Form.Field {form} name="budget">
+	<Form.Field {form} name="budget_weekly">
 		<Form.Control let:attrs>
-			<Form.Label>Budget</Form.Label>
-			<Input {...attrs} bind:value={$budgetProxy} type="number" />
+			<Form.Label>Budget weekly</Form.Label>
+			<Input {...attrs} bind:value={$budgetWeeklyProxy} type="number" />
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
-	<Form.Fieldset {form} name="budget_per" class="space-y-3">
-		<Form.Legend>Budget per</Form.Legend>
-		<RadioGroup.Root bind:value={$formData.budget_per} class="flex flex-col space-y-1">
-			<div class="flex items-center space-x-3 space-y-0">
-				<Form.Control let:attrs>
-					<RadioGroup.Item value="week" {...attrs} />
-					<Form.Label class="font-normal">Week</Form.Label>
-				</Form.Control>
-			</div>
-			<div class="flex items-center space-x-3 space-y-0">
-				<Form.Control let:attrs>
-					<RadioGroup.Item value="month" {...attrs} />
-					<Form.Label class="font-normal">Month</Form.Label>
-				</Form.Control>
-			</div>
-			<RadioGroup.Input name="budget_per" />
-		</RadioGroup.Root>
+
+	<Form.Field {form} name="budget_monthly">
+		<Form.Control let:attrs>
+			<Form.Label>Budget monthly</Form.Label>
+			<Input {...attrs} bind:value={$budgetMonthlyProxy} type="number" />
+		</Form.Control>
 		<Form.FieldErrors />
-	</Form.Fieldset>
+	</Form.Field>
+
 	<Form.Field {form} name="default_currency">
 		<Form.Control let:attrs>
 			<Form.Label>Default currency</Form.Label>
@@ -85,7 +76,9 @@
 				</Select.Content>
 			</Select.Root>
 			<input hidden bind:value={$formData.default_currency} name={attrs.name} />
-			<Form.Description>Only expenses from groups with the same currency will be calculated towards your budget.</Form.Description>
+			<Form.Description
+				>Only expenses from groups with the same currency will be calculated towards your budget.</Form.Description
+			>
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
