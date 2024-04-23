@@ -71,8 +71,8 @@
 	<Card.Header>
 		<Card.Title>Invite Members</Card.Title>
 		<Card.Description
-			>You can invite new members to your group by adding them and using an email. Then when they
-			sign in / sign up for Splitto they can accept to join your group.</Card.Description
+			>You can invite new members to your group by adding them and using an email. When they
+			sign in / sign up for Splitto they can then accept to join your group.</Card.Description
 		>
 	</Card.Header>
 	<Card.Content>

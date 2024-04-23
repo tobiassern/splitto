@@ -32,11 +32,11 @@ export const actions: Actions = {
 		const [new_group_member, error] = await event.locals.db.transaction(async (tx) => {
 			const existing_group_member = create_group_member_form.data.email
 				? await tx.query.groupMembersTable.findFirst({
-						where: and(
-							eq(groupMembersTable.group_id, group.id),
-							eq(groupMembersTable.email, create_group_member_form.data.email)
-						)
-					})
+					where: and(
+						eq(groupMembersTable.group_id, group.id),
+						eq(groupMembersTable.email, create_group_member_form.data.email)
+					)
+				})
 				: null;
 			if (existing_group_member) return [null, 'Email already added'];
 			const new_group_member = await tx.insert(groupMembersTable).values({
@@ -70,7 +70,7 @@ export const actions: Actions = {
 
 		await event.locals.db
 			.update(groupsTable)
-			.set({ invite_link_code: generateRandomString(6, alphabet('0-9')) })
+			.set({ invite_link_code: generateRandomString(6, alphabet("a-z", "A-Z", "0-9")) })
 			.where(eq(groupsTable.id, group.id));
 	},
 	'update-group-member': async (event) => {
@@ -88,12 +88,12 @@ export const actions: Actions = {
 		const [updated_group_member, error] = await event.locals.db.transaction(async (tx) => {
 			const existing_group_member = update_group_member_form.data.email
 				? await tx.query.groupMembersTable.findFirst({
-						where: and(
-							eq(groupMembersTable.group_id, group.id),
-							eq(groupMembersTable.email, update_group_member_form.data.email),
-							ne(groupMembersTable.id, update_group_member_form.data.id)
-						)
-					})
+					where: and(
+						eq(groupMembersTable.group_id, group.id),
+						eq(groupMembersTable.email, update_group_member_form.data.email),
+						ne(groupMembersTable.id, update_group_member_form.data.id)
+					)
+				})
 				: null;
 			if (existing_group_member) return [null, 'Email already added'];
 			const [updated_group_member] = await tx
