@@ -114,5 +114,16 @@ export const actions: Actions = {
 		} else {
 			return { success: true };
 		}
+	},
+	'delete-account': async (event) => {
+		const { user, session } = isAuthenticated(event);
+
+		const formData = await event.request.formData();
+		const confirmEmail = formData.get('confirm-email')?.toString();
+
+		if (confirmEmail !== user.email) error(400, 'Email not matching');
+
+		await event.locals.db.delete(userTable).where(eq(userTable.id, user.id));
+		redirect(302, '/sign-in');
 	}
 };

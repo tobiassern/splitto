@@ -9,6 +9,7 @@
 	import { toast } from 'svelte-sonner';
 	import autoAnimate from '@formkit/auto-animate';
 	import { PageTitle } from '$lib/components/page-title';
+	import DeleteUser from './(components)/delete-user.svelte';
 
 	export let data;
 </script>
@@ -28,6 +29,8 @@
 			<UpdateUserName data={data.update_user_name_form} />
 			<Separator />
 			<UpdateUserEmail data={data.update_user_email_form} />
+			<Separator />
+			<DeleteUser />
 		</Card.Content>
 	</Card.Root>
 	<Card.Root class="col-span-1">
