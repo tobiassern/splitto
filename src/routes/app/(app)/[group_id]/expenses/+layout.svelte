@@ -79,7 +79,7 @@
 							goto(newUrl, { invalidateAll: true });
 						}}
 						size="sm"
-						variant="ghost">Reset filter</Button
+						variant="secondary">Reset filter</Button
 					>
 				</div>
 			{/if}
