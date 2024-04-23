@@ -1,4 +1,4 @@
-import { RESEND_API_KEY } from '$env/static/private';
+import { RESEND_API_KEY, EMAIL_DOMAIN } from '$env/static/private';
 import { PUBLIC_APP_HOSTNAME } from '$env/static/public';
 
 const sendEmail = async ({
@@ -34,11 +34,11 @@ const sendEmail = async ({
 
 export const sendEmailLoginOTP = async ({ to, otp }: { to: string; otp: string }) => {
 	await sendEmail({
-		from: 'Splitto <no-reply@email.splitto.io>',
+		from: `Splitto <no-reply@${EMAIL_DOMAIN}`,
 		to: [to],
 		subject: 'OTP Code for Splitto',
 		html: `
-        <p>Your OTP code: ${otp}</p>
+        <p>Your code is${otp}</p>
         <p><a href="https://${PUBLIC_APP_HOSTNAME}/sign-in/verify-email/?email=${to}&code=${otp}">Link to verify your email</></p>
         `
 	});
