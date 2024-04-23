@@ -34,9 +34,9 @@ const sendEmail = async ({
 
 export const sendEmailLoginOTP = async ({ to, otp }: { to: string; otp: string }) => {
 	await sendEmail({
-		from: 'Project NEO <no-reply@leadser.io>',
+		from: 'Splitto <no-reply@email.splitto.io>',
 		to: [to],
-		subject: 'OTP Code for Project NEO',
+		subject: 'OTP Code for Splitto',
 		html: `
         <p>Your OTP code: ${otp}</p>
         <p><a href="https://${PUBLIC_APP_HOSTNAME}/sign-in/verify-email/?email=${to}&code=${otp}">Link to verify your email</></p>
