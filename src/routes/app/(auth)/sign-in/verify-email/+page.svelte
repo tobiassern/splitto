@@ -59,7 +59,7 @@
 				<Form.Field {form} name="otp">
 					<Form.Control let:attrs>
 						<Form.Label>OTP (One-time password)</Form.Label>
-						<Input {...attrs} bind:value={$formData.otp} />
+						<Input {...attrs} bind:value={$formData.otp} autocomplete="one-time-code" />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
