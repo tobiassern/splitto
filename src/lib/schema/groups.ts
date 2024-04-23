@@ -19,7 +19,9 @@ export const groupsTable = sqliteTable('groups', {
 		.notNull()
 		.default('USD'),
 	invite_link_active: integer('invite_link_active', { mode: 'boolean' }).default(false),
-	invite_link_code: text('invite_link_code').$defaultFn(() => generateRandomString(6, alphabet('0-9'))),
+	invite_link_code: text('invite_link_code').$defaultFn(() =>
+		generateRandomString(6, alphabet('0-9'))
+	),
 	weekly_budget: real('weekly_budget'),
 	monthly_budget: real('monthly_budget')
 });
@@ -85,7 +87,7 @@ export const update_group_member_schema = z.object({
 	weekly_budget: z.coerce.number().positive().nullable(),
 	monthly_budget: z.coerce.number().positive().nullable(),
 	id: z.coerce.number().int()
-})
+});
 
 export const update_group_name_schema = z.object({
 	name: z.string().min(2)
@@ -98,4 +100,4 @@ export const update_group_currency_schema = z.object({
 export const update_group_budget_schema = z.object({
 	weekly_budget: z.coerce.number().positive().nullable(),
 	monthly_budget: z.coerce.number().positive().nullable()
-})
+});

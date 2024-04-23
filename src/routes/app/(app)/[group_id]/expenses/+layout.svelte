@@ -31,13 +31,13 @@
 		</Button>
 	</Card.Header>
 	<Card.Content>
-		<div class="flex items-center justify-start gap-3 mb-2">
+		<div class="mb-2 flex items-center justify-start gap-3">
 			<div>
 				<Input
 					placeholder="Search expense..."
 					class="h-8"
 					bind:value={search}
-					on:change={(event) => {
+					on:change={() => {
 						const newUrl = new URL($page.url);
 						if (search) {
 							newUrl.searchParams.set('s', search);

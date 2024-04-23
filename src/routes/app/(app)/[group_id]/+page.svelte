@@ -7,12 +7,13 @@
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import BudgetReport from '../(components)/budget-report.svelte';
 	import GroupMemberSwitcher from '../(components)/group-member-switcher.svelte';
-
+	import { PageTitle } from '$lib/components/page-title';
 	export let data;
 
 	$: selectedGroupMember = $page.url.searchParams.get('member') ?? undefined;
 </script>
 
+<PageTitle text="Dashboard | {data.group.name}" />
 <div class="col-span-12 grid auto-rows-max items-start gap-4 md:gap-8">
 	<div class="flex items-center justify-start gap-3">
 		<div>

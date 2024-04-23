@@ -26,7 +26,7 @@
 		}
 	});
 
-	const { form: formData, enhance, errors, delayed } = form;
+	const { enhance, errors, delayed } = form;
 
 	const monthlyBudget = numberProxy(form, 'monthly_budget', { empty: 'null' });
 	const weeklyBudget = numberProxy(form, 'weekly_budget', { empty: 'null' });

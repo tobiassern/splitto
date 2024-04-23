@@ -14,12 +14,13 @@
 	import Copy from 'lucide-svelte/icons/copy';
 	import { toast } from 'svelte-sonner';
 	import { applyAction, enhance } from '$app/forms';
-
+	import { PageTitle } from '$lib/components/page-title';
 	export let data;
 
 	let inviteLinkActiveFormEl: HTMLFormElement;
 </script>
 
+<PageTitle text="Persons | {data.group.name}" />
 <Card.Root class="col-span-12 lg:col-span-8 lg:col-start-3">
 	<Card.Header class="flex flex-row items-center">
 		<div class="grid gap-2">
@@ -59,7 +60,7 @@
 							</p>
 						</div>
 					</div>
-					<PersonActions {member} update_group_member_form={data.update_group_member_form}/>
+					<PersonActions {member} update_group_member_form={data.update_group_member_form} />
 				</div>
 			{/each}
 		{/if}
@@ -88,7 +89,7 @@
 					class="flex items-center space-x-2"
 					method="POST"
 					action="?/activate-invite-link"
-					use:enhance={(form) => {
+					use:enhance={() => {
 						return async ({ result }) => {
 							if (result.type === 'success') {
 								toast.success(

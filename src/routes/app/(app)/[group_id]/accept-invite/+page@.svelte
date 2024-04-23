@@ -3,9 +3,11 @@
 	import * as Card from '$lib/components/ui/card';
 	import { applyAction, enhance } from '$app/forms';
 	import { toast } from 'svelte-sonner';
+	import PageTitle from '$lib/components/page-title/page-title.svelte';
 	export let data;
 </script>
 
+<PageTitle text="Accept invite" />
 <main class="mx-auto flex min-h-dvh w-full max-w-2xl items-center p-4 md:p-8">
 	<Card.Root class="w-full max-w-sm">
 		<Card.Header>

@@ -1,9 +1,11 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Button } from '$lib/components/ui/button';
+	import { PageTitle } from '$lib/components/page-title';
 	export let data;
 </script>
 
+<PageTitle text="Join {data.group.name}"></PageTitle>
 <main class="mx-auto flex min-h-dvh w-full max-w-2xl items-center p-4 md:p-8">
 	<Card.Root class="w-full">
 		<Card.Header class="flex flex-col items-start justify-between sm:flex-row sm:items-center">

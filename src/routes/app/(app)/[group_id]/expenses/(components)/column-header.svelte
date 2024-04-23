@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import EyeNone from 'svelte-radix/EyeNone.svelte';
 	import ArrowDown from 'svelte-radix/ArrowDown.svelte';
 	import ArrowUp from 'svelte-radix/ArrowUp.svelte';
 	import CaretSort from 'svelte-radix/CaretSort.svelte';
@@ -13,24 +12,14 @@
 	export let searchParam: string;
 
 	$: sorting = $page.url.searchParams.get(searchParam);
-	// export let props: {
-	// 	select: never;
-	// 	sort: {
-	// 		order: 'desc' | 'asc' | undefined;
-	// 		toggle: (_: Event) => void;
-	// 		clear: () => void;
-	// 		disabled: boolean;
-	// 	};
-	// 	filter: never;
-	// };
 
-	function handleAscSort(e: Event) {
+	function handleAscSort() {
 		const newUrl = new URL($page.url);
 		newUrl.searchParams.set(searchParam, 'asc');
 		goto(newUrl);
 	}
 
-	function handleDescSort(e: Event) {
+	function handleDescSort() {
 		const newUrl = new URL($page.url);
 		newUrl.searchParams.set(searchParam, 'desc');
 		goto(newUrl);

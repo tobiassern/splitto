@@ -3,9 +3,11 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import CreateGroup from './(components)/create-group.svelte';
+	import { PageTitle } from '$lib/components/page-title';
 	export let data;
 </script>
 
+<PageTitle text="Select group" />
 <main class="mx-auto flex min-h-dvh w-full max-w-2xl items-center p-4 md:p-8">
 	<Card.Root class="w-full">
 		<Card.Header class="flex flex-col items-start justify-between sm:flex-row sm:items-center">

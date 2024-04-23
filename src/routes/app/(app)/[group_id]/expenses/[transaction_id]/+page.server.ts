@@ -21,7 +21,7 @@ export const load: PageServerLoad = async (event) => {
 			splits: {
 				with: {
 					group_member: true
-				},
+				}
 			}
 		}
 	});

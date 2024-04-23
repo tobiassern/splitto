@@ -12,20 +12,39 @@ export const load: LayoutServerLoad = async (event) => {
 	const to = event.url.searchParams.get('to');
 	const whenOrder = event.url.searchParams.get('when');
 
-	const tagsData = await event.locals.db.select().from(transactionTagsTable).where(and(eq(transactionTagsTable.transaction_id, 16), inArray(transactionTagsTable.tag_id, [12])))
+	const tagsData = await event.locals.db
+		.select()
+		.from(transactionTagsTable)
+		.where(
+			and(eq(transactionTagsTable.transaction_id, 16), inArray(transactionTagsTable.tag_id, [12]))
+		);
 	console.log(tagsData);
 
 	return {
 		transactions: event.locals.db.query.transactionsTable.findMany({
-			where: (transactions, { eq, and, like, gte, lte }) => (
+			where: (transactions, { eq, and, like, gte, lte }) =>
 				and(
 					eq(transactions.group_id, group.id),
 					search ? like(transactions.label, `%${search}%`) : undefined,
 					from ? gte(transactions.when, new Date(from)) : undefined,
 					to ? lte(transactions.when, new Date(to)) : undefined,
-					tags?.length ? exists(event.locals.db.select().from(transactionTagsTable).where(and(eq(transactionTagsTable.transaction_id, transactions.id), inArray(transactionTagsTable.tag_id, tags.map(tag => Number(tag)))))) : undefined
-				)
-			),
+					tags?.length
+						? exists(
+								event.locals.db
+									.select()
+									.from(transactionTagsTable)
+									.where(
+										and(
+											eq(transactionTagsTable.transaction_id, transactions.id),
+											inArray(
+												transactionTagsTable.tag_id,
+												tags.map((tag) => Number(tag))
+											)
+										)
+									)
+							)
+						: undefined
+				),
 			with: {
 				group_member: true,
 				splits: true,

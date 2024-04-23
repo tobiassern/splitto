@@ -11,6 +11,7 @@
 	import autoAnimate from '@formkit/auto-animate';
 	import { toast } from 'svelte-sonner';
 	import { onMount } from 'svelte';
+	import { PageTitle } from '$lib/components/page-title';
 	export let data;
 
 	const form = superForm(data.form, {
@@ -35,6 +36,7 @@
 	});
 </script>
 
+<PageTitle text="Verify email" />
 <Card.Root class="mx-auto w-full max-w-sm">
 	<Card.Header>
 		<Card.Title class="text-2xl">Verify email</Card.Title>

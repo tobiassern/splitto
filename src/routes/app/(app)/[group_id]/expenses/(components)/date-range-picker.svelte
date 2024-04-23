@@ -3,11 +3,9 @@
 	import type { DateRange } from 'bits-ui';
 	import { page } from '$app/stores';
 	import {
-		CalendarDate,
 		DateFormatter,
 		type DateValue,
 		getLocalTimeZone,
-		toCalendarDate,
 		parseDate
 	} from '@internationalized/date';
 	import { cn } from '$lib/utils.js';

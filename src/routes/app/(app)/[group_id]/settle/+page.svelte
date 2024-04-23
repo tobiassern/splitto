@@ -3,9 +3,11 @@
 	import { Button } from '$lib/components/ui/button';
 	import HandCoins from 'lucide-svelte/icons/hand-coins';
 	import { settlementFormStore } from '$lib/components/create-settlement/create-settlement.svelte';
+	import { PageTitle } from '$lib/components/page-title';
 	export let data;
 </script>
 
+<PageTitle text="Settle"></PageTitle>
 <div class="col-span-12">
 	<h3 class="font-semibold leading-none tracking-tight">Balances</h3>
 	<ul class="-mx-3 flex snap-x gap-4 overflow-x-scroll px-3 py-2">

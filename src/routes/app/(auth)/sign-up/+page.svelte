@@ -10,7 +10,7 @@
 	import { toast } from 'svelte-sonner';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-
+	import { PageTitle } from '$lib/components/page-title';
 	export let data;
 
 	const form = superForm(data.form, {
@@ -32,6 +32,7 @@
 	});
 </script>
 
+<PageTitle text="Sign up" />
 <Card.Root class="mx-auto w-full max-w-sm">
 	<Card.Header>
 		<Card.Title class="text-xl">Sign Up</Card.Title>

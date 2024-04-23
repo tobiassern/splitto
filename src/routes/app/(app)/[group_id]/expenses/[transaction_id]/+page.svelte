@@ -8,6 +8,7 @@
 	import ExpenseActions from './(components)/expense-actions.svelte';
 	import ExpenseUpdatedAt from './(components)/expense-updated-at.svelte';
 	import { Badge } from '$lib/components/ui/badge';
+	import { PageTitle } from '$lib/components/page-title';
 
 	export let data;
 	let open = true;
@@ -15,6 +16,7 @@
 	const isDesktop = mediaQuery('(min-width: 1024px)');
 </script>
 
+<PageTitle text="{data.transaction.label ?? '-'} | Expenses | {data.group.name}" />
 {#if $isDesktop}
 	<Card.Root class="overflow-hidden">
 		<Card.Header class="grid gap-1 bg-muted/50">

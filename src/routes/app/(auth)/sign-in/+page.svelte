@@ -9,6 +9,7 @@
 	import { sign_in_schema } from '$lib/schema';
 	import autoAnimate from '@formkit/auto-animate';
 	import { toast } from 'svelte-sonner';
+	import PageTitle from '$lib/components/page-title/page-title.svelte';
 
 	export let data;
 
@@ -26,6 +27,7 @@
 	const { form: formData, enhance, errors, delayed, submitting } = form;
 </script>
 
+<PageTitle text="Sign in" />
 <Card.Root class="mx-auto w-full max-w-sm">
 	<Card.Header>
 		<Card.Title class="text-2xl">Sign In</Card.Title>

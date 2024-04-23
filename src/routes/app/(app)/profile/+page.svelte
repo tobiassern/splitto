@@ -8,10 +8,12 @@
 	import { enhance, applyAction } from '$app/forms';
 	import { toast } from 'svelte-sonner';
 	import autoAnimate from '@formkit/auto-animate';
+	import { PageTitle } from '$lib/components/page-title';
 
 	export let data;
 </script>
 
+<PageTitle text="Profile" />
 <main
 	class="col-span-1 mx-auto grid max-w-7xl flex-1 items-start gap-4 p-4 sm:px-6 md:gap-8 lg:grid-cols-3"
 >

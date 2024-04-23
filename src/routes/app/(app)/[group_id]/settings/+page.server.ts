@@ -20,7 +20,9 @@ export const load: PageServerLoad = async (event) => {
 	return {
 		create_tag_form: await superValidate(zod(insert_tag_schema), { id: 'create-tag-form' }),
 		update_tag_form: await superValidate(zod(update_tag_schema), { id: 'update-tag-form' }),
-		update_budget_form: await superValidate(group, zod(update_group_budget_schema), { id: 'update-budget-form' }),
+		update_budget_form: await superValidate(group, zod(update_group_budget_schema), {
+			id: 'update-budget-form'
+		}),
 		update_group_name_form: await superValidate(
 			{ name: group.name ?? undefined },
 			zod(update_group_name_schema),
@@ -124,9 +126,11 @@ export const actions: Actions = {
 			});
 		}
 
-		await event.locals.db
-			.insert(tagsTable)
-			.values({ label: create_tag_form.data.label, group_id: group.id, monthly_budget: create_tag_form.data.monthly_budget });
+		await event.locals.db.insert(tagsTable).values({
+			label: create_tag_form.data.label,
+			group_id: group.id,
+			monthly_budget: create_tag_form.data.monthly_budget
+		});
 
 		return { create_tag_form };
 	},
@@ -143,7 +147,10 @@ export const actions: Actions = {
 
 		const result = await event.locals.db
 			.update(tagsTable)
-			.set({ label: update_tag_form.data.label, monthly_budget: update_tag_form.data.monthly_budget })
+			.set({
+				label: update_tag_form.data.label,
+				monthly_budget: update_tag_form.data.monthly_budget
+			})
 			.where(and(eq(tagsTable.group_id, group.id), eq(tagsTable.id, update_tag_form.data.id)))
 			.returning();
 

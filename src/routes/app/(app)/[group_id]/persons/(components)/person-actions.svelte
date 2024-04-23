@@ -15,7 +15,7 @@
 	export let member: typeof groupMembersTable.$inferSelect;
 	let showEditForm = false;
 	let deleteFormEl: HTMLFormElement;
-	let leaveGroupFormEl: HTMLFormElement
+	let leaveGroupFormEl: HTMLFormElement;
 </script>
 
 <form

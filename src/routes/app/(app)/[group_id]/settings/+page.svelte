@@ -4,9 +4,11 @@
 	import UpdateBudgetForm from './(components)/update-budget-form.svelte';
 	import DeleteGroupForm from './(components)/delete-group-form.svelte';
 	import ManageTags from './(components)/manage-tags.svelte';
+	import { PageTitle } from '$lib/components/page-title';
 	export let data;
 </script>
 
+<PageTitle text="Settings | {data.group.name}" />
 <UpdateNameForm data={data.update_group_name_form} />
 <UpdateCurrencyForm data={data.update_group_currency_form} />
 <UpdateBudgetForm data={data.update_budget_form} />

@@ -19,7 +19,7 @@
 	export let data: SuperValidated<Infer<typeof update_group_member_schema>>;
 	export let member: typeof groupMembersTable.$inferSelect;
 	export let open = false;
-    
+
 	const form = superForm(data, {
 		resetForm: false,
 		id: `update-group-member-form-${member.id}`,
@@ -27,17 +27,15 @@
 		onResult: ({ result }) => {
 			if (result.type === 'success') {
 				toast.success('Person updated');
-                open = false;
+				open = false;
 			} else {
-                toast.error('An error occurred');
-            }
+				toast.error('An error occurred');
+			}
 			console.log(result);
 		}
 	});
 
 	const { form: formData, enhance, errors, delayed } = form;
-
-
 
 	const emailProxy = stringProxy(form, 'email', { empty: 'null' });
 	const weeklyBudgetProxy = numberProxy(form, 'weekly_budget', { empty: 'null' });
