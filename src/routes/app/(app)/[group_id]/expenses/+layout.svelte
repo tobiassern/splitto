@@ -33,11 +33,11 @@
 		</Button>
 	</Card.Header>
 	<Card.Content>
-		<div class="mb-2 flex items-center justify-start gap-3">
-			<div>
+		<div class="mb-2 flex flex-col items-start justify-start gap-3 sm:flex-row sm:items-center">
+			<div class="w-full sm:w-64">
 				<Input
 					placeholder="Search expense..."
-					class="h-8"
+					class="h-8 w-full"
 					bind:value={search}
 					on:change={() => {
 						const newUrl = new URL($page.url);
@@ -51,7 +51,9 @@
 					}}
 				/>
 			</div>
-			<DateRangePicker />
+			<div class="w-full sm:w-auto">
+				<DateRangePicker />
+			</div>
 			<FacetedFilter
 				name="Tags"
 				title="Tags"

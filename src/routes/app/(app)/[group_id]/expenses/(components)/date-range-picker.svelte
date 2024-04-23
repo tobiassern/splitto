@@ -59,7 +59,10 @@
 			<Button
 				variant="outline"
 				size="sm"
-				class={cn('w-52 justify-start text-left font-normal', !value && 'text-muted-foreground')}
+				class={cn(
+					'w-full justify-start text-left font-normal sm:w-52',
+					!value && 'text-muted-foreground'
+				)}
 				builders={[builder]}
 			>
 				<CalendarIcon class="mr-2 h-4 w-4" />
