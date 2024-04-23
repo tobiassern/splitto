@@ -57,7 +57,7 @@ export const actions: Actions = {
 			error(500, 'Failed to generate OTP code');
 		}
 
-		if (dev || !RESEND_API_KEY || !EMAIL_DOMAIN) {
+		if (dev && (!RESEND_API_KEY || !EMAIL_DOMAIN)) {
 			redirect(
 				302,
 				`/sign-in/verify-email?email=${emailVerificationToken.email}&code=${emailVerificationToken.code}`
