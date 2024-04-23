@@ -14,7 +14,6 @@
 		type Infer,
 		superForm,
 		stringProxy,
-		numberProxy
 	} from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { insert_group_member_schema } from '$lib/schema';
@@ -40,8 +39,7 @@
 
 	const { form: formData, enhance, errors, delayed } = form;
 	const email = stringProxy(form, 'email', { empty: 'null' });
-	const weeklyBudgetProxy = numberProxy(form, 'weekly_budget', { empty: 'null' });
-	const monthlyBudgetProxy = numberProxy(form, 'monthly_budget', { empty: 'null' });
+
 </script>
 
 <Dialog.Root bind:open={$showCreateGroupMemberForm}>
@@ -66,20 +64,6 @@
 				<Form.Control let:attrs>
 					<Form.Label>Email</Form.Label>
 					<Input {...attrs} bind:value={$email} placeholder="m@example.com" />
-				</Form.Control>
-				<Form.FieldErrors />
-			</Form.Field>
-			<Form.Field {form} name="weekly_budget">
-				<Form.Control let:attrs>
-					<Form.Label>Weekly budget</Form.Label>
-					<Input {...attrs} bind:value={$weeklyBudgetProxy} placeholder="0.00" />
-				</Form.Control>
-				<Form.FieldErrors />
-			</Form.Field>
-			<Form.Field {form} name="monthly_budget">
-				<Form.Control let:attrs>
-					<Form.Label>Monthly budget</Form.Label>
-					<Input {...attrs} bind:value={$monthlyBudgetProxy} placeholder="0.00" />
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>

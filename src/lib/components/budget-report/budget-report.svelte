@@ -8,6 +8,7 @@
 	export let type: 'week' | 'month';
 	export let amount: string | null;
 	export let budget: number | undefined | null;
+	export let currency: string;
 
 	$: budget_percentage =
 		budget !== null && budget !== undefined && amount
@@ -25,7 +26,7 @@
 		</Card.Description>
 		<Card.Title class="text-3xl">
 			{Intl.NumberFormat('sv-SE', {
-				currency: $page.data.group?.currency,
+				currency: currency,
 				style: 'currency',
 				maximumFractionDigits: 0
 			}).format(Number(amount ? -amount : 0))}
@@ -44,7 +45,7 @@
 				</Tooltip.Trigger>
 				<Tooltip.Content>
 					Total budget: {Intl.NumberFormat('sv-SE', {
-						currency: $page.data.group?.currency,
+						currency: currency,
 						style: 'currency',
 						maximumFractionDigits: 0
 					}).format(Number(budget ?? 0))}
@@ -54,7 +55,7 @@
 	{:else}
 		<Card.Content>
 			<div class="text-xs text-muted-foreground">
-				Set a {type === 'week' ? 'weekly' : 'monthly'} group budget to keep track
+				Set a {type === 'week' ? 'weekly' : 'monthly'} budget to keep track
 			</div>
 		</Card.Content>
 	{/if}

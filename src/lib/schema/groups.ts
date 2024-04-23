@@ -38,9 +38,7 @@ export const groupMembersTable = sqliteTable(
 			onDelete: 'cascade'
 		}),
 		name: text('name').notNull(),
-		email: text('email'),
-		weekly_budget: real('weekly_budget'),
-		monthly_budget: real('monthly_budget')
+		email: text('email')
 	},
 	(t) => ({
 		unq: unique().on(t.group_id, t.email),
@@ -76,16 +74,12 @@ export const insert_group_schema = createInsertSchema(groupsTable, {
 
 export const insert_group_member_schema = createInsertSchema(groupMembersTable, {
 	name: (schema) => schema.name.min(2),
-	email: (schema) => schema.email.email().toLowerCase().nullable(),
-	weekly_budget: z.coerce.number().positive().nullable(),
-	monthly_budget: z.coerce.number().positive().nullable()
+	email: (schema) => schema.email.email().toLowerCase().nullable()
 }).omit({ id: true, group_id: true });
 
 export const update_group_member_schema = z.object({
 	name: z.string().min(2),
 	email: z.string().email().toLowerCase().nullable(),
-	weekly_budget: z.coerce.number().positive().nullable(),
-	monthly_budget: z.coerce.number().positive().nullable(),
 	id: z.coerce.number().int()
 });
 

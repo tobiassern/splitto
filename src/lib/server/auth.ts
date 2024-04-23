@@ -14,10 +14,16 @@ export function initializeLucia() {
 				avatar_url: string | null;
 				email: string;
 				super_admin?: boolean | undefined;
+				budget: number | null;
+				budget_per: DatabaseUserAttributes['budget_per'];
+				default_currency: DatabaseUserAttributes['default_currency'];
 			} = {
 				name: attributes.name,
 				avatar_url: attributes.avatar_url,
-				email: attributes.email
+				email: attributes.email,
+				budget: attributes.budget,
+				budget_per: attributes.budget_per,
+				default_currency: attributes.default_currency
 			};
 			if (attributes.super_admin) userAttr.super_admin = true;
 			return userAttr;
@@ -48,9 +54,4 @@ declare module 'lucia' {
 	}
 }
 
-interface DatabaseUserAttributes {
-	email: string;
-	name: string;
-	avatar_url: string | null;
-	super_admin: boolean | null;
-}
+type DatabaseUserAttributes = typeof userTable.$inferSelect;

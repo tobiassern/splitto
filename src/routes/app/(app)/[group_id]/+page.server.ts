@@ -10,9 +10,9 @@ import { eq, sum, and, between, or, isNull } from 'drizzle-orm';
 
 export const load: PageServerLoad = async (event) => {
 	const { group } = isGroupMember(event);
-	const group_member_id = event.url.searchParams.get('member')
-		? Number(event.url.searchParams.get('member'))
-		: undefined;
+	// const group_member_id = event.url.searchParams.get('member')
+	// 	? Number(event.url.searchParams.get('member'))
+	// 	: undefined;
 	const date = new Date();
 	const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
 	const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -35,7 +35,7 @@ export const load: PageServerLoad = async (event) => {
 				eq(transactionSplitsTable.type, 'credit'),
 				eq(transactionsTable.type, 'expense'),
 				between(transactionsTable.when, firstDayOfMonth, lastDayOfMonth),
-				group_member_id ? eq(transactionSplitsTable.group_member_id, group_member_id) : undefined
+				// group_member_id ? eq(transactionSplitsTable.group_member_id, group_member_id) : undefined
 			)
 		)
 		.groupBy(transactionsTable.group_id);
@@ -51,7 +51,7 @@ export const load: PageServerLoad = async (event) => {
 				eq(transactionSplitsTable.type, 'credit'),
 				eq(transactionsTable.type, 'expense'),
 				between(transactionsTable.when, firstDayOfWeek, lastDayOfWeek),
-				group_member_id ? eq(transactionSplitsTable.group_member_id, group_member_id) : undefined
+				// group_member_id ? eq(transactionSplitsTable.group_member_id, group_member_id) : undefined
 			)
 		)
 		.groupBy(transactionsTable.group_id);
@@ -78,9 +78,9 @@ export const load: PageServerLoad = async (event) => {
 					and(
 						eq(transactionSplitsTable.type, 'credit'),
 						eq(transactionsTable.type, 'expense'),
-						group_member_id
-							? eq(transactionSplitsTable.group_member_id, group_member_id)
-							: undefined,
+						// group_member_id
+						// 	? eq(transactionSplitsTable.group_member_id, group_member_id)
+						// 	: undefined,
 						between(transactionsTable.when, firstDayOfMonth, lastDayOfMonth),
 						eq(tagsTable.group_id, group.id)
 					),

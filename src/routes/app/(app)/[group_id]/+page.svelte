@@ -6,20 +6,13 @@
 	import * as Table from '$lib/components/ui/table/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import BudgetReport from '../(components)/budget-report.svelte';
-	import GroupMemberSwitcher from '../(components)/group-member-switcher.svelte';
 	import { PageTitle } from '$lib/components/page-title';
 	export let data;
 
-	$: selectedGroupMember = $page.url.searchParams.get('member') ?? undefined;
 </script>
 
 <PageTitle text="Dashboard | {data.group.name}" />
 <div class="col-span-12 grid auto-rows-max items-start gap-4 md:gap-8">
-	<div class="flex items-center justify-start gap-3">
-		<div>
-			<GroupMemberSwitcher members={data.group.members} />
-		</div>
-	</div>
 	<div class="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
 		<Card.Root class="sm:col-span-2">
 			<Card.Header class="pb-3">
@@ -32,23 +25,11 @@
 				<Button>Create New Expense</Button>
 			</Card.Footer>
 		</Card.Root>
-		<BudgetReport
-			type="week"
-			who={selectedGroupMember ? 'person' : 'group'}
-			amount={data.total_week?.amount}
-			budget={selectedGroupMember
-				? data.group.members.find((member) => member.id === Number(selectedGroupMember))
-						?.weekly_budget
-				: data.group.weekly_budget}
-		/>
+		<BudgetReport type="week" amount={data.total_week?.amount} budget={data.group.weekly_budget} />
 		<BudgetReport
 			type="month"
-			who={selectedGroupMember ? 'person' : 'group'}
 			amount={data.total_month?.amount}
-			budget={selectedGroupMember
-				? data.group.members.find((member) => member.id === Number(selectedGroupMember))
-						?.monthly_budget
-				: data.group.monthly_budget}
+			budget={data.group.monthly_budget}
 		/>
 	</div>
 	<Card.Root>

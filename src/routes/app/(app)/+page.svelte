@@ -4,12 +4,33 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import CreateGroup from './(components)/create-group.svelte';
 	import { PageTitle } from '$lib/components/page-title';
+	import { BudgetReport } from '$lib/components/budget-report';
 	export let data;
+
+	$: {
+		console.log(data.total_month);
+	}
 </script>
 
 <PageTitle text="Select group" />
-<main class="mx-auto flex min-h-dvh w-full max-w-2xl items-center p-4 md:p-8">
-	<Card.Root class="w-full">
+<main class="mx-auto grid w-full max-w-3xl grid-cols-12 items-start gap-4 p-4 sm:p-6 md:gap-8">
+	<div class="col-span-12 lg:col-span-6">
+		<BudgetReport
+			type="week"
+			amount={data.total_week?.amount}
+			budget={data.user?.budget_per === 'week' ? data.user.budget : null}
+			currency={data.user?.default_currency ?? ''}
+		/>
+	</div>
+	<div class="col-span-12 lg:col-span-6">
+		<BudgetReport
+			type="month"
+			amount={data.total_month?.amount}
+			budget={data.user?.budget_per === 'month' ? data.user.budget : null}
+			currency={data.user?.default_currency ?? ''}
+		/>
+	</div>
+	<Card.Root class="col-span-12">
 		<Card.Header class="flex flex-col items-start justify-between sm:flex-row sm:items-center">
 			<div class="grid flex-1 gap-2">
 				<Card.Title>Groups</Card.Title>

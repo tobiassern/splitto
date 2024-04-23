@@ -3,6 +3,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Separator } from '$lib/components/ui/separator';
 	import UpdateUserName from './(components)/update-user-name.svelte';
+	import UpdateUserBudget from './(components)/update-user-budget.svelte';
 	import UpdateUserEmail from './(components)/update-user-email.svelte';
 	import { Badge } from '$lib/components/ui/badge';
 	import { enhance, applyAction } from '$app/forms';
@@ -29,6 +30,8 @@
 			<UpdateUserName data={data.update_user_name_form} />
 			<Separator />
 			<UpdateUserEmail data={data.update_user_email_form} />
+			<Separator />
+			<UpdateUserBudget data={data.update_user_budget_form} />
 			<Separator />
 			<DeleteUser />
 		</Card.Content>

@@ -3,7 +3,8 @@ import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
 import {
 	update_user_name_schema,
-	update_user_email__schema,
+	update_user_email_schema,
+	update_user_budget_schema,
 	userTable,
 	sessionTable
 } from '$lib/schema';
@@ -16,8 +17,9 @@ export const load: PageServerLoad = async (event) => {
 	const { user } = isAuthenticated(event);
 	return {
 		sessions: await event.locals.lucia.getUserSessions(user.id),
+		update_user_budget_form: await superValidate({ budget: user.budget, budget_per: user.budget_per ?? 'month' }, zod(update_user_budget_schema)),
 		update_user_name_form: await superValidate(user, zod(update_user_name_schema)),
-		update_user_email_form: await superValidate(user, zod(update_user_email__schema))
+		update_user_email_form: await superValidate(user, zod(update_user_email_schema))
 	};
 };
 
@@ -38,9 +40,25 @@ export const actions: Actions = {
 
 		return { update_user_name_form };
 	},
+	'update-budget': async (event) => {
+		const { user } = isAuthenticated(event);
+
+		const update_user_budget_form = await superValidate(event, zod(update_user_budget_schema));
+
+		if (!update_user_budget_form.valid) {
+			return fail(400, { update_user_budget_form });
+		}
+
+		await event.locals.db
+			.update(userTable)
+			.set(update_user_budget_form.data)
+			.where(eq(userTable.id, user.id));
+
+		return { update_user_budget_form };
+	},
 	'update-email': async (event) => {
 		const { user } = isAuthenticated(event);
-		const update_user_email_form = await superValidate(event, zod(update_user_email__schema));
+		const update_user_email_form = await superValidate(event, zod(update_user_email_schema));
 
 		if (!update_user_email_form.valid) {
 			return fail(400, { update_user_email_form });

@@ -9,6 +9,8 @@ import { error } from '@sveltejs/kit';
 import { dev } from '$app/environment';
 import { sendEmailLoginOTP } from '$lib/server/mail';
 import { RESEND_API_KEY, EMAIL_DOMAIN } from '$env/static/private';
+import { countryToCurrency } from '$lib/currencies';
+
 export const load: PageServerLoad = async () => {
 	return {
 		form: await superValidate(zod(sign_up_schema))
@@ -36,7 +38,10 @@ export const actions: Actions = {
 				.insert(userTable)
 				.values({
 					email: form.data.email,
-					name: form.data.name
+					name: form.data.name,
+					default_currency: countryToCurrency[
+						(event.request.headers.get('CF-IPCountry') as keyof typeof countryToCurrency) ?? 'US'
+					] ?? 'USD'
 				})
 				.returning();
 
