@@ -58,11 +58,12 @@
 								method="POST"
 								action="?/sign-out-session"
 								use:enhance={() => {
-									return async ({ result }) => {
+									return async ({ result, update }) => {
 										if (result.type === 'redirect') {
 											toast.success('You are signed out');
 										} else if (result.type === 'success') {
 											toast.success('Session signed out');
+											update();
 										} else {
 											toast.error('An error occurred');
 										}

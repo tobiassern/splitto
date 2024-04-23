@@ -116,7 +116,7 @@ export const actions: Actions = {
 		}
 	},
 	'delete-account': async (event) => {
-		const { user, session } = isAuthenticated(event);
+		const { user } = isAuthenticated(event);
 
 		const formData = await event.request.formData();
 		const confirmEmail = formData.get('confirm-email')?.toString();

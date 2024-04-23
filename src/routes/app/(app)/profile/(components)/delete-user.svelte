@@ -1,12 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
-	import { update_user_name_schema } from '$lib/schema';
-	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
-	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
-	import { FormErrors } from '$lib/components/form-errors';
 	import { Button } from '$lib/components/ui/button';
 	import { Label } from '$lib/components/ui/label';
 	import { toast } from 'svelte-sonner';
@@ -46,7 +40,8 @@
 			bind:value={confirm_email}
 		/>
 		<div class="text-[0.8rem] text-muted-foreground">
-			All groups where you are the owner will be deleted along with related data when you delete your account.
+			All groups where you are the owner will be deleted along with related data when you delete
+			your account.
 		</div>
 	</div>
 	<!-- <Form.Field {form} name="name">
