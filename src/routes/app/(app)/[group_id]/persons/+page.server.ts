@@ -32,11 +32,11 @@ export const actions: Actions = {
 		const [new_group_member, error] = await event.locals.db.transaction(async (tx) => {
 			const existing_group_member = create_group_member_form.data.email
 				? await tx.query.groupMembersTable.findFirst({
-					where: and(
-						eq(groupMembersTable.group_id, group.id),
-						eq(groupMembersTable.email, create_group_member_form.data.email)
-					)
-				})
+						where: and(
+							eq(groupMembersTable.group_id, group.id),
+							eq(groupMembersTable.email, create_group_member_form.data.email)
+						)
+					})
 				: null;
 			if (existing_group_member) return [null, 'Email already added'];
 			const new_group_member = await tx.insert(groupMembersTable).values({
@@ -56,7 +56,6 @@ export const actions: Actions = {
 		const { group } = isGroupMember(event);
 		const formData = await event.request.formData();
 		const invite_link_active = formData.get('invite-link-active') ? true : false;
-		console.log(invite_link_active);
 
 		await event.locals.db
 			.update(groupsTable)
@@ -70,7 +69,7 @@ export const actions: Actions = {
 
 		await event.locals.db
 			.update(groupsTable)
-			.set({ invite_link_code: generateRandomString(6, alphabet("a-z", "A-Z", "0-9")) })
+			.set({ invite_link_code: generateRandomString(6, alphabet('a-z', 'A-Z', '0-9')) })
 			.where(eq(groupsTable.id, group.id));
 	},
 	'update-group-member': async (event) => {
@@ -83,26 +82,22 @@ export const actions: Actions = {
 			});
 		}
 
-		console.log(update_group_member_form.data);
-
 		const [updated_group_member, error] = await event.locals.db.transaction(async (tx) => {
 			const existing_group_member = update_group_member_form.data.email
 				? await tx.query.groupMembersTable.findFirst({
-					where: and(
-						eq(groupMembersTable.group_id, group.id),
-						eq(groupMembersTable.email, update_group_member_form.data.email),
-						ne(groupMembersTable.id, update_group_member_form.data.id)
-					)
-				})
+						where: and(
+							eq(groupMembersTable.group_id, group.id),
+							eq(groupMembersTable.email, update_group_member_form.data.email),
+							ne(groupMembersTable.id, update_group_member_form.data.id)
+						)
+					})
 				: null;
 			if (existing_group_member) return [null, 'Email already added'];
 			const [updated_group_member] = await tx
 				.update(groupMembersTable)
 				.set({
 					name: update_group_member_form.data.name,
-					email: update_group_member_form.data.email,
-					weekly_budget: update_group_member_form.data.weekly_budget,
-					monthly_budget: update_group_member_form.data.monthly_budget
+					email: update_group_member_form.data.email
 				})
 				.where(
 					and(
@@ -117,7 +112,6 @@ export const actions: Actions = {
 		if (error) return setError(update_group_member_form, '', error);
 		if (!updated_group_member)
 			return setError(update_group_member_form, '', 'Could not update person');
-		console.log(updated_group_member);
 		return { update_group_member_form };
 	},
 	'leave-group': async (event) => {

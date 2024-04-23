@@ -107,7 +107,6 @@
 						checked={data.group.invite_link_active ? true : false}
 						onCheckedChange={(value) => {
 							data.group.invite_link_active = value;
-							console.log(data.group.invite_link_active);
 							setTimeout(() => {
 								inviteLinkActiveFormEl.requestSubmit();
 							}, 0);

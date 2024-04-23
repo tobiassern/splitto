@@ -145,7 +145,7 @@ export const actions: Actions = {
 			});
 		}
 
-		const result = await event.locals.db
+		await event.locals.db
 			.update(tagsTable)
 			.set({
 				label: update_tag_form.data.label,
@@ -153,8 +153,6 @@ export const actions: Actions = {
 			})
 			.where(and(eq(tagsTable.group_id, group.id), eq(tagsTable.id, update_tag_form.data.id)))
 			.returning();
-
-		console.log(result);
 
 		return { update_tag_form };
 	},

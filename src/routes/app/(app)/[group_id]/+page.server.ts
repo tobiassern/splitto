@@ -34,7 +34,7 @@ export const load: PageServerLoad = async (event) => {
 				eq(transactionsTable.group_id, group.id),
 				eq(transactionSplitsTable.type, 'credit'),
 				eq(transactionsTable.type, 'expense'),
-				between(transactionsTable.when, firstDayOfMonth, lastDayOfMonth),
+				between(transactionsTable.when, firstDayOfMonth, lastDayOfMonth)
 				// group_member_id ? eq(transactionSplitsTable.group_member_id, group_member_id) : undefined
 			)
 		)
@@ -50,7 +50,7 @@ export const load: PageServerLoad = async (event) => {
 				eq(transactionsTable.group_id, group.id),
 				eq(transactionSplitsTable.type, 'credit'),
 				eq(transactionsTable.type, 'expense'),
-				between(transactionsTable.when, firstDayOfWeek, lastDayOfWeek),
+				between(transactionsTable.when, firstDayOfWeek, lastDayOfWeek)
 				// group_member_id ? eq(transactionSplitsTable.group_member_id, group_member_id) : undefined
 			)
 		)

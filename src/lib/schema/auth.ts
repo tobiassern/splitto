@@ -20,7 +20,7 @@ export const userTable = sqliteTable('user', {
 	budget_monthly: real('budget_monthly'),
 	default_currency: text('currency', { enum: zodEnum(Object.keys(currencies)) })
 		.notNull()
-		.default('USD'),
+		.default('USD')
 });
 
 export const sessionTable = sqliteTable('session', {
@@ -72,4 +72,4 @@ export const update_user_budget_schema = z.object({
 	budget_weekly: z.coerce.number().nullable(),
 	budget_monthly: z.coerce.number().nullable(),
 	default_currency: z.enum(zodEnum(Object.keys(currencies)))
-})
+});

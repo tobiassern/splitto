@@ -7,7 +7,6 @@
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import { FormErrors } from '$lib/components/form-errors';
 	import { toast } from 'svelte-sonner';
-	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
 	import { currencies } from '$lib/currencies';
 	import * as Select from '$lib/components/ui/select/index.js';
 

@@ -9,12 +9,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 
 	import * as Form from '$lib/components/ui/form';
-	import {
-		type SuperValidated,
-		type Infer,
-		superForm,
-		stringProxy,
-	} from 'sveltekit-superforms';
+	import { type SuperValidated, type Infer, superForm, stringProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { insert_group_member_schema } from '$lib/schema';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
@@ -39,7 +34,6 @@
 
 	const { form: formData, enhance, errors, delayed } = form;
 	const email = stringProxy(form, 'email', { empty: 'null' });
-
 </script>
 
 <Dialog.Root bind:open={$showCreateGroupMemberForm}>

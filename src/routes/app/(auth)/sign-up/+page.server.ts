@@ -39,9 +39,10 @@ export const actions: Actions = {
 				.values({
 					email: form.data.email,
 					name: form.data.name,
-					default_currency: countryToCurrency[
-						(event.request.headers.get('CF-IPCountry') as keyof typeof countryToCurrency) ?? 'US'
-					] ?? 'USD'
+					default_currency:
+						countryToCurrency[
+							(event.request.headers.get('CF-IPCountry') as keyof typeof countryToCurrency) ?? 'US'
+						] ?? 'USD'
 				})
 				.returning();
 

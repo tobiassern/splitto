@@ -39,7 +39,12 @@
 				<Form.Field {form} name="email">
 					<Form.Control let:attrs>
 						<Form.Label>Email</Form.Label>
-						<Input {...attrs} bind:value={$formData.email} placeholder="m@example.com" autocomplete="email"/>
+						<Input
+							{...attrs}
+							bind:value={$formData.email}
+							placeholder="m@example.com"
+							autocomplete="email"
+						/>
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>

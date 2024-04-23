@@ -1,12 +1,18 @@
 import { superValidate, setError } from 'sveltekit-superforms';
 import type { PageServerLoad, Actions } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
-import { groupMembersTable, groupsTable, insert_group_schema, transactionSplitsTable, transactionsTable, userTable } from '$lib/schema';
+import {
+	groupMembersTable,
+	groupsTable,
+	insert_group_schema,
+	transactionSplitsTable,
+	transactionsTable,
+	userTable
+} from '$lib/schema';
 import { fail } from '@sveltejs/kit';
 import { isAuthenticated } from '$lib/helpers';
 import { redirect } from '@sveltejs/kit';
 import { desc, eq, isNull, and, sum, between } from 'drizzle-orm';
-import { countryToCurrency } from '$lib/currencies';
 
 export const load: PageServerLoad = async (event) => {
 	const { user } = isAuthenticated(event);
@@ -35,11 +41,10 @@ export const load: PageServerLoad = async (event) => {
 				eq(transactionsTable.type, 'expense'),
 				eq(userTable.id, user.id),
 				eq(groupsTable.currency, user.default_currency),
-				between(transactionsTable.when, firstDayOfMonth, lastDayOfMonth),
+				between(transactionsTable.when, firstDayOfMonth, lastDayOfMonth)
 			)
 		)
 		.groupBy(userTable.id);
-
 
 	const [total_week] = await event.locals.db
 		.select({
@@ -57,7 +62,7 @@ export const load: PageServerLoad = async (event) => {
 				eq(transactionsTable.type, 'expense'),
 				eq(userTable.id, user.id),
 				eq(groupsTable.currency, user.default_currency),
-				between(transactionsTable.when, firstDayOfWeek, lastDayOfWeek),
+				between(transactionsTable.when, firstDayOfWeek, lastDayOfWeek)
 			)
 		)
 		.groupBy(userTable.id);

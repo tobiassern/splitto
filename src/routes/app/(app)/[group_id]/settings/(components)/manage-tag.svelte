@@ -71,7 +71,7 @@
 			>
 			<DropdownMenu.Sub>
 				<DropdownMenu.SubTrigger>Update tag</DropdownMenu.SubTrigger>
-				<DropdownMenu.SubContent>
+				<DropdownMenu.SubContent fitViewport={true}>
 					<form class="grid gap-1 p-1" method="POST" action="?/update-tag" use:enhance>
 						<input value={tag.id} name="id" hidden />
 						<Form.Field {form} name="label">

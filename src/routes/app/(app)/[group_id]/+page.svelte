@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Progress } from '$lib/components/ui/progress/index.js';
@@ -8,7 +7,6 @@
 	import BudgetReport from '../(components)/budget-report.svelte';
 	import { PageTitle } from '$lib/components/page-title';
 	export let data;
-
 </script>
 
 <PageTitle text="Dashboard | {data.group.name}" />

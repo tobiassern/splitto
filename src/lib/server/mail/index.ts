@@ -29,10 +29,8 @@ const sendEmail = async ({
 		})
 	});
 
-	console.log(res);
-
 	const result = await res.json();
-	console.log("## EMAIL RESULT ## ", result);
+	console.log('## EMAIL RESULT ## ', result);
 };
 
 export const sendEmailLoginOTP = async ({ to, otp }: { to: string; otp: string }) => {

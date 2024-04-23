@@ -6,10 +6,6 @@
 	import { PageTitle } from '$lib/components/page-title';
 	import { BudgetReport } from '$lib/components/budget-report';
 	export let data;
-
-	$: {
-		console.log(data.total_month);
-	}
 </script>
 
 <PageTitle text="Select group" />
