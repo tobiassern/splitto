@@ -71,8 +71,8 @@
 	<Card.Header>
 		<Card.Title>Invite Members</Card.Title>
 		<Card.Description
-			>You can invite new members to your group by adding them and using an email. When they
-			sign in / sign up for Splitto they can then accept to join your group.</Card.Description
+			>You can invite new members to your group by adding them and using an email. When they sign in
+			/ sign up for Splitto they can then accept to join your group.</Card.Description
 		>
 	</Card.Header>
 	<Card.Content>
@@ -116,10 +116,12 @@
 					<Label for="invite-link-active">Activate</Label>
 				</form>
 			</Card.Header>
-			<Card.Content class="flex items-center justify-start gap-4">
+			<Card.Content
+				class="flex flex-col items-stretch justify-start gap-4 md:flex-row md:items-center"
+			>
 				<Button
 					variant="secondary"
-					class="gap-1"
+					class="items-center gap-1"
 					disabled={!data.group.invite_link_active}
 					on:click={() => {
 						navigator.clipboard.writeText(
@@ -149,6 +151,7 @@
 						disabled={!data.group.invite_link_active}
 						variant="outline"
 						size="sm"
+						class="w-full"
 						type="submit">Generate new code</Button
 					>
 				</form>
