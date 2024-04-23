@@ -7,6 +7,7 @@
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import { FormErrors } from '$lib/components/form-errors';
 	import { toast } from 'svelte-sonner';
+	import * as Card from '$lib/components/ui/card';
 
 	export let data: SuperValidated<Infer<typeof update_user_email_schema>>;
 
@@ -25,21 +26,27 @@
 	const { form: formData, enhance, delayed, errors } = form;
 </script>
 
-<form method="POST" use:enhance class="grid gap-4" action="?/update-email">
-	<Form.Field {form} name="email">
-		<Form.Control let:attrs>
-			<Form.Label>Email</Form.Label>
-			<Input {...attrs} bind:value={$formData.email} />
-		</Form.Control>
-		<Form.FieldErrors />
-		<Form.Description
-			>When updating your email you will be signed out from all other devices.</Form.Description
-		>
-	</Form.Field>
-	<FormErrors errors={$errors._errors} />
-	<div class="text-right">
-		<Form.Button class="gap-1"
-			>Update{#if $delayed}<LoaderCircle class="size-4 animate-spin" />{/if}</Form.Button
-		>
-	</div>
+<form method="POST" use:enhance class="contents" action="?/update-email">
+	<Card.Root>
+		<Card.Header>
+			<Card.Title>Email</Card.Title>
+		</Card.Header>
+		<Card.Content>
+			<Form.Field {form} name="email">
+				<Form.Control let:attrs>
+					<Input {...attrs} bind:value={$formData.email} class="max-w-sm" />
+				</Form.Control>
+				<Form.FieldErrors />
+				<Form.Description class="max-w-sm"
+					>When updating your email you will be signed out from all other devices.</Form.Description
+				>
+			</Form.Field>
+			<FormErrors errors={$errors._errors} />
+		</Card.Content>
+		<Card.Footer class="justify-end">
+			<Form.Button class="gap-1"
+				>Update{#if $delayed}<LoaderCircle class="size-4 animate-spin" />{/if}</Form.Button
+			>
+		</Card.Footer>
+	</Card.Root>
 </form>

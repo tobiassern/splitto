@@ -2,10 +2,9 @@
 	import { page } from '$app/stores';
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
-	import { Label } from '$lib/components/ui/label';
 	import { toast } from 'svelte-sonner';
 	import { applyAction, enhance } from '$app/forms';
-
+	import * as Card from '$lib/components/ui/card';
 	let confirm_email: string | undefined = undefined;
 </script>
 
@@ -29,35 +28,31 @@
 			}
 		};
 	}}
-	class="grid gap-4"
+	class="contents"
 	action="?/delete-account"
 >
-	<div class="space-y-2">
-		<Label>Delete your account</Label>
-		<Input
-			name="confirm-email"
-			placeholder="Enter your email to confirm"
-			bind:value={confirm_email}
-		/>
-		<div class="text-[0.8rem] text-muted-foreground">
-			All groups where you are the owner will be deleted along with related data when you delete
-			your account.
-		</div>
-	</div>
-	<!-- <Form.Field {form} name="name">
-		<Form.Control let:attrs>
-			<Form.Label>Email</Form.Label>
-			<Input {...attrs} bind:value={$formData.name} />
-		</Form.Control>
-		<Form.FieldErrors />
-	</Form.Field>
-	<FormErrors errors={$errors._errors} /> -->
-	<div class="text-right">
-		<Button type="submit" variant="destructive" disabled={$page.data.user?.email !== confirm_email}
-			>Delete account</Button
-		>
-		<!-- <Form.Button class="gap-1"
-			>Update{#if $delayed}<LoaderCircle class="size-4 animate-spin" />{/if}</Form.Button
-		> -->
-	</div>
+	<Card.Root class="col-span-12 lg:col-span-7">
+		<Card.Header>
+			<Card.Title>Delete your account</Card.Title>
+		</Card.Header>
+		<Card.Content>
+			<Input
+				name="confirm-email"
+				placeholder="Enter your email to confirm"
+				class="max-w-sm"
+				bind:value={confirm_email}
+			/>
+			<div class="mt-1.5 max-w-sm text-[0.8rem] text-muted-foreground">
+				All groups where you are the owner will be deleted along with related data when you delete
+				your account.
+			</div>
+		</Card.Content>
+		<Card.Footer class="justify-end">
+			<Button
+				type="submit"
+				variant="destructive"
+				disabled={$page.data.user?.email !== confirm_email}>Delete account</Button
+			>
+		</Card.Footer>
+	</Card.Root>
 </form>

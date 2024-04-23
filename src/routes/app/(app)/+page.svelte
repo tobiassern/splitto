@@ -5,17 +5,22 @@
 	import CreateGroup from './(components)/create-group.svelte';
 	import { PageTitle } from '$lib/components/page-title';
 	import { BudgetReport } from '$lib/components/budget-report';
+	import { UserNav } from '$lib/components/user-nav';
 	export let data;
 </script>
 
 <PageTitle text="Select group" />
+
 <main class="mx-auto grid w-full max-w-7xl grid-cols-12 items-start gap-4 p-4 sm:p-6 md:gap-8">
+	<header class="col-span-12 text-right">
+		<UserNav user={data.user} />
+	</header>
 	<div class="col-span-12 grid grid-cols-12 gap-4 md:gap-8">
 		<div class="col-span-12 lg:col-span-3">
 			<BudgetReport
 				title="Average daily spending"
 				budget_type="average daily budget"
-				no_budget_text="Set an average daily budget to keep track"
+				set_budget_link="/profile"
 				amount={data.total_month?.amount
 					? Number(data.total_month?.amount) / data.daysSinceFirst
 					: 0}
@@ -29,7 +34,7 @@
 				budget_type="weekly budget"
 				amount={data.total_week?.amount}
 				budget={data.user?.budget_weekly}
-				no_budget_text="Set a weekly budget to keep track"
+				set_budget_link="/profile"
 				currency={data.user?.default_currency ?? ''}
 			/>
 		</div>
@@ -39,7 +44,7 @@
 				budget_type="monthly budget"
 				amount={data.total_month?.amount}
 				budget={data.user?.budget_monthly}
-				no_budget_text="Set a monthly budget to keep track"
+				set_budget_link="/profile"
 				currency={data.user?.default_currency ?? ''}
 			/>
 		</div>

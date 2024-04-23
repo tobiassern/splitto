@@ -1,7 +1,6 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
-	import { Separator } from '$lib/components/ui/separator';
 	import UpdateUserName from './(components)/update-user-name.svelte';
 	import UpdateUserBudget from './(components)/update-user-budget.svelte';
 	import UpdateUserEmail from './(components)/update-user-email.svelte';
@@ -11,32 +10,34 @@
 	import autoAnimate from '@formkit/auto-animate';
 	import { PageTitle } from '$lib/components/page-title';
 	import DeleteUser from './(components)/delete-user.svelte';
+	import ArrowLeft from 'lucide-svelte/icons/arrow-left';
+	import { afterNavigate } from '$app/navigation';
+	let path: string = '/';
+
+	afterNavigate((nav) => {
+		console.log(nav);
+		path = nav.from?.url.pathname ?? '/';
+	});
 
 	export let data;
 </script>
 
 <PageTitle text="Profile" />
 <main
-	class="col-span-1 mx-auto grid max-w-7xl flex-1 items-start gap-4 p-4 sm:px-6 md:gap-8 lg:grid-cols-3"
+	class="col-span-12 mx-auto grid max-w-7xl flex-1 grid-cols-12 items-start gap-4 p-4 sm:px-6 md:gap-8"
 >
-	<Card.Root class="col-span-1 lg:col-span-2">
-		<Card.Header class="flex flex-row items-center">
-			<div class="grid gap-2">
-				<Card.Title>Your profile</Card.Title>
-			</div>
-			<Button href="/" size="sm" variant="outline" class="ml-auto gap-1">Go to app</Button>
-		</Card.Header>
-		<Card.Content class="grid gap-6">
-			<UpdateUserName data={data.update_user_name_form} />
-			<Separator />
-			<UpdateUserEmail data={data.update_user_email_form} />
-			<Separator />
-			<UpdateUserBudget data={data.update_user_budget_form} />
-			<Separator />
-			<DeleteUser />
-		</Card.Content>
-	</Card.Root>
-	<Card.Root class="col-span-1">
+	<div class="col-span-12">
+		<Button href={path} size="sm" variant="outline" class="ml-auto gap-1"
+			><ArrowLeft class="size-4" />Go back</Button
+		>
+	</div>
+	<div class="col-span-12 flex flex-col gap-4 md:gap-8 lg:col-span-7">
+		<UpdateUserName data={data.update_user_name_form} />
+		<UpdateUserEmail data={data.update_user_email_form} />
+		<UpdateUserBudget data={data.update_user_budget_form} />
+		<DeleteUser />
+	</div>
+	<Card.Root class="col-span-12 lg:col-span-5">
 		<Card.Header>
 			<Card.Title>Sessions</Card.Title>
 		</Card.Header>

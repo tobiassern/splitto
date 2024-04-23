@@ -3,10 +3,11 @@
 	import { Badge } from '$lib/components/ui/badge';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Progress } from '$lib/components/ui/progress/index.js';
+	import { Button } from '../ui/button';
 
 	export let title: string;
 	export let budget_type: string;
-	export let no_budget_text: string;
+	export let set_budget_link: string;
 	export let amount: number | string | null;
 	export let budget: number | undefined | null;
 	export let currency: string;
@@ -17,29 +18,23 @@
 			: 0;
 </script>
 
-<Card.Root class="h-full">
-	<Card.Header class="pb-2">
-		<Card.Description class="flex items-center justify-between gap-2">
-			<span>{title}</span>
-			{#if budget && budget_percentage && budget_percentage > 100}
-				<Badge variant="destructive">Over budget</Badge>
-			{/if}
-		</Card.Description>
-		<Card.Title class="text-3xl">
+<Card.Root>
+	<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+		<Card.Title class="text-sm font-medium">{title}</Card.Title>
+		{#if budget && budget_percentage && budget_percentage > 100}
+			<Badge variant="destructive">Over budget</Badge>
+		{/if}
+	</Card.Header>
+	<Card.Content>
+		<div class="text-2xl font-bold">
 			{Intl.NumberFormat('sv-SE', {
 				currency: currency,
 				style: 'currency',
 				maximumFractionDigits: 0
 			}).format(Number(amount ? -amount : 0))}
-		</Card.Title>
-	</Card.Header>
-	{#if typeof budget === 'number'}
-		<Card.Content>
-			<div class="text-xs text-muted-foreground">
-				{budget_percentage}% of {budget_type}
-			</div>
-		</Card.Content>
-		<Card.Footer>
+		</div>
+		{#if typeof budget === 'number'}
+			<p class="text-xs text-muted-foreground">{budget_percentage}% of {budget_type}</p>
 			<Tooltip.Root>
 				<Tooltip.Trigger class="w-full">
 					<Progress value={budget_percentage} aria-label="{budget_percentage}%" />
@@ -52,12 +47,10 @@
 					}).format(Number(budget ?? 0))}
 				</Tooltip.Content>
 			</Tooltip.Root>
-		</Card.Footer>
-	{:else}
-		<Card.Content>
-			<div class="text-xs text-muted-foreground">
-				{no_budget_text}
+		{:else}
+			<div class="text-right">
+				<Button href={set_budget_link} size="sm" variant="outline">Set budget</Button>
 			</div>
-		</Card.Content>
-	{/if}
+		{/if}
+	</Card.Content>
 </Card.Root>
