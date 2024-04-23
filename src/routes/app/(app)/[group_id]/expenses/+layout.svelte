@@ -14,6 +14,8 @@
 	import ColumnHeader from './(components)/column-header.svelte';
 	import DateRangePicker from './(components)/date-range-picker.svelte';
 	import { goto } from '$app/navigation';
+	import { scale } from 'svelte/transition';
+
 	export let data;
 
 	let search: string | undefined = $page.url.searchParams.get('s') ?? undefined;
@@ -62,6 +64,23 @@
 					};
 				})}
 			/>
+			{#if $page.url.searchParams.get('s') || $page.url.searchParams.get('tag') || $page.url.searchParams.get('from') || $page.url.searchParams.get('to')}
+				<div transition:scale={{ start: 0.95, opacity: 0 }}>
+					<Button
+						on:click={() => {
+							const newUrl = new URL($page.url);
+							newUrl.searchParams.delete('s');
+							newUrl.searchParams.delete('tag');
+							newUrl.searchParams.delete('from');
+							newUrl.searchParams.delete('to');
+							search = undefined;
+							goto(newUrl, { invalidateAll: true });
+						}}
+						size="sm"
+						variant="ghost">Reset filter</Button
+					>
+				</div>
+			{/if}
 		</div>
 		<Table.Root>
 			<Table.Header>
