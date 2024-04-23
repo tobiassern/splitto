@@ -29,16 +29,19 @@ const sendEmail = async ({
 		})
 	});
 
-	await res.json();
+	console.log(res);
+
+	const result = await res.json();
+	console.log("## EMAIL RESULT ## ", result);
 };
 
 export const sendEmailLoginOTP = async ({ to, otp }: { to: string; otp: string }) => {
 	await sendEmail({
-		from: `Splitto <no-reply@${EMAIL_DOMAIN}`,
+		from: `Splitto <no-reply@${EMAIL_DOMAIN}>`,
 		to: [to],
 		subject: 'OTP Code for Splitto',
 		html: `
-        <p>Your code is${otp}</p>
+        <p>Your code is ${otp}</p>
         <p><a href="https://${PUBLIC_APP_HOSTNAME}/sign-in/verify-email/?email=${to}&code=${otp}">Link to verify your email</></p>
         `
 	});

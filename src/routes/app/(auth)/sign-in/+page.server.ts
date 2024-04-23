@@ -8,7 +8,7 @@ import { eq } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
 import { dev } from '$app/environment';
 import { sendEmailLoginOTP } from '$lib/server/mail/index.js';
-import { RESEND_API_KEY } from '$env/static/private';
+import { EMAIL_DOMAIN, RESEND_API_KEY } from '$env/static/private';
 export const load: PageServerLoad = async () => {
 	return {
 		form: await superValidate(zod(sign_in_schema))
@@ -48,7 +48,7 @@ export const actions: Actions = {
 			setError(form, '', 'Failed to generate OTP code');
 		}
 
-		if (dev || !RESEND_API_KEY) {
+		if (!dev || !RESEND_API_KEY || !EMAIL_DOMAIN) {
 			redirect(
 				302,
 				`/sign-in/verify-email?email=${emailVerificationToken.email}&code=${emailVerificationToken.code}`
