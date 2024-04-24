@@ -9,6 +9,7 @@
 	import MoonIcon from 'lucide-svelte/icons/moon';
 	import SunIcon from 'lucide-svelte/icons/sun';
 	import MonitorIcon from 'lucide-svelte/icons/monitor';
+	import CheckIcon from 'lucide-svelte/icons/check';
 	import { setMode, mode } from 'mode-watcher';
 
 	export let user: import('lucia').User | null;
@@ -48,7 +49,23 @@
 				</div>
 			</DropdownMenu.Label>
 			<DropdownMenu.Separator />
-			<DropdownMenu.Item href="/">Switch group</DropdownMenu.Item>
+			<DropdownMenu.Item href="/">My dashboard</DropdownMenu.Item>
+			{#if $page.data.groups?.length}
+				<DropdownMenu.Sub>
+					<DropdownMenu.SubTrigger>Groups</DropdownMenu.SubTrigger>
+
+					<DropdownMenu.SubContent>
+						{#each $page.data.groups as group}
+							{@const active = $page.params.group_id && group.id === Number($page.params.group_id)}
+							<DropdownMenu.Item href="/{group.id}" class="items-center gap-2"
+								><span class="whitespace-nowrap">{group.name}</span>{#if active}<CheckIcon
+										class="ml-auto size-4"
+									/>{/if}</DropdownMenu.Item
+							>
+						{/each}
+					</DropdownMenu.SubContent>
+				</DropdownMenu.Sub>
+			{/if}
 			<DropdownMenu.Item href="/profile">Profile</DropdownMenu.Item>
 			<DropdownMenu.Sub>
 				<DropdownMenu.SubTrigger

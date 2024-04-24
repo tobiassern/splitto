@@ -69,15 +69,6 @@ export const load: PageServerLoad = async (event) => {
 		.groupBy(userTable.id);
 
 	return {
-		groups: await event.locals.db
-			.select({
-				name: groupsTable.name,
-				id: groupsTable.id
-			})
-			.from(groupsTable)
-			.leftJoin(groupMembersTable, eq(groupMembersTable.group_id, groupsTable.id))
-			.where(eq(groupMembersTable.user_id, user.id))
-			.orderBy(desc(groupsTable.created_at)),
 		group_invites: await event.locals.db
 			.select({
 				name: groupsTable.name,

@@ -29,10 +29,11 @@ declare global {
 			group?: ExtendedGroup | undefined | null;
 			user?: import('lucia').User | null | undefined;
 			breadcrumbs?: { label: string; path?: string }[];
+			groups?: ExtendedGroup[] | undefined | null;
 		}
 		// interface PageState {}
 		// interface Platform {}
 	}
 }
 
-export {};
+export { };
