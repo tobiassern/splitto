@@ -12,6 +12,9 @@
 	import DeleteUser from './(components)/delete-user.svelte';
 	import ArrowLeft from 'lucide-svelte/icons/arrow-left';
 	import { afterNavigate } from '$app/navigation';
+	import { cn } from '$lib/utils';
+	export let data;
+
 	let path: string = '/';
 
 	afterNavigate((nav) => {
@@ -19,15 +22,22 @@
 		path = nav.from?.url.pathname ?? '/';
 	});
 
-	export let data;
+	let scrollY: number;
+
+	$: isScrolled = scrollY ? true : false;
 </script>
 
+<svelte:window bind:scrollY />
 <PageTitle text="Profile" />
 <main
 	class="col-span-12 mx-auto grid max-w-7xl flex-1 grid-cols-12 items-start gap-4 p-4 sm:px-6 md:gap-8"
 >
-	<div class="col-span-12">
-		<Button href={path} size="sm" variant="outline" class="ml-auto gap-1"
+	<div class="sticky top-4 col-span-12">
+		<Button
+			href={path}
+			size="sm"
+			variant="outline"
+			class={cn('ml-auto gap-1 transition-shadow', isScrolled && 'shadow-lg')}
 			><ArrowLeft class="size-4" />Go back</Button
 		>
 	</div>
