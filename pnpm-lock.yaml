@@ -41,6 +41,9 @@ importers:
       libphonenumber-js:
         specifier: ^1.10.60
         version: 1.10.60
+      logrocket:
+        specifier: ^8.1.0
+        version: 8.1.0
       lucia:
         specifier: ^3.1.1
         version: 3.1.1
@@ -2463,6 +2466,9 @@ packages:
 
   lodash.throttle@4.1.1:
     resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
+
+  logrocket@8.1.0:
+    resolution: {integrity: sha512-0PRv9lnS90KBrL3mfiQzcKEPvNT3N55pRN0PRe/q3DqWFQbIW1p72MmMp9a3Qi9la6o+TXri7r68ZE0AM7vsDA==}
 
   loupe@2.3.7:
     resolution: {integrity: sha512-zSMINGVYkdpYSOBmLi0D1Uo7JU9nVdQKrHxC8eYlV+9YKK9WePqAlL7lSlorG/U2Fw1w0hTBmaa/jrQ3UbPHtA==}
@@ -5545,6 +5551,8 @@ snapshots:
   lodash.merge@4.6.2: {}
 
   lodash.throttle@4.1.1: {}
+
+  logrocket@8.1.0: {}
 
   loupe@2.3.7:
     dependencies:
