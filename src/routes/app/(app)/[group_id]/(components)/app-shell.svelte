@@ -5,8 +5,8 @@
 </script>
 
 <div class="flex min-h-dvh w-full flex-col pb-14 sm:pb-0 sm:pl-14">
-	<AppNavigation {user} />
 	<main class="mx-auto grid w-full max-w-7xl grid-cols-12 items-start gap-4 p-4 sm:p-6 md:gap-8">
 		<slot />
 	</main>
 </div>
+<AppNavigation {user} />
