@@ -1,5 +1,4 @@
 <script lang="ts">
-import { PUBLIC_MICROSOFT_CLARITY_KEY } from '$env/static/public';
 	import { ModeWatcher } from 'mode-watcher';
 
 	import { Toaster } from '$lib/components/ui/sonner';
@@ -23,7 +22,7 @@ import { PUBLIC_MICROSOFT_CLARITY_KEY } from '$env/static/public';
 				t.src = 'https://www.clarity.ms/tag/' + i;
 				y = l.getElementsByTagName(r)[0];
 				y.parentNode.insertBefore(t, y);
-			})(window, document, 'clarity', 'script', PUBLIC_MICROSOFT_CLARITY_KEY);
+			})(window, document, 'clarity', 'script', 'm1ir2muhwe');
 		</script>
 	{/if}
 </svelte:head>
