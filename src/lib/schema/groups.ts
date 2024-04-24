@@ -12,7 +12,9 @@ export const groupsTable = sqliteTable('groups', {
 	id: integer('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
 	created_at: integer('created_at', { mode: 'timestamp_ms' }).default(sql`(CURRENT_TIMESTAMP)`),
 	name: text('name').notNull(),
-	owner_id: integer('user_id', { mode: 'number' }).references(() => userTable.id).notNull(),
+	owner_id: integer('user_id', { mode: 'number' })
+		.references(() => userTable.id)
+		.notNull(),
 	currency: text('currency', { enum: zodEnum(Object.keys(currencies)) })
 		.notNull()
 		.default('USD'),

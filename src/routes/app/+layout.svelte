@@ -9,7 +9,8 @@
 
 	export let data;
 
-	$: if (data.user?.id && PUBLIC_LOGROCKET_KEY) LogRocket.identify(data.user.id.toString(), {name: data.user.name});
+	$: if (data.user?.id && PUBLIC_LOGROCKET_KEY)
+		LogRocket.identify(data.user.id.toString(), { name: data.user.name });
 
 	onMount(() => {
 		if (!dev && PUBLIC_LOGROCKET_KEY) {
