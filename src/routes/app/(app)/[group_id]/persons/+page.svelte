@@ -44,7 +44,7 @@
 						</Avatar.Root>
 						<div class="grid gap-1">
 							<p class="text-sm font-medium leading-none">
-								{member.name}{#if data.group.owner_id === member.user_id}<Badge
+								{member.user?.name ?? member.name}{#if data.group.owner_id === member.user_id}<Badge
 										class="ml-2"
 										variant="secondary">Owner</Badge
 									>{/if}

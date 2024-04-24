@@ -45,7 +45,7 @@
 	use:enhance={() => {
 		return async ({ result }) => {
 			if (result.type === 'redirect') {
-				toast.success('Group left');
+				toast.success('Left group');
 				goto(`/`, { invalidateAll: true });
 			} else {
 				toast.error('An error occurred');
