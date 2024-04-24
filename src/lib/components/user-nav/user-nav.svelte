@@ -23,7 +23,7 @@
 
 <form bind:this={signOutFormEl} method="POST" action="/sign-out" hidden />
 {#if user}
-	<DropdownMenu.Root>
+	<DropdownMenu.Root preventScroll={false}>
 		<DropdownMenu.Trigger asChild let:builder>
 			<Button
 				variant="outline"
