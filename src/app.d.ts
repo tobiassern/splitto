@@ -10,6 +10,7 @@ interface ExtendedMember extends Member {
 	user: typeof userTable.$inferSelect | null;
 }
 interface ExtendedGroup extends Group {
+	owner: typeof userTable.$inferSelect;
 	members: ExtendedMember[];
 	tags: Tag[];
 }

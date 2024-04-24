@@ -77,43 +77,45 @@
 	</Card.Header>
 	<Card.Content>
 		<Card.Root>
-			<Card.Header class="flex flex-row items-start justify-between gap-6">
+			<Card.Header>
 				<div class="space-y-1.5">
-					<Card.Title>Invite link</Card.Title>
+					<div class="flex items-center justify-between gap-2">
+						<Card.Title>Invite link</Card.Title>
+						<form
+							bind:this={inviteLinkActiveFormEl}
+							class="flex items-center space-x-2"
+							method="POST"
+							action="?/activate-invite-link"
+							use:enhance={() => {
+								return async ({ result }) => {
+									if (result.type === 'success') {
+										toast.success(
+											data.group.invite_link_active
+												? 'Invite link activated'
+												: 'Invite link deactivated'
+										);
+									}
+								};
+							}}
+						>
+							<Switch
+								id="invite-link-active"
+								name="invite-link-active"
+								checked={data.group.invite_link_active ? true : false}
+								onCheckedChange={(value) => {
+									data.group.invite_link_active = value;
+									setTimeout(() => {
+										inviteLinkActiveFormEl.requestSubmit();
+									}, 0);
+								}}
+							/>
+							<Label for="invite-link-active">Activate</Label>
+						</form>
+					</div>
 					<Card.Description
 						>Or you can copy the following link and anyone with the link can join your group.</Card.Description
 					>
 				</div>
-				<form
-					bind:this={inviteLinkActiveFormEl}
-					class="flex items-center space-x-2"
-					method="POST"
-					action="?/activate-invite-link"
-					use:enhance={() => {
-						return async ({ result }) => {
-							if (result.type === 'success') {
-								toast.success(
-									data.group.invite_link_active
-										? 'Invite link activated'
-										: 'Invite link deactivated'
-								);
-							}
-						};
-					}}
-				>
-					<Switch
-						id="invite-link-active"
-						name="invite-link-active"
-						checked={data.group.invite_link_active ? true : false}
-						onCheckedChange={(value) => {
-							data.group.invite_link_active = value;
-							setTimeout(() => {
-								inviteLinkActiveFormEl.requestSubmit();
-							}, 0);
-						}}
-					/>
-					<Label for="invite-link-active">Activate</Label>
-				</form>
 			</Card.Header>
 			<Card.Content
 				class="flex flex-col items-stretch justify-start gap-4 md:flex-row md:items-center"

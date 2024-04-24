@@ -19,21 +19,26 @@
 </script>
 
 <form
+	hidden
 	bind:this={deleteFormEl}
 	method="POST"
-	action="?/delete"
+	action="?/delete-member"
 	use:enhance={() => {
-		return async ({ result }) => {
+		return async ({ result, update }) => {
 			if (result.type === 'success') {
 				toast.success('Group member removed');
+				update();
 			} else {
 				toast.error('An error occurred');
 			}
 		};
 	}}
-/>
+>
+	<input name="member_id" value={member.id} />
+</form>
 
 <form
+	hidden
 	bind:this={leaveGroupFormEl}
 	method="POST"
 	action="?/leave-group"

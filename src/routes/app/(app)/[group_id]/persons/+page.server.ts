@@ -1,6 +1,6 @@
 import type { PageServerLoad, Actions } from './$types';
 import { isGroupMember } from '$lib/helpers';
-import { groupMembersTable, groupsTable } from '$lib/schema';
+import { groupMembersTable, groupsTable, transactionSplitsTable, transactionsTable } from '$lib/schema';
 import { eq, and, ne } from 'drizzle-orm';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -32,11 +32,11 @@ export const actions: Actions = {
 		const [new_group_member, error] = await event.locals.db.transaction(async (tx) => {
 			const existing_group_member = create_group_member_form.data.email
 				? await tx.query.groupMembersTable.findFirst({
-						where: and(
-							eq(groupMembersTable.group_id, group.id),
-							eq(groupMembersTable.email, create_group_member_form.data.email)
-						)
-					})
+					where: and(
+						eq(groupMembersTable.group_id, group.id),
+						eq(groupMembersTable.email, create_group_member_form.data.email)
+					)
+				})
 				: null;
 			if (existing_group_member) return [null, 'Email already added'];
 			const new_group_member = await tx.insert(groupMembersTable).values({
@@ -85,12 +85,12 @@ export const actions: Actions = {
 		const [updated_group_member, error] = await event.locals.db.transaction(async (tx) => {
 			const existing_group_member = update_group_member_form.data.email
 				? await tx.query.groupMembersTable.findFirst({
-						where: and(
-							eq(groupMembersTable.group_id, group.id),
-							eq(groupMembersTable.email, update_group_member_form.data.email),
-							ne(groupMembersTable.id, update_group_member_form.data.id)
-						)
-					})
+					where: and(
+						eq(groupMembersTable.group_id, group.id),
+						eq(groupMembersTable.email, update_group_member_form.data.email),
+						ne(groupMembersTable.id, update_group_member_form.data.id)
+					)
+				})
 				: null;
 			if (existing_group_member) return [null, 'Email already added'];
 			const [updated_group_member] = await tx
@@ -125,5 +125,27 @@ export const actions: Actions = {
 			.where(and(eq(groupMembersTable.group_id, group.id), eq(groupMembersTable.user_id, user.id)));
 
 		redirect(302, '/');
+	},
+	'delete-member': async (event) => {
+		const { group, user } = isGroupMember(event);
+
+		const formData = await event.request.formData();
+		let member_id = formData.get('member_id');
+		if (member_id === null) error(400, 'No user ID provided');
+
+		const member = await event.locals.db.query.groupMembersTable.findFirst({ where: and(eq(groupMembersTable.group_id, group.id), eq(groupMembersTable.id, Number(member_id))) });
+		if (!member) error(404, 'Member not found');
+		if (member.user_id === group.owner_id) error(400, "Group owner can't be removed from the group");
+		if (member.user_id === user.id) error(400, "You can't remove yourself");
+
+		await event.locals.db.transaction(async tx => {
+			await tx.update(transactionsTable).set({ group_member_id: group.members.find(member => member.user_id === group.owner.id)?.id }).where(and(eq(transactionsTable.group_id, group.id), eq(transactionsTable.group_member_id, Number(member_id))));
+			await tx.update(transactionSplitsTable).set({ group_member_id: group.members.find(member => member.user_id === group.owner.id)?.id }).where(and(eq(transactionSplitsTable.group_member_id, Number(member_id))));
+			await tx.delete(groupMembersTable).where(and(eq(groupMembersTable.group_id, group.id), eq(groupMembersTable.id, Number(member_id))));
+		})
+
+
+
+		return { success: true }
 	}
 };
