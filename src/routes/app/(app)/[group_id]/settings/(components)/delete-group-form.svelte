@@ -38,7 +38,7 @@
 				Confirm deletion of your group by writing the name of the group
 			</div>
 		</Card.Content>
-		<Card.Footer class="border-t px-6 py-4">
+		<Card.Footer class="justify-end border-t px-6 py-4">
 			<Button type="submit" variant="destructive">Delete group</Button>
 		</Card.Footer>
 	</form>

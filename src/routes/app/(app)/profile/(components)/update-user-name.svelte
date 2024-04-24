@@ -40,7 +40,7 @@
 			</Form.Field>
 			<FormErrors errors={$errors._errors} />
 		</Card.Content>
-		<Card.Footer class="justify-end">
+		<Card.Footer class="justify-end border-t px-6 py-4">
 			<Form.Button class="gap-1"
 				>Update{#if $delayed}<LoaderCircle class="size-4 animate-spin" />{/if}</Form.Button
 			>

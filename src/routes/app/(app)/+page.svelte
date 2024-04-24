@@ -9,7 +9,7 @@
 	export let data;
 </script>
 
-<PageTitle text="My dashboard | Splitto" />
+<PageTitle text="My dashboard" />
 
 <main class="mx-auto grid w-full max-w-7xl grid-cols-12 items-start gap-4 p-4 sm:p-6 md:gap-8">
 	<header class="col-span-12 text-right">

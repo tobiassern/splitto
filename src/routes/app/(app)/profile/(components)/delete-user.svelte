@@ -47,7 +47,7 @@
 				your account.
 			</div>
 		</Card.Content>
-		<Card.Footer class="justify-end">
+		<Card.Footer class="justify-end border-t px-6 py-4">
 			<Button
 				type="submit"
 				variant="destructive"

@@ -56,7 +56,7 @@
 			</div>
 			<FormErrors errors={$errors._errors} />
 		</Card.Content>
-		<Card.Footer class="border-t px-6 py-4">
+		<Card.Footer class="justify-end border-t px-6 py-4">
 			<Form.Button type="submit" class="flex gap-1"
 				>Update{#if $delayed}<LoaderCircle class="size-4 animate-spin" />{/if}</Form.Button
 			>
