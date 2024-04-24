@@ -24,7 +24,7 @@
 
 	let scrollY: number;
 
-	$: isScrolled = scrollY ? true : false;
+	$: isScrolled = scrollY > 20 ? true : false;
 </script>
 
 <svelte:window bind:scrollY />

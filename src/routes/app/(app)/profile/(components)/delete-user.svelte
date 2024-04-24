@@ -11,14 +11,15 @@
 <form
 	method="POST"
 	use:enhance={({ cancel }) => {
+		if (confirm_email !== $page.data.user?.email) {
+			toast.error('Email not matching');
+			return cancel();
+		}
 		const confirmed = confirm(
 			'Are you sure you want to delete your account? All groups where you are an owner will be deleted also!'
 		);
-		if (!confirmed) cancel();
-		if (confirm_email !== $page.data.user?.email) {
-			toast.error('Email not matching');
-			cancel();
-		}
+		if (!confirmed) return cancel();
+
 		return async ({ result }) => {
 			if (result.type === 'redirect') {
 				toast.success('Your account is deleted');
@@ -48,11 +49,7 @@
 			</div>
 		</Card.Content>
 		<Card.Footer class="justify-end border-t px-6 py-4">
-			<Button
-				type="submit"
-				variant="destructive"
-				disabled={$page.data.user?.email !== confirm_email}>Delete account</Button
-			>
+			<Button type="submit" variant="destructive">Delete account</Button>
 		</Card.Footer>
 	</Card.Root>
 </form>
