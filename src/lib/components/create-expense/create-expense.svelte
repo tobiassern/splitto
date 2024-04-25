@@ -70,7 +70,20 @@
 			<Form.Field {form} name="amount">
 				<Form.Control let:attrs>
 					<Form.Label>How much?</Form.Label>
-					<Input {...attrs} bind:value={$formData.amount} type="number" step="any" />
+					<Input
+						{...attrs}
+						bind:value={$formData.amount}
+						type="number"
+						step="any"
+						on:change={() => {
+							const enabled_splits = $formData.splits.filter((split) => split.enabled).length;
+							$formData.splits = $formData.splits.map((split) => {
+								split.amount =
+									split.enabled && $formData.amount ? $formData.amount / enabled_splits : null;
+								return split;
+							});
+						}}
+					/>
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
