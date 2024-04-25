@@ -6,14 +6,20 @@
 	import { PageTitle } from '$lib/components/page-title';
 	import { BudgetReport } from '$lib/components/budget-report';
 	import { UserNav } from '$lib/components/user-nav';
+	import { cn } from '$lib/utils';
 	export let data;
+
+	let scrollY: number;
+
+	$: isScrolled = scrollY > 20 ? true : false;
 </script>
 
+<svelte:window bind:scrollY />
 <PageTitle text="My dashboard" />
 
 <main class="mx-auto grid w-full max-w-7xl grid-cols-12 items-start gap-4 p-4 sm:p-6 md:gap-8">
-	<header class="col-span-12 text-right">
-		<UserNav user={data.user} />
+	<header class="sticky top-4 col-span-12 text-right sm:top-6">
+		<UserNav user={data.user} class={cn('transition-shadow', isScrolled && 'shadow-lg')} />
 	</header>
 	<div class="col-span-12 grid grid-cols-12 gap-4 md:gap-8">
 		<div class="col-span-12 lg:col-span-3">

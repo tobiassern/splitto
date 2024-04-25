@@ -11,8 +11,10 @@
 	import MonitorIcon from 'lucide-svelte/icons/monitor';
 	import CheckIcon from 'lucide-svelte/icons/check';
 	import { setMode, mode } from 'mode-watcher';
-
+	import { cn } from '$lib/utils';
 	export let user: import('lucia').User | null;
+	let clazz: string = '';
+	export { clazz as class };
 
 	let signOutFormEl: HTMLFormElement;
 
@@ -28,7 +30,7 @@
 			<Button
 				variant="outline"
 				size="icon"
-				class="overflow-hidden rounded-full"
+				class={cn('overflow-hidden rounded-full', clazz)}
 				builders={[builder]}
 			>
 				<Avatar.Root class="size-9 overflow-hidden rounded-full">

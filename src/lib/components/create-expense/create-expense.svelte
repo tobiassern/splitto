@@ -17,7 +17,6 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { Button } from '../ui/button';
 	import PlusIcon from 'lucide-svelte/icons/plus';
-	import { cn } from '$lib/utils';
 	import { Separator } from '$lib/components/ui/separator';
 	import { toast } from 'svelte-sonner';
 	import DatePicker from '../date-picker/date-picker.svelte';

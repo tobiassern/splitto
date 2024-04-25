@@ -2,7 +2,6 @@ import type { PageServerLoad, Actions } from './$types';
 import { isGroupMember } from '$lib/helpers';
 import {
 	create_expense_schema,
-	groupMembersTable,
 	transactionSplitsTable,
 	transactionTagsTable,
 	transactionsTable
@@ -69,13 +68,13 @@ export const actions: Actions = {
 				group_member_id: create_expense_form.data.group_member_id
 			});
 
-			console.log("## SPLITS ## ", insert_splits);
+			console.log('## SPLITS ## ', insert_splits);
 			const check_transaction_split_sum = insert_splits.reduce((acc, split) => {
 				return acc + split.amount;
 			}, 0);
 
 			if (check_transaction_split_sum !== 0) {
-				console.log(check_transaction_split_sum)
+				console.log(check_transaction_split_sum);
 				await tx.rollback();
 				return 'Total transaction volumne does not sum up correctly';
 			}
