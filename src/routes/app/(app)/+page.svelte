@@ -18,7 +18,7 @@
 <PageTitle text="My dashboard" />
 
 <main class="mx-auto grid w-full max-w-7xl grid-cols-12 items-start gap-4 p-4 sm:p-6 md:gap-8">
-	<header class="sticky top-4 z-50 col-span-12 text-right sm:top-6">
+	<header class="sticky top-[calc(env(safe-area-inset-top)_+_1rem)] z-50 col-span-12 text-right sm:top-6">
 		<UserNav user={data.user} class={cn('transition-shadow', isScrolled && 'shadow-lg')} />
 	</header>
 	<div class="col-span-12 grid grid-cols-12 gap-4 md:gap-8">
