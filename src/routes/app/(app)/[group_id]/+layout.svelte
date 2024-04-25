@@ -6,9 +6,11 @@
 	export let data;
 </script>
 
-<AppShell user={data.user}>
-	<slot />
-</AppShell>
-<CreateExpense data={data.create_expense_form} />
-<CreateGroupMember data={data.create_group_member_form} />
-<CreateSettlement data={data.create_settlement_form} />
+{#key data.group.id}
+	<AppShell user={data.user}>
+		<slot />
+	</AppShell>
+	<CreateExpense data={data.create_expense_form} />
+	<CreateGroupMember data={data.create_group_member_form} />
+	<CreateSettlement data={data.create_settlement_form} />
+{/key}

@@ -15,10 +15,9 @@
 		{ label: 'Persons', path: '/persons', icon: Users }
 	];
 </script>
-
 <aside
-	class="fixed bottom-0 left-0 z-30 flex w-full justify-center border-r border-t bg-background sm:h-dvh sm:w-14 sm:border-t-0"
-	style="height: calc(env(safe-area-inset-bottom) + 3.5rem); padding-bottom: env(safe-area-inset-bottom);"
+	class="fixed bottom-0 left-0 z-30 flex h-[calc(env(safe-area-inset-bottom)_+_3.5rem)] w-full justify-center border-r border-t bg-background sm:h-dvh sm:w-14 sm:border-t-0"
+	style="padding-bottom: env(safe-area-inset-bottom);"
 >
 	<nav
 		class="flex items-center justify-between gap-6 px-4 sm:flex-col sm:justify-start sm:gap-4 sm:px-0 sm:py-4"
