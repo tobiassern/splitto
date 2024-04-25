@@ -146,7 +146,7 @@
 			<Form.Field {form} name="amount">
 				<Form.Control let:attrs>
 					<Form.Label>How much?</Form.Label>
-					<Input {...attrs} bind:value={$formData.amount} type="number" />
+					<Input {...attrs} bind:value={$formData.amount} type="number" step="any" />
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
