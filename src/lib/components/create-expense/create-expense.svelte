@@ -153,6 +153,8 @@
 							{#if $page.data.group?.tags}
 								{#each $page.data.group?.tags as tag}
 									<Select.Item value={tag.id} label={tag.label} />
+									{:else}
+									<div class="text-xs py-1.5 px-2 text-muted-foreground">No tags created</div>
 								{/each}
 							{/if}
 						</Select.Content>

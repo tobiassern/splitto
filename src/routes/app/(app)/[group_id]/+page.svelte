@@ -6,6 +6,7 @@
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import BudgetReport from '../(components)/budget-report.svelte';
 	import { PageTitle } from '$lib/components/page-title';
+	import { showCreateExpenseForm } from '$lib/components/create-expense/create-expense.svelte';
 	export let data;
 </script>
 
@@ -20,7 +21,7 @@
 				</Card.Description>
 			</Card.Header>
 			<Card.Footer>
-				<Button>Create New Expense</Button>
+				<Button on:click={() => ($showCreateExpenseForm = true)}>Create New Expense</Button>
 			</Card.Footer>
 		</Card.Root>
 		<BudgetReport type="week" amount={data.total_week?.amount} budget={data.group.weekly_budget} />
@@ -42,7 +43,6 @@
 						<Table.Head>Tag</Table.Head>
 						<Table.Head>Monthly budget</Table.Head>
 						<Table.Head>Total spent</Table.Head>
-						<Table.Head><span class="sr-only">Actions</span></Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
@@ -85,13 +85,6 @@
 									style: 'currency'
 								}).format(Number(tag_amount.amount ? -tag_amount.amount : 0))}
 							</Table.Cell>
-							<Table.Cell class="text-right"
-								><Button
-									href="/{data.group.id}/expenses?tag={tag_amount.id}"
-									size="sm"
-									variant="outline">View expenses</Button
-								></Table.Cell
-							>
 						</Table.Row>
 					{/each}
 				</Table.Body>
