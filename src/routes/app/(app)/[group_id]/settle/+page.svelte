@@ -4,6 +4,8 @@
 	import HandCoins from 'lucide-svelte/icons/hand-coins';
 	import { settlementFormStore } from '$lib/components/create-settlement/create-settlement.svelte';
 	import { PageTitle } from '$lib/components/page-title';
+	import CopyIcon from 'lucide-svelte/icons/copy';
+	import { toast } from 'svelte-sonner';
 	export let data;
 </script>
 
@@ -36,11 +38,23 @@
 					<Card.Description class="text-lg"
 						>{settle.from?.name} pays to {settle.to?.name}</Card.Description
 					>
-					<Card.Title class="text-3xl"
-						>{Intl.NumberFormat('sv-SE', {
-							currency: data.group.currency,
-							style: 'currency'
-						}).format(settle.amount ?? 0)}</Card.Title
+					<Card.Title
+						><Button
+							variant="ghost"
+							class="group/settleAmountBtn -mx-4 items-center gap-3 text-3xl"
+							on:click={() => {
+								if (settle.amount) {
+									navigator.clipboard.writeText(String(settle.amount));
+									toast('Amount copied to clipboard');
+								}
+							}}
+							>{Intl.NumberFormat('sv-SE', {
+								currency: data.group.currency,
+								style: 'currency'
+							}).format(settle.amount ?? 0)}<CopyIcon
+								class="size-5 opacity-0 transition-opacity group-hover/settleAmountBtn:opacity-100"
+							/></Button
+						></Card.Title
 					>
 				</Card.Header>
 				<Card.Footer class="justify-end">

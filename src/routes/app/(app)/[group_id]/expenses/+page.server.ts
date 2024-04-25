@@ -2,6 +2,7 @@ import type { PageServerLoad, Actions } from './$types';
 import { isGroupMember } from '$lib/helpers';
 import {
 	create_expense_schema,
+	groupMembersTable,
 	transactionSplitsTable,
 	transactionTagsTable,
 	transactionsTable
@@ -55,22 +56,26 @@ export const actions: Actions = {
 					.map((split) => {
 						return {
 							amount: -Number(split.amount),
-							group_member_id: split.group_member_id,
+							group_member_id: Number(split.group_member_id),
 							transaction_id: transaction.id,
 							type: 'credit'
 						};
 					});
+
 			insert_splits.push({
 				amount: create_expense_form.data.amount,
 				type: 'debit',
 				transaction_id: transaction.id,
 				group_member_id: create_expense_form.data.group_member_id
 			});
+
+			console.log("## SPLITS ## ", insert_splits);
 			const check_transaction_split_sum = insert_splits.reduce((acc, split) => {
 				return acc + split.amount;
 			}, 0);
 
 			if (check_transaction_split_sum !== 0) {
+				console.log(check_transaction_split_sum)
 				await tx.rollback();
 				return 'Total transaction volumne does not sum up correctly';
 			}

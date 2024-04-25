@@ -17,7 +17,7 @@ export const load: LayoutServerLoad = async (event) => {
 				group_member_id: group.members.find((member) => member.user_id === user.id)?.id,
 				when: new Date().toLocaleDateString('sv-SE'),
 				splits: group.members.map((member) => {
-					return { amount: null, group_member_id: member.id };
+					return { enabled: true, amount: null, group_member_id: member.id, email: member.user?.email ?? member.email, name: member.user?.name ?? member.name };
 				})
 			},
 			zod(create_expense_schema),

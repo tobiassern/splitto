@@ -109,7 +109,10 @@ export const create_expense_schema = z
 		splits: z
 			.object({
 				group_member_id: z.number().int().positive(),
-				amount: z.coerce.number().nonnegative().nullable()
+				name: z.string().min(2),
+				email: z.preprocess(val => val ? val : null, z.string().email().nullable()),
+				amount: z.coerce.number().nonnegative().nullable(),
+				enabled: z.boolean().default(true)
 			})
 			.array()
 	})
@@ -132,6 +135,26 @@ export const create_expense_schema = z
 				path: ['splits']
 			});
 		}
+		if (!data.splits.length) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: 'Need to add at least one person',
+				path: ['splits']
+			});
+		} else {
+			data.splits.forEach((split, idx) => {
+				if (split.group_member_id === null && split.email) {
+					if (data.splits.filter(filter_split => filter_split.email && filter_split.email === split.email).length >= 2) {
+						ctx.addIssue({
+							code: z.ZodIssueCode.custom,
+							message: 'Email is already used',
+							path: ['splits', idx, 'email']
+						});
+					}
+				}
+			});
+		}
+		return data;
 	});
 
 export const create_settlement_schema = z.object({

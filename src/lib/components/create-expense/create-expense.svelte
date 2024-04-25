@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
 	import { writable } from 'svelte/store';
-	export const showCreateExpenseForm = writable(false);
+	export const showCreateExpenseForm = writable(true);
 </script>
 
 <script lang="ts">
@@ -21,6 +21,8 @@
 	import { Separator } from '$lib/components/ui/separator';
 	import { toast } from 'svelte-sonner';
 	import DatePicker from '../date-picker/date-picker.svelte';
+	import autoAnimate from '@formkit/auto-animate';
+	import { Switch } from '$lib/components/ui/switch/index.js';
 
 	export let data: SuperValidated<Infer<typeof create_expense_schema>>;
 
@@ -129,7 +131,6 @@
 						multiple
 						selected={selectedTags}
 						onSelectedChange={(v) => {
-							// v && ($formData.tags = v.values);
 							v && ($formData.tags = v.map((val) => val.value));
 						}}
 					>
@@ -142,12 +143,6 @@
 									<Select.Item value={tag.id} label={tag.label} />
 								{/each}
 							{/if}
-							<!-- <Select.Separator></Select.Separator>
-							<Button
-								on:click={() => ($showCreateGroupMemberForm = true)}
-								class="w-full gap-1"
-								variant="ghost"><PlusIcon class="size-4" />Add person</Button
-							> -->
 						</Select.Content>
 					</Select.Root>
 					<input hidden bind:value={$formData.group_member_id} name={attrs.name} />
@@ -155,70 +150,97 @@
 				<Form.FieldErrors />
 			</Form.Field>
 
-			<Form.Fieldset {form} name="splits" class="mt-3 grid gap-1">
+			<Form.Fieldset {form} name="splits" class="my-3 grid gap-1">
 				<Form.FieldErrors />
 				<Form.Legend class="w-full border-b pb-1">Splits</Form.Legend>
 				<div>
 					<Button
+						disabled={!$formData.amount}
 						on:click={() => {
 							if ($formData.amount) {
-								$formData.splits = $formData.splits.map((split) => {
-									return {
-										...split,
-										amount: $formData.amount / $formData.splits.length
-									};
-								});
+								if ($formData.amount) {
+									$formData.splits = $formData.splits.map((split) => {
+										split.amount = $formData.amount / $formData.splits.length;
+										split.enabled = true;
+										return split;
+									});
+								}
 							}
 						}}
 						size="sm">All</Button
 					>
 					<Button
 						on:click={() => {
-							if ($formData.amount) {
-								$formData.splits = $formData.splits.map((split) => {
-									return {
-										...split,
-										amount: null
-									};
-								});
-							}
+							$formData.splits = $formData.splits.map((split) => {
+								split.amount = null;
+								split.enabled = false;
+								return split;
+							});
 						}}
 						size="sm">None</Button
 					>
 				</div>
-				{#each $formData.splits as split, i}
-					<Form.ElementField
-						{form}
-						name="splits[{i}].amount"
-						class={cn(!split.amount && 'opacity-50')}
-						on:change={(data) => {
-							console.log(data);
-						}}
-					>
-						<Form.Control let:attrs>
-							<Form.Label
-								>{$page.data.group?.members.find((member) => member.id === split.group_member_id)
-									?.name}</Form.Label
-							>
-							<Input
-								{...attrs}
-								bind:value={split.amount}
-								type="number"
-								placeholder="0.00"
-								step="any"
-							/>
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.ElementField>
-				{/each}
+				<div use:autoAnimate class="grid gap-2">
+					{#each $formData.splits as split, i}
+						<div class="-mx-3 rounded-md border px-3 py-2">
+							<p class="text-sm">
+								{split.name}{#if split.email}
+									<span class="ml-1 text-muted-foreground">({split.email})</span>
+								{/if}
+							</p>
+							<div class="mt-2 flex items-start justify-between gap-2">
+								<Form.ElementField
+									class="flex-1"
+									{form}
+									name="splits[{i}].amount"
+									on:change={(data) => {
+										console.log(data);
+									}}
+								>
+									<Form.Control let:attrs>
+										<Input
+											{...attrs}
+											bind:value={split.amount}
+											type="number"
+											placeholder="Amount"
+											step="any"
+										/>
+									</Form.Control>
+
+									<Form.FieldErrors />
+								</Form.ElementField>
+								<div class="flex h-9 items-center justify-end">
+									<Switch
+										name="splits[{i}].enabled"
+										checked={split.enabled ? true : false}
+										onCheckedChange={(value) => {
+											split.enabled = value;
+											if ($formData.amount) {
+												const enabled_splits = $formData.splits.filter(
+													(split) => split.enabled
+												).length;
+												$formData.splits = $formData.splits.map((split) => {
+													split.amount = split.enabled ? $formData.amount / enabled_splits : null;
+													return split;
+												});
+											}
+										}}
+									/>
+								</div>
+							</div>
+						</div>
+					{/each}
+				</div>
 				<Button
 					size="sm"
-					on:click={() => ($showCreateGroupMemberForm = true)}
 					class="w-full gap-1"
-					variant="ghost"><PlusIcon class="size-4" />Add person</Button
+					variant="ghost"
+					on:click={() => {
+						$showCreateGroupMemberForm = true;
+					}}><PlusIcon class="size-4" />Add person</Button
 				>
+				<Separator></Separator>
 			</Form.Fieldset>
-			<Separator></Separator>
 			<FormErrors errors={$errors._errors} />
 			<Form.Button type="submit" class="flex w-full gap-1"
 				>Add expense{#if $delayed}<LoaderCircle class="size-4 animate-spin" />{/if}</Form.Button
