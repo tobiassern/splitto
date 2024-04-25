@@ -1,0 +1,7 @@
+{
+    "name": "Splitto",
+    "short_name": "Splitto",
+    "start_url": ".",
+    "display": "standalone",
+    "description": "Split your expenses with your friends and foes."
+}
