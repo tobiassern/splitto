@@ -17,7 +17,7 @@
 <svelte:window bind:scrollY />
 <PageTitle text="My dashboard" />
 
-<main class="mx-auto grid w-full max-w-7xl grid-cols-12 items-start gap-4 p-4 sm:p-6 md:gap-8">
+<main class="mx-auto grid w-full max-w-7xl grid-cols-12 items-start gap-4 p-4 sm:p-6 md:gap-8 pt-[calc(env(safe-area-inset-top)_+_1rem)]">
 	<header class="sticky top-[calc(env(safe-area-inset-top)_+_1rem)] z-50 col-span-12 text-right sm:top-6">
 		<UserNav user={data.user} class={cn('transition-shadow', isScrolled && 'shadow-lg')} />
 	</header>

@@ -30,7 +30,7 @@
 <svelte:window bind:scrollY />
 <PageTitle text="Profile" />
 <main
-	class="col-span-12 mx-auto grid max-w-7xl flex-1 grid-cols-12 items-start gap-4 p-4 sm:px-6 md:gap-8"
+	class="col-span-12 mx-auto grid max-w-7xl flex-1 grid-cols-12 items-start gap-4 p-4 pt-[calc(env(safe-area-inset-top)_+_1rem)] sm:px-6 md:gap-8"
 >
 	<div class="sticky top-4 col-span-12">
 		<Button
