@@ -45,8 +45,8 @@
 	<div class="col-span-12 flex flex-col gap-4 md:gap-8 lg:col-span-7">
 		<UpdateUserName data={data.update_user_name_form} />
 		<UpdateUserEmail data={data.update_user_email_form} />
-		<UpdateUserDefaultCurrency data={data.update_default_currency_form} />
 		<PushNotifications />
+		<UpdateUserDefaultCurrency data={data.update_default_currency_form} />
 		<DeleteUser />
 	</div>
 	<Card.Root class="col-span-12 lg:col-span-5">

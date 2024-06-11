@@ -112,7 +112,9 @@
 				<p>
 					You have enabled notification permissions. Remove the permission in your browser settings.
 				</p>
-				<p>Subscribed to push notifications: <b>{isSubscribed}</b></p>
+				{#if !isSubscribed}
+					You need to subscribe to notifications in order to receive push notifications.
+				{/if}
 			{/if}</Card.Description
 		>
 	</Card.Header>
@@ -144,7 +146,8 @@
 					<Button on:click={subscribeUser}>Subscribe</Button>
 				{/if}
 			{:else}
-				This browser doesn't support push notifications. Try install a different browser or install this website as a PWA.
+				This browser doesn't support push notifications. Try install a different browser or install
+				this website as a PWA.
 			{/if}
 		{/if}
 	</Card.Footer>
