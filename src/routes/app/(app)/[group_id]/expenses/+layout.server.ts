@@ -8,12 +8,13 @@ export const load: LayoutServerLoad = async (event) => {
 	const { group } = isGroupMember(event);
 
 	const search = event.url.searchParams.get('s');
+	const type = event.url.searchParams.getAll('type') as typeof transactionsTable.$inferSelect['type'][];
 	const tags = event.url.searchParams.getAll('tag');
 	const from = event.url.searchParams.get('from');
 	const to = event.url.searchParams.get('to');
 	const whenOrder = event.url.searchParams.get('when');
 	const page = Number(event.url.searchParams.get('page'));
-	if (page && page < 1 || isNaN(page)) error(400, 'Invalid page search param');
+	if ((page && page < 1) || isNaN(page)) error(400, 'Invalid page search param');
 
 	return {
 		transactions: await event.locals.db.transaction(async (tx) => {
@@ -41,7 +42,8 @@ export const load: LayoutServerLoad = async (event) => {
 											)
 										)
 								)
-							: undefined
+							: undefined,
+						type?.length ? inArray(transactions.type, type) : undefined
 					),
 				with: {
 					group_member: true,

@@ -28,7 +28,7 @@
 
 <Card.Root
 	class={cn(
-		'col-span-12 h-[calc(100dvh_-_92px)] overflow-scroll md:h-[calc(100dvh_-_32px)] flex flex-col',
+		'col-span-12 flex h-[calc(100dvh_-_92px)] flex-col overflow-scroll md:h-[calc(100dvh_-_32px)]',
 		$page.params.transaction_id && 'lg:col-span-8'
 	)}
 >
@@ -66,6 +66,19 @@
 				<DateRangePicker />
 			</div>
 			<FacetedFilter
+				name="Type"
+				title="Type"
+				searchParam="type"
+				filterValues={$page.url.searchParams.getAll('type')}
+				options={[
+					{
+						label: 'Expense',
+						value: 'expense'
+					},
+					{ label: 'Settlement', value: 'settlement' }
+				]}
+			/>
+			<FacetedFilter
 				name="Tags"
 				title="Tags"
 				searchParam="tag"
@@ -77,13 +90,14 @@
 					};
 				})}
 			/>
-			{#if $page.url.searchParams.get('s') || $page.url.searchParams.get('tag') || $page.url.searchParams.get('from') || $page.url.searchParams.get('to')}
+			{#if $page.url.searchParams.get('s') || $page.url.searchParams.get('tag') || $page.url.searchParams.get('type') || $page.url.searchParams.get('from') || $page.url.searchParams.get('to')}
 				<div transition:scale={{ start: 0.95, opacity: 0 }}>
 					<Button
 						on:click={() => {
 							const newUrl = new URL($page.url);
 							newUrl.searchParams.delete('s');
 							newUrl.searchParams.delete('tag');
+							newUrl.searchParams.delete('type');
 							newUrl.searchParams.delete('from');
 							newUrl.searchParams.delete('to');
 							search = undefined;
