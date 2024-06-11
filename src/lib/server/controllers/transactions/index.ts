@@ -10,6 +10,8 @@ import { isGroupMember } from '$lib/helpers';
 import { z } from 'zod';
 import { sql, and, eq } from 'drizzle-orm';
 
+import { notifyGroupMembers } from '../notifications';
+
 export const createTransaction = async (
 	event: ServerLoadEvent | RequestEvent,
 	data: z.infer<typeof create_transaction_schema>
@@ -78,6 +80,11 @@ export const createTransaction = async (
 		}
 		return null;
 	});
+
+	await notifyGroupMembers(event, 'Hej', [
+		...data.splits.map((split) => split.group_member_id),
+		data.group_member_id
+	]);
 
 	return { error };
 };
