@@ -18,8 +18,8 @@ export const load: LayoutServerLoad = async (event) => {
 	return {
 		transactions: await event.locals.db.transaction(async (tx) => {
 			const data = await tx.query.transactionsTable.findMany({
-				limit: 50,
-				offset: 50 * (page ? Number(page) - 1 : 0),
+				limit: 25,
+				offset: 25 * (page ? Number(page) - 1 : 0),
 				where: (transactions, { eq, and, like, gte, lte }) =>
 					and(
 						eq(transactions.group_id, group.id),

@@ -28,7 +28,7 @@
 
 <Card.Root
 	class={cn(
-		'col-span-12 h-[calc(100dvh_-_92px)] overflow-scroll md:h-[calc(100dvh_-_32px)]',
+		'col-span-12 h-[calc(100dvh_-_92px)] overflow-scroll md:h-[calc(100dvh_-_32px)] flex flex-col',
 		$page.params.transaction_id && 'lg:col-span-8'
 	)}
 >
@@ -96,7 +96,7 @@
 			{/if}
 		</div>
 	</Card.Header>
-	<Card.Content>
+	<Card.Content class="flex-1">
 		<Table.Root>
 			<Table.Header>
 				<Table.Row>
@@ -204,7 +204,7 @@
 		<Button
 			on:click={() => goto(`?page=${Math.max(1, Number($page.url.searchParams.get('page'))) + 1}`)}
 			size="icon"
-			disabled={isNaN(Number($page.url.searchParams.get('page'))) || data.transactions.length < 50}
+			disabled={isNaN(Number($page.url.searchParams.get('page'))) || data.transactions.length < 25}
 			variant="ghost"><ChevronRight class="size-4" /></Button
 		>
 	</Card.Footer>
