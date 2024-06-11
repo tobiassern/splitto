@@ -9,7 +9,8 @@ import { redirect, error } from '@sveltejs/kit';
  */
 export const isAuthenticated = (event: ServerLoadEvent | RequestEvent) => {
 	if (!event.locals.user || !event.locals.session) {
-		redirect(302, '/sign-in');
+		console.log("NOT LOGGED IN")
+		redirect(302, `/sign-in?redirect_to=${encodeURIComponent(event.url.pathname)}`);
 	}
 
 	return { user: event.locals.user, session: event.locals.session };

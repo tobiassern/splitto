@@ -53,6 +53,7 @@
 			<Form.Button class="w-full" disabled={$submitting}
 				>Sign in{#if $delayed}<LoaderCircle class="ml-2 size-4 animate-spin" />{/if}</Form.Button
 			>
+			<input type="text" name="redirect_to" hidden bind:value={$formData.redirect_to} />
 		</form>
 
 		<div class="mt-4 text-center text-sm">

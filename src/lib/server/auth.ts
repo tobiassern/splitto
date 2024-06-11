@@ -14,17 +14,11 @@ export function initializeLucia() {
 				avatar_url: string | null;
 				email: string;
 				super_admin?: boolean | undefined;
-				budget_average_daily: DatabaseUserAttributes['budget_average_daily'];
-				budget_weekly: DatabaseUserAttributes['budget_weekly'];
-				budget_monthly: DatabaseUserAttributes['budget_monthly'];
 				default_currency: DatabaseUserAttributes['default_currency'];
 			} = {
 				name: attributes.name,
 				avatar_url: attributes.avatar_url,
 				email: attributes.email,
-				budget_average_daily: attributes.budget_average_daily,
-				budget_weekly: attributes.budget_weekly,
-				budget_monthly: attributes.budget_monthly,
 				default_currency: attributes.default_currency
 			};
 			if (attributes.super_admin) userAttr.super_admin = true;

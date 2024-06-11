@@ -11,9 +11,13 @@ import { sendEmailLoginOTP } from '$lib/server/mail';
 import { RESEND_API_KEY, EMAIL_DOMAIN } from '$env/static/private';
 import { countryToCurrency } from '$lib/currencies';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async (event) => {
 	return {
-		form: await superValidate(zod(sign_up_schema))
+		form: await superValidate(
+			{ redirect_to: event.url.searchParams.get('redirect_to') ?? undefined },
+			zod(sign_up_schema),
+			{ errors: false }
+		)
 	};
 };
 
@@ -58,17 +62,20 @@ export const actions: Actions = {
 			error(500, 'Failed to generate OTP code');
 		}
 
+		const url = new URL(event.url);
+		url.pathname = '/sign-in/verify-email';
+		url.searchParams.set('email', emailVerificationToken.email);
+		if (form.data.redirect_to) url.searchParams.set('redirect_to', form.data.redirect_to);
+
 		if (dev && (!RESEND_API_KEY || !EMAIL_DOMAIN)) {
-			redirect(
-				302,
-				`/sign-in/verify-email?email=${emailVerificationToken.email}&code=${emailVerificationToken.code}`
-			);
+			url.searchParams.set('code', emailVerificationToken.code);
+			redirect(302, url);
 		} else {
 			await sendEmailLoginOTP({
 				to: emailVerificationToken.email,
 				otp: emailVerificationToken.code
 			});
-			redirect(302, `/sign-in/verify-email?email=${emailVerificationToken.email}`);
+			redirect(302, url);
 		}
 	}
 };

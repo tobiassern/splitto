@@ -6,9 +6,13 @@ import { verify_email_schema, userTable, emailVerificationTokensTable } from '$l
 import { redirect } from '@sveltejs/kit';
 import { eq, and } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async (event) => {
 	return {
-		form: await superValidate(zod(verify_email_schema))
+		form: await superValidate(
+			{ redirect_to: event.url.searchParams.get('redirect_to') ?? undefined },
+			zod(verify_email_schema),
+			{ errors: false }
+		)
 	};
 };
 
@@ -73,6 +77,6 @@ export const actions: Actions = {
 			...sessionCookie.attributes
 		});
 
-		redirect(302, '/');
+		redirect(302, form.data.redirect_to ?? '/');
 	}
 };

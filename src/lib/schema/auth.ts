@@ -57,15 +57,21 @@ export const emailVerificationTokensTable = sqliteTable('email_verification_toke
 export const sign_up_schema = createInsertSchema(userTable, {
 	email: (schema) => schema.email.email().toLowerCase(),
 	name: (schema) => schema.name.min(2)
-}).omit({ id: true });
+})
+	.omit({ id: true })
+	.extend({
+		redirect_to: z.string().optional()
+	});
 
 export const sign_in_schema = z.object({
-	email: z.string().email()
+	email: z.string().email(),
+	redirect_to: z.string().optional()
 });
 
 export const verify_email_schema = z.object({
 	email: z.string().email(),
-	otp: z.string().length(6)
+	otp: z.string().length(6),
+	redirect_to: z.string().optional()
 });
 
 export const update_user_name_schema = z.object({

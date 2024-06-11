@@ -13,58 +13,7 @@ import { desc, eq, isNull, and } from 'drizzle-orm';
 
 export const load: PageServerLoad = async (event) => {
 	const { user } = isAuthenticated(event);
-	// const date = new Date();
-	// const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-	// const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-	// const daysSinceFirst = date.getDate();
-
-	// const first = date.getDate() - date.getDay(); // First day is the day of the month - the day of the week
-	// const last = first + 6; // last day is the first day + 6
-
-	// const firstDayOfWeek = new Date(date.setDate(first));
-	// const lastDayOfWeek = new Date(date.setDate(last));
-
-	// const [total_month] = await event.locals.db
-	// 	.select({
-	// 		amount: sum(transactionSplitsTable.amount)
-	// 	})
-	// 	.from(transactionSplitsTable)
-	// 	.leftJoin(transactionsTable, eq(transactionsTable.id, transactionSplitsTable.transaction_id))
-	// 	.leftJoin(groupMembersTable, eq(groupMembersTable.id, transactionSplitsTable.group_member_id))
-	// 	.leftJoin(userTable, eq(userTable.id, groupMembersTable.user_id))
-	// 	.leftJoin(groupsTable, eq(groupsTable.id, transactionsTable.group_id))
-	// 	.where(
-	// 		and(
-	// 			eq(transactionSplitsTable.type, 'credit'),
-	// 			eq(transactionsTable.type, 'expense'),
-	// 			eq(userTable.id, user.id),
-	// 			eq(groupsTable.currency, user.default_currency),
-	// 			between(transactionsTable.when, firstDayOfMonth, lastDayOfMonth)
-	// 		)
-	// 	)
-	// 	.groupBy(userTable.id);
-
-	// const [total_week] = await event.locals.db
-	// 	.select({
-	// 		amount: sum(transactionSplitsTable.amount)
-	// 	})
-	// 	.from(transactionSplitsTable)
-	// 	.leftJoin(transactionsTable, eq(transactionsTable.id, transactionSplitsTable.transaction_id))
-	// 	.leftJoin(groupMembersTable, eq(groupMembersTable.id, transactionSplitsTable.group_member_id))
-	// 	.leftJoin(userTable, eq(userTable.id, groupMembersTable.user_id))
-	// 	.leftJoin(groupsTable, eq(groupsTable.id, transactionsTable.group_id))
-
-	// 	.where(
-	// 		and(
-	// 			eq(transactionSplitsTable.type, 'credit'),
-	// 			eq(transactionsTable.type, 'expense'),
-	// 			eq(userTable.id, user.id),
-	// 			eq(groupsTable.currency, user.default_currency),
-	// 			between(transactionsTable.when, firstDayOfWeek, lastDayOfWeek)
-	// 		)
-	// 	)
-	// 	.groupBy(userTable.id);
-
+	
 	return {
 		group_invites: await event.locals.db
 			.select({
