@@ -17,7 +17,7 @@ export const createTransaction = async (
 	data: z.infer<typeof create_transaction_schema>
 ) => {
 	const { group } = isGroupMember(event);
-	const error = await event.locals.db.transaction(async (tx) => {
+	const [transaction, error] = await event.locals.db.transaction(async (tx) => {
 		const [transaction] = await tx
 			.insert(transactionsTable)
 			.values({
@@ -61,7 +61,7 @@ export const createTransaction = async (
 		if (check_transaction_split_sum !== 0) {
 			console.log(check_transaction_split_sum);
 			await tx.rollback();
-			return 'Total transaction volumne does not sum up correctly';
+			return [null, 'Total transaction volumne does not sum up correctly'];
 		}
 		await tx.insert(transactionSplitsTable).values(insert_splits);
 		for await (const insert_split of insert_splits) {
@@ -78,13 +78,22 @@ export const createTransaction = async (
 				.returning();
 			console.log(test);
 		}
-		return null;
+		if (!transaction) return [null, 'Transaction failed to create'];
+		return [transaction, null];
 	});
 
-	await notifyGroupMembers(event, 'Hej', [
-		...data.splits.map((split) => split.group_member_id),
-		data.group_member_id
-	]);
+	if (transaction) {
+		const url = new URL(event.url.origin);
+		console.log(url);
+
+		url.pathname = `/${event.locals.group?.id}/expenses/${transaction.id}`;
+
+		await notifyGroupMembers(
+			event,
+			{ message: data.type === 'expense' ? 'New expense' : 'New settlement', url: url.toString() },
+			[...data.splits.map((split) => split.group_member_id), data.group_member_id]
+		);
+	}
 
 	return { error };
 };

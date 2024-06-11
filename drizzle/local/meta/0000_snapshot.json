@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "70f6ea99-e066-4d4e-ab42-a4954620b8fe",
+  "id": "7b6299c9-cfda-44ab-a624-7a503c2ad227",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "email_verification_tokens": {

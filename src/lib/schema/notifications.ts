@@ -23,7 +23,7 @@ export const notificationsLogTable = sqliteTable('notifications_log', {
 	id: integer('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
 	created_at: integer('created_at', { mode: 'timestamp_ms' }).default(sql`(CURRENT_TIMESTAMP)`),
 	device_id: integer('device_id').references(() => userDevicesTable.id, { onDelete: 'set null' }),
-	payload: text('payload'),
+	data: text('data', { mode: 'json' }),
 	http_status_response: integer('http_status_response'),
 	success: integer('success', { mode: 'boolean' }),
 	error_message: text('error_message')

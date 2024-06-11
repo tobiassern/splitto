@@ -14,6 +14,8 @@
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
 		"db:studio:local": "drizzle-kit studio  --config drizzle.config.local.ts",
+		"db:studio:dev": "drizzle-kit studio  --config drizzle.config.dev.ts",
+		"db:studio:production": "drizzle-kit studio  --config drizzle.config.production.ts",
 		"db:generate:local": "drizzle-kit generate --config drizzle.config.local.ts",
 		"db:generate:dev": "drizzle-kit generate --config drizzle.config.dev.ts",
 		"db:generate:production": "drizzle-kit generate --config drizzle.config.production.ts",

@@ -21,13 +21,16 @@ const deleteIfExpired = async (event: RequestEvent, deviceId: number) => {
 	}
 };
 
-const sendNotification = async (subscription: PushSubscription, payload: string) => {
+const sendNotification = async (
+	subscription: PushSubscription,
+	data: { message: string; url?: string }
+) => {
 	console.log(subscription);
-	console.log(payload);
+
 	try {
 		const payload = await buildPushPayload(
 			{
-				data: 'Bonk!',
+				data,
 				options: {
 					ttl: 86400
 				}
@@ -60,12 +63,12 @@ const sendNotification = async (subscription: PushSubscription, payload: string)
 const sendNotificationToDevices = async (
 	event: RequestEvent,
 	devices: (typeof userDevicesTable.$inferSelect)[],
-	payload: string
+	data: { message: string; url?: string }
 ) => {
 	console.log('## SEND NOTIFICATION TO DEVICES  ##');
 	devices.forEach(async (device) => {
 		const subscription = JSON.parse(device.subscription);
-		const res = await sendNotification(subscription, payload);
+		const res = await sendNotification(subscription, data);
 
 		if (!res.ok) {
 			console.error(
@@ -76,7 +79,7 @@ const sendNotificationToDevices = async (
 
 		await event.locals.db.insert(notificationsLogTable).values({
 			device_id: device.id,
-			payload: payload,
+			data: data,
 			http_status_response: res.status,
 			success: res.ok,
 			error_message: !res.ok ? String(res.body) : null
@@ -91,7 +94,11 @@ const sendNotificationToDevices = async (
 	});
 };
 
-export const notifyUser = async (event: RequestEvent, userID: number, payload: string) => {
+export const notifyUser = async (
+	event: RequestEvent,
+	userID: number,
+	data: { message: string; url?: string }
+) => {
 	console.log('## NOTIFY USER ## ', userID);
 
 	const devices = await event.locals.db.query.userDevicesTable.findMany({
@@ -100,12 +107,12 @@ export const notifyUser = async (event: RequestEvent, userID: number, payload: s
 
 	console.log('## DEVICES ## ', devices);
 
-	await sendNotificationToDevices(event, devices, payload);
+	await sendNotificationToDevices(event, devices, data);
 };
 
 export const notifyGroupMembers = async (
 	event: RequestEvent,
-	payload: string,
+	data: { message: string; url?: string },
 	group_members: number[]
 ) => {
 	const users = await event.locals.db.query.groupMembersTable.findMany({
@@ -117,6 +124,6 @@ export const notifyGroupMembers = async (
 
 	console.log(users);
 	for (const user of users) {
-		if (user.user_id) await notifyUser(event, user.user_id, payload);
+		if (user.user_id) await notifyUser(event, user.user_id, data);
 	}
 };

@@ -9,6 +9,7 @@ import {
 	sessionTable
 } from '$lib/schema';
 import { isAuthenticated } from '$lib/helpers';
+import { notifyUser } from '$lib/server/controllers/notifications';
 
 import { and, eq } from 'drizzle-orm';
 import { redirect, error, fail } from '@sveltejs/kit';
@@ -146,5 +147,13 @@ export const actions: Actions = {
 
 		await event.locals.db.delete(userTable).where(eq(userTable.id, user.id));
 		redirect(302, '/sign-in');
+	},
+	testNotification: async (event) => {
+		const { locals } = event;
+		if (!locals.session || !locals.user) {
+			throw error(400, 'Not logged in');
+		}
+
+		await notifyUser(event, locals.user.id, { message: 'This is a test notification' });
 	}
 };

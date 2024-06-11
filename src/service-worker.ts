@@ -1,15 +1,19 @@
-// self.addEventListener('fetch', function () {
-// 	return;
-// });
+self.addEventListener('fetch', function () {
+	return;
+});
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 self.addEventListener('push', function (event: any) {
-	const payload = event.data?.text() ?? 'no payload';
+	console.log('## PUSH NOTIFICATION RECEIVED ##');
+	const payload = event.data?.json() ?? 'no payload';
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const registration = (self as any).registration as ServiceWorkerRegistration;
 	event.waitUntil(
 		registration.showNotification('Splitto', {
-			body: payload
+			body: payload.message,
+			data: {
+				url: payload.url
+			}
 		})
 	);
 } as EventListener);
@@ -21,16 +25,9 @@ self.addEventListener('notificationclick', (event: any) => {
 
 	// This looks to see if the current is already open and
 	// focuses if it is
-	// event.waitUntil(
-	//   clients
-	// 	.matchAll({
-	// 	  type: "window",
-	// 	})
-	// 	.then((clientList) => {
-	// 	  for (const client of clientList) {
-	// 		if (client.url === "/" && "focus" in client) return client.focus();
-	// 	  }
-	// 	  if (clients.openWindow) return clients.openWindow("/");
-	// 	}),
-	// );
+
+	event.waitUntil(
+		// clients.openWindow(event.data.url + "?notification_id=" + event.data.id)
+		clients.openWindow(event.notification.data.url)
+	);
 });
