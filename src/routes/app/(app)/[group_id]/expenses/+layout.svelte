@@ -14,7 +14,8 @@
 	import ColumnHeader from './(components)/column-header.svelte';
 	import DateRangePicker from './(components)/date-range-picker.svelte';
 	import { goto } from '$app/navigation';
-	import * as Pagination from '$lib/components/ui/pagination';
+	import ChevronLeft from 'lucide-svelte/icons/chevron-left';
+	import ChevronRight from 'lucide-svelte/icons/chevron-right';
 
 	import { scale } from 'svelte/transition';
 
@@ -189,9 +190,23 @@
 			</Table.Body>
 		</Table.Root>
 	</Card.Content>
-	<Card.Footer class="sticky bottom-0 bg-background">
-		<Button>Prev</Button>
-		<Button>Next</Button>
+	<Card.Footer class="sticky bottom-0 justify-end gap-1 bg-background pt-3">
+		<Button
+			size="icon"
+			variant="ghost"
+			on:click={() => {
+				goto(`?page=${Number($page.url.searchParams.get('page')) - 1}`);
+			}}
+			disabled={!$page.url.searchParams.has('page') ||
+				isNaN(Number($page.url.searchParams.get('page'))) ||
+				Number($page.url.searchParams.get('page')) === 1}><ChevronLeft class="size-4" /></Button
+		>
+		<Button
+			on:click={() => goto(`?page=${Math.max(1, Number($page.url.searchParams.get('page'))) + 1}`)}
+			size="icon"
+			disabled={isNaN(Number($page.url.searchParams.get('page'))) || data.transactions.length < 50}
+			variant="ghost"><ChevronRight class="size-4" /></Button
+		>
 	</Card.Footer>
 </Card.Root>
 {#if $$props.slot}
