@@ -1,1 +1,0 @@
-ALTER TABLE tags ADD `monthly_budget` real;

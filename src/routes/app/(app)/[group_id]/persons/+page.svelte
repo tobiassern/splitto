@@ -148,12 +148,7 @@
 						};
 					}}
 				>
-					<Button
-						disabled={!data.group.invite_link_active}
-						variant="outline"
-						size="sm"
-						class="w-full"
-						type="submit">Generate new code</Button
+					<Button variant="outline" size="sm" class="w-full" type="submit">Generate new code</Button
 					>
 				</form>
 			</Card.Content>

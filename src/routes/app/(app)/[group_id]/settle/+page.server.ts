@@ -1,31 +1,20 @@
 import { isGroupMember } from '$lib/helpers';
-import {
-	transactionSplitsTable,
-	transactionsTable,
-	groupMembersTable,
-	create_settlement_schema
-} from '$lib/schema';
-import { eq, sum } from 'drizzle-orm';
+import { groupMembersTable, create_transaction_schema } from '$lib/schema';
+import { eq } from 'drizzle-orm';
 import type { PageServerLoad, Actions } from './$types';
 import { superValidate, setError } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail } from '@sveltejs/kit';
+import { createTransaction } from '$lib/server/controllers/transactions';
 
-function caculateSettlements(
-	balances: {
-		amount: number;
-		id: number;
-		name: string;
-		email: string | null;
-	}[]
-) {
+function caculateSettlements(groupMember: (typeof groupMembersTable.$inferSelect)[]) {
 	// Calculate the total balance for each person
 	const balanceMap: { [n: number]: number } = {};
-	balances.forEach(({ id, amount }) => {
+	groupMember.forEach(({ id, balance }) => {
 		if (balanceMap[id]) {
-			balanceMap[id] += amount;
+			balanceMap[id] += balance;
 		} else {
-			balanceMap[id] = amount;
+			balanceMap[id] = balance;
 		}
 	});
 
@@ -56,8 +45,8 @@ function caculateSettlements(
 			if (!creditor) break; // No more creditors
 			const repaymentAmount = Math.min(debtor.amount, creditor.amount);
 			repayments.push({
-				from: balances.find((item) => item.id === debtor.id),
-				to: balances.find((item) => item.id === creditor.id),
+				from: groupMember.find((item) => item.id === debtor.id),
+				to: groupMember.find((item) => item.id === creditor.id),
 				amount: repaymentAmount
 			});
 			debtor.amount -= repaymentAmount;
@@ -74,32 +63,22 @@ function caculateSettlements(
 export const load: PageServerLoad = async (event) => {
 	const { group } = isGroupMember(event);
 
-	const balances = await event.locals.db
-		.select({
-			id: groupMembersTable.id,
-			name: groupMembersTable.name,
-			email: groupMembersTable.email,
-			amount: sum(transactionSplitsTable.amount)
-		})
-		.from(groupMembersTable)
-		.leftJoin(
-			transactionSplitsTable,
-			eq(groupMembersTable.id, transactionSplitsTable.group_member_id)
-		)
-		.groupBy(groupMembersTable.id)
-		.where(eq(groupMembersTable.group_id, group.id));
-	const settles = caculateSettlements(JSON.parse(JSON.stringify(balances)));
+	const group_members = await event.locals.db.query.groupMembersTable.findMany({
+		where: eq(groupMembersTable.group_id, group.id)
+	});
+
+	const settles = caculateSettlements(JSON.parse(JSON.stringify(group_members)));
 
 	return {
-		balances,
-		settles
+		settles,
+		group_members
 	};
 };
 
 export const actions: Actions = {
 	create: async (event) => {
-		const { group } = isGroupMember(event);
-		const create_settlement_form = await superValidate(event, zod(create_settlement_schema), {
+		isGroupMember(event);
+		const create_settlement_form = await superValidate(event, zod(create_transaction_schema), {
 			id: 'create-settlement-form'
 		});
 
@@ -109,44 +88,7 @@ export const actions: Actions = {
 			});
 		}
 
-		const error = await event.locals.db.transaction(async (tx) => {
-			const [transaction] = await tx
-				.insert(transactionsTable)
-				.values({
-					type: 'settlement',
-					group_id: group.id,
-					group_member_id: create_settlement_form.data.from_id,
-					label: create_settlement_form.data.label,
-					when: new Date(create_settlement_form.data.when)
-				})
-				.returning();
-			const insert_splits: (typeof transactionSplitsTable.$inferInsert)[] = [
-				{
-					group_member_id: create_settlement_form.data.from_id,
-					amount: create_settlement_form.data.amount,
-					type: 'debit',
-					transaction_id: transaction.id
-				},
-				{
-					group_member_id: create_settlement_form.data.to_id,
-					amount: -create_settlement_form.data.amount,
-					type: 'credit',
-					transaction_id: transaction.id
-				}
-			];
-
-			const check_transaction_split_sum = insert_splits.reduce((acc, split) => {
-				return acc + split.amount;
-			}, 0);
-
-			if (check_transaction_split_sum !== 0) {
-				await tx.rollback();
-				return 'Total transaction volumne does not sum up correctly';
-			}
-			await tx.insert(transactionSplitsTable).values(insert_splits);
-
-			return null;
-		});
+		const { error } = await createTransaction(event, create_settlement_form.data);
 
 		if (error) {
 			return setError(create_settlement_form, '', error);

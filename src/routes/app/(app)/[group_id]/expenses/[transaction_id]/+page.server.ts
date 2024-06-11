@@ -6,6 +6,7 @@ import { error } from '@sveltejs/kit';
 export const load: PageServerLoad = async (event) => {
 	const { group } = isGroupMember(event);
 
+
 	const transaction = await event.locals.db.query.transactionsTable.findFirst({
 		where: and(
 			eq(transactionsTable.id, Number(event.params.transaction_id)),

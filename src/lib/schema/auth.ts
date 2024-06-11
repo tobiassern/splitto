@@ -1,10 +1,10 @@
-import { text, integer, sqliteTable, real } from 'drizzle-orm/sqlite-core';
+import { text, integer, sqliteTable } from 'drizzle-orm/sqlite-core';
 import { createInsertSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { sql } from 'drizzle-orm';
 import { currencies } from '../currencies';
 import { generateRandomString, alphabet } from 'oslo/crypto';
-
+import { relations } from 'drizzle-orm';
 const zodEnum = <T>(arr: T[]): [T, ...T[]] => arr as [T, ...T[]];
 
 export const userTable = sqliteTable('user', {
@@ -16,14 +16,14 @@ export const userTable = sqliteTable('user', {
 	avatar_url: text('avatar_url'),
 	super_admin: integer('super_admin', { mode: 'boolean' }),
 	email_verified: integer('email_verified', { mode: 'boolean' }).default(false),
-	budget_average_daily: real('budget_average_daily'),
-	budget_weekly: real('budget_weekly'),
-	budget_monthly: real('budget_monthly'),
 	default_currency: text('currency', { enum: zodEnum(Object.keys(currencies)) })
 		.notNull()
 		.default('USD')
 });
 
+export const userRelations = relations(userTable, ({ many }) => ({
+	sessions: many(sessionTable)
+}));
 export const sessionTable = sqliteTable('session', {
 	id: text('id').notNull().primaryKey(),
 	userId: integer('user_id', { mode: 'number' })
@@ -32,6 +32,13 @@ export const sessionTable = sqliteTable('session', {
 	expiresAt: integer('expires_at').notNull(),
 	user_agent: text('user_agent')
 });
+
+export const sessionRelations = relations(sessionTable, ({ one }) => ({
+	user: one(userTable, {
+		fields: [sessionTable.userId],
+		references: [userTable.id]
+	})
+}));
 
 export const emailVerificationTokensTable = sqliteTable('email_verification_tokens', {
 	id: integer('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
@@ -69,9 +76,6 @@ export const update_user_email_schema = z.object({
 	email: z.string().email()
 });
 
-export const update_user_budget_schema = z.object({
-	budget_average_daily: z.coerce.number().nullable(),
-	budget_weekly: z.coerce.number().nullable(),
-	budget_monthly: z.coerce.number().nullable(),
+export const update_default_currency_schema = z.object({
 	default_currency: z.enum(zodEnum(Object.keys(currencies)))
 });

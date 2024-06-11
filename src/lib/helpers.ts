@@ -1,13 +1,15 @@
 import type { RequestEvent, ServerLoadEvent } from '@sveltejs/kit';
 import { redirect, error } from '@sveltejs/kit';
 
+/**
+ * Checks if the user is authenticated and returns the user and session objects.
+ *
+ * @param {ServerLoadEvent | RequestEvent} event - The event object containing the user and session information.
+ * @return {{ user: import('lucia').User, session: import('lucia').Session }} - An object containing the user and session objects.
+ */
 export const isAuthenticated = (event: ServerLoadEvent | RequestEvent) => {
 	if (!event.locals.user || !event.locals.session) {
-		redirect(302, '/login');
-	}
-
-	if (event.params.group_id && !event.locals.group) {
-		error(404);
+		redirect(302, '/sign-in');
 	}
 
 	return { user: event.locals.user, session: event.locals.session };

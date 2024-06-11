@@ -20,7 +20,7 @@
 	import * as Form from '$lib/components/ui/form';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { create_settlement_schema } from '$lib/schema';
+	import { create_transaction_schema } from '$lib/schema';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import FormErrors from '$lib/components/form-errors/form-errors.svelte';
 	import * as Select from '$lib/components/ui/select/index.js';
@@ -28,11 +28,13 @@
 	import { toast } from 'svelte-sonner';
 	import DatePicker from '../date-picker/date-picker.svelte';
 
-	export let data: SuperValidated<Infer<typeof create_settlement_schema>>;
+	export let data: SuperValidated<Infer<typeof create_transaction_schema>>;
 
 	const form = superForm(data, {
+		id: 'create-settlement-form',
 		dataType: 'json',
-		validators: zodClient(create_settlement_schema),
+		validators: zodClient(create_transaction_schema),
+		resetForm: false,
 		onResult: ({ result }) => {
 			if (result.type === 'success') {
 				toast.success('Settlement added');
@@ -48,21 +50,29 @@
 
 	const { form: formData, enhance, errors, delayed } = form;
 
-	$: if ($settlementFormStore.to_id) $formData.to_id = $settlementFormStore.to_id;
-	$: if ($settlementFormStore.from_id) $formData.from_id = $settlementFormStore.from_id;
+	$: if ($settlementFormStore.to_id)
+		$formData.splits[0] = {
+			group_member_id: $settlementFormStore.to_id,
+			amount: $settlementFormStore.amount,
+			enabled: true
+		};
+	$: if ($settlementFormStore.from_id) $formData.group_member_id = $settlementFormStore.from_id;
 	$: $formData.amount = $settlementFormStore.amount;
 
-	$: selectedFrom = $formData.from_id
+	$: selectedFrom = $formData.group_member_id
 		? {
-				label: $page.data.group?.members.find((member) => member.id === $formData.from_id)?.name,
-				value: $formData.from_id
+				label: $page.data.group?.members.find((member) => member.id === $formData.group_member_id)
+					?.name,
+				value: $formData.group_member_id
 			}
 		: undefined;
 
-	$: selectedTo = $formData.to_id
+	$: selectedTo = $formData.splits[0]?.group_member_id
 		? {
-				label: $page.data.group?.members.find((member) => member.id === $formData.to_id)?.name,
-				value: $formData.to_id
+				label: $page.data.group?.members.find(
+					(member) => member.id === $formData.splits[0]?.group_member_id
+				)?.name,
+				value: $formData.splits[0]?.group_member_id
 			}
 		: undefined;
 </script>
@@ -78,13 +88,13 @@
 			method="POST"
 			action="/{$page.params.group_id}/settle/?/create"
 		>
-			<Form.Field {form} name="from_id">
+			<Form.Field {form} name="group_member_id">
 				<Form.Control let:attrs>
 					<Form.Label>Who paid?</Form.Label>
 					<Select.Root
 						selected={selectedFrom}
 						onSelectedChange={(v) => {
-							v && ($formData.from_id = v.value);
+							v && ($formData.group_member_id = v.value);
 						}}
 					>
 						<Select.Trigger {...attrs}>
@@ -98,42 +108,38 @@
 							{/if}
 						</Select.Content>
 					</Select.Root>
-					<input hidden bind:value={$formData.from_id} name={attrs.name} />
+					<input hidden bind:value={$formData.group_member_id} name={attrs.name} />
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
-			<Form.Field {form} name="to_id">
-				<Form.Control let:attrs>
-					<Form.Label>To whom?</Form.Label>
-					<Select.Root
-						selected={selectedTo}
-						onSelectedChange={(v) => {
-							v && ($formData.to_id = v.value);
-						}}
-					>
-						<Select.Trigger {...attrs}>
-							<Select.Value placeholder="Select to whom" />
-						</Select.Trigger>
-						<Select.Content>
-							{#if $page.data.group?.members}
-								{#each $page.data.group?.members as member}
-									<Select.Item value={member.id} label={member.name} />
-								{/each}
-							{/if}
-						</Select.Content>
-					</Select.Root>
-					<input hidden bind:value={$formData.to_id} name={attrs.name} />
-				</Form.Control>
-				<Form.FieldErrors />
-			</Form.Field>
-			<!-- <Form.Field {form} name="when">
-				<Form.Control let:attrs>
-					<Form.Label>When</Form.Label>
-					<DatePicker bind:value={whenValue} />
-					<input value={$formData.when} name={attrs.name} />
-				</Form.Control>
-				<Form.FieldErrors />
-			</Form.Field> -->
+			<Form.Fieldset {form} name="splits" class="my-3 grid gap-1">
+				{#each $formData.splits as split, i}
+					<Form.Field {form} name="splits[{i}].group_member_id">
+						<Form.Control let:attrs>
+							<Form.Label>To whom?</Form.Label>
+							<Select.Root
+								selected={selectedTo}
+								onSelectedChange={(v) => {
+									v && (split.group_member_id = v.value);
+								}}
+							>
+								<Select.Trigger {...attrs}>
+									<Select.Value placeholder="Select to whom" />
+								</Select.Trigger>
+								<Select.Content>
+									{#if $page.data.group?.members}
+										{#each $page.data.group?.members as member}
+											<Select.Item value={member.id} label={member.name} />
+										{/each}
+									{/if}
+								</Select.Content>
+							</Select.Root>
+							<input hidden bind:value={split.group_member_id} name={attrs.name} />
+						</Form.Control>
+						<Form.FieldErrors />
+					</Form.Field>
+				{/each}
+			</Form.Fieldset>
 
 			<Form.Field {form} name="label">
 				<Form.Control let:attrs>
@@ -146,7 +152,16 @@
 			<Form.Field {form} name="amount">
 				<Form.Control let:attrs>
 					<Form.Label>How much?</Form.Label>
-					<Input {...attrs} bind:value={$formData.amount} type="number" step="any" />
+					<Input
+						{...attrs}
+						bind:value={$formData.amount}
+						type="number"
+						step="any"
+						on:change={(event) => {
+							// @ts-ignore
+							$formData.splits[0].amount = Number(event.target?.value);
+						}}
+					/>
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>

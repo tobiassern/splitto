@@ -12,6 +12,7 @@
 	import FormErrors from '$lib/components/form-errors/form-errors.svelte';
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { currencies } from '$lib/currencies';
+import { page } from '$app/stores';
 
 	export let data: SuperValidated<Infer<typeof insert_group_schema>>;
 
@@ -30,7 +31,7 @@
 			}
 		: undefined;
 
-	let open = false;
+	let open = $page.url.searchParams.get('create-group') ? true : false;
 </script>
 
 <Dialog.Root bind:open>

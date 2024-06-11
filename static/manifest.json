@@ -1,7 +1,11 @@
 {
     "name": "Splitto",
     "short_name": "Splitto",
-    "start_url": ".",
+    "start_url": "/",
     "display": "standalone",
-    "description": "Split your expenses with your friends and foes."
+    "description": "Split your expenses with your friends and foes.",
+    "icons": [ {
+        "src": "favicon.svg",
+        "sizes": "any"
+      }]
 }

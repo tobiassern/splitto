@@ -2,6 +2,7 @@ import { text, integer, sqliteTable, real, primaryKey } from 'drizzle-orm/sqlite
 import { z } from 'zod';
 import { relations, sql } from 'drizzle-orm';
 import { groupMembersTable, groupsTable } from './groups';
+import { createInsertSchema } from 'drizzle-zod';
 
 export const transactionsTable = sqliteTable('transactions', {
 	id: integer('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
@@ -33,7 +34,6 @@ export const transactionSplitsTable = sqliteTable('transaction_splits', {
 export const tagsTable = sqliteTable('tags', {
 	id: integer('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
 	label: text('label').notNull(),
-	monthly_budget: real('monthly_budget'),
 	group_id: integer('group_id', { mode: 'number' })
 		.references(() => groupsTable.id, { onDelete: 'cascade' })
 		.notNull()
@@ -99,8 +99,9 @@ export const transactionSplitsRelations = relations(transactionSplitsTable, ({ o
 	})
 }));
 
-export const create_expense_schema = z
+export const create_transaction_schema = z
 	.object({
+		type: z.enum(['expense', 'settlement']).default('expense'),
 		label: z.string().nullable(),
 		group_member_id: z.number().int().positive(),
 		amount: z.coerce.number().positive(),
@@ -109,8 +110,6 @@ export const create_expense_schema = z
 		splits: z
 			.object({
 				group_member_id: z.number().int().positive(),
-				name: z.string().min(2),
-				email: z.preprocess((val) => (val ? val : null), z.string().email().nullable()),
 				amount: z.coerce.number().nonnegative().nullable(),
 				enabled: z.boolean().default(true)
 			})
@@ -141,41 +140,21 @@ export const create_expense_schema = z
 				message: 'Need to add at least one person',
 				path: ['splits']
 			});
-		} else {
-			data.splits.forEach((split, idx) => {
-				if (split.group_member_id === null && split.email) {
-					if (
-						data.splits.filter(
-							(filter_split) => filter_split.email && filter_split.email === split.email
-						).length >= 2
-					) {
-						ctx.addIssue({
-							code: z.ZodIssueCode.custom,
-							message: 'Email is already used',
-							path: ['splits', idx, 'email']
-						});
-					}
-				}
-			});
 		}
 		return data;
 	});
 
-export const create_settlement_schema = z.object({
-	label: z.string().default('Settlement'),
-	from_id: z.number().int().positive(),
-	to_id: z.number().int().positive(),
-	amount: z.coerce.number(),
-	when: z.string()
+export const insert_tag_schema = z.object({
+	label: z.string().min(2)
 });
 
-export const insert_tag_schema = z.object({
-	label: z.string().min(2),
-	monthly_budget: z.coerce.number().nullable()
+export const insert_transaction_schema = createInsertSchema(transactionsTable).omit({
+	id: true,
+	created_at: true,
+	updated_at: true
 });
 
 export const update_tag_schema = z.object({
-	monthly_budget: z.coerce.number().nullable(),
 	label: z.string().min(2),
 	id: z.coerce.number().int()
 });

@@ -1,14 +1,10 @@
 import type { PageServerLoad, Actions } from './$types';
 import { isGroupMember } from '$lib/helpers';
-import {
-	create_expense_schema,
-	transactionSplitsTable,
-	transactionTagsTable,
-	transactionsTable
-} from '$lib/schema';
+import { create_transaction_schema } from '$lib/schema';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail } from '@sveltejs/kit';
+import { createTransaction } from '$lib/server/controllers/transactions';
 
 export const load: PageServerLoad = async (event) => {
 	isGroupMember(event);
@@ -18,8 +14,9 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions: Actions = {
 	create: async (event) => {
-		const { group } = isGroupMember(event);
-		const create_expense_form = await superValidate(event, zod(create_expense_schema), {
+		isGroupMember(event);
+
+		const create_expense_form = await superValidate(event, zod(create_transaction_schema), {
 			id: 'create-expense-form'
 		});
 
@@ -29,59 +26,7 @@ export const actions: Actions = {
 			});
 		}
 
-		const error = await event.locals.db.transaction(async (tx) => {
-			const [transaction] = await tx
-				.insert(transactionsTable)
-				.values({
-					type: 'expense',
-					group_id: group.id,
-					group_member_id: create_expense_form.data.group_member_id,
-					label: create_expense_form.data.label,
-					when: new Date(create_expense_form.data.when)
-				})
-				.returning();
-
-			if (create_expense_form.data.tags.length) {
-				await tx.insert(transactionTagsTable).values(
-					create_expense_form.data.tags.map((tag_id) => {
-						return { tag_id, transaction_id: transaction.id };
-					})
-				);
-			}
-
-			const insert_splits: (typeof transactionSplitsTable.$inferInsert)[] =
-				create_expense_form.data.splits
-					.filter((split) => split.amount !== null)
-					.map((split) => {
-						return {
-							amount: -Number(split.amount),
-							group_member_id: Number(split.group_member_id),
-							transaction_id: transaction.id,
-							type: 'credit'
-						};
-					});
-
-			insert_splits.push({
-				amount: create_expense_form.data.amount,
-				type: 'debit',
-				transaction_id: transaction.id,
-				group_member_id: create_expense_form.data.group_member_id
-			});
-
-			console.log('## SPLITS ## ', insert_splits);
-			const check_transaction_split_sum = insert_splits.reduce((acc, split) => {
-				return acc + split.amount;
-			}, 0);
-
-			if (check_transaction_split_sum !== 0) {
-				console.log(check_transaction_split_sum);
-				await tx.rollback();
-				return 'Total transaction volumne does not sum up correctly';
-			}
-			await tx.insert(transactionSplitsTable).values(insert_splits);
-
-			return null;
-		});
+		const { error } = await createTransaction(event, create_expense_form.data);
 
 		if (error) {
 			return setError(create_expense_form, '', error);

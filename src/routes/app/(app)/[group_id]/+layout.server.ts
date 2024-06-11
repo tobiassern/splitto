@@ -3,8 +3,7 @@ import { superValidate } from 'sveltekit-superforms';
 import type { LayoutServerLoad } from '../$types';
 import { zod } from 'sveltekit-superforms/adapters';
 import {
-	create_expense_schema,
-	create_settlement_schema,
+	create_transaction_schema,
 	insert_group_member_schema
 } from '$lib/schema';
 export const load: LayoutServerLoad = async (event) => {
@@ -26,12 +25,12 @@ export const load: LayoutServerLoad = async (event) => {
 					};
 				})
 			},
-			zod(create_expense_schema),
+			zod(create_transaction_schema),
 			{ id: 'create-expense-form', errors: false }
 		),
 		create_settlement_form: await superValidate(
-			{ when: new Date().toLocaleDateString('sv-SE') },
-			zod(create_settlement_schema),
+			{ when: new Date().toLocaleDateString('sv-SE'), type: 'settlement' },
+			zod(create_transaction_schema),
 			{
 				id: 'create-settlement-form'
 			}

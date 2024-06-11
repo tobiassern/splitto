@@ -19,10 +19,12 @@ CREATE TABLE `user` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`created_at` integer DEFAULT (CURRENT_TIMESTAMP),
 	`email` text NOT NULL,
+	`phone_number` text,
 	`name` text NOT NULL,
 	`avatar_url` text,
 	`super_admin` integer,
-	`email_verified` integer DEFAULT false
+	`email_verified` integer DEFAULT false,
+	`currency` text DEFAULT 'USD' NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `group_members` (
@@ -32,6 +34,7 @@ CREATE TABLE `group_members` (
 	`user_id` integer,
 	`name` text NOT NULL,
 	`email` text,
+	`balance` real DEFAULT 0 NOT NULL,
 	FOREIGN KEY (`group_id`) REFERENCES `groups`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
@@ -40,9 +43,21 @@ CREATE TABLE `groups` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`created_at` integer DEFAULT (CURRENT_TIMESTAMP),
 	`name` text NOT NULL,
-	`user_id` integer,
+	`user_id` integer NOT NULL,
 	`currency` text DEFAULT 'USD' NOT NULL,
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
+	`invite_link_active` integer DEFAULT false,
+	`invite_link_code` text,
+	`weekly_budget` real,
+	`monthly_budget` real,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `tags` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`label` text NOT NULL,
+	`monthly_budget` real,
+	`group_id` integer NOT NULL,
+	FOREIGN KEY (`group_id`) REFERENCES `groups`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `transaction_splits` (
@@ -55,13 +70,21 @@ CREATE TABLE `transaction_splits` (
 	FOREIGN KEY (`group_member_id`) REFERENCES `group_members`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
+CREATE TABLE `transaction_tags` (
+	`tag_id` integer NOT NULL,
+	`transaction_id` integer NOT NULL,
+	PRIMARY KEY(`tag_id`, `transaction_id`),
+	FOREIGN KEY (`tag_id`) REFERENCES `tags`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`transaction_id`) REFERENCES `transactions`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
 CREATE TABLE `transactions` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`created_at` integer DEFAULT (CURRENT_TIMESTAMP),
 	`updated_at` integer DEFAULT (CURRENT_TIMESTAMP),
 	`type` text NOT NULL,
 	`when` integer DEFAULT (CURRENT_TIMESTAMP),
-	`label` text NOT NULL,
+	`label` text,
 	`group_id` integer NOT NULL,
 	`group_member_id` integer NOT NULL,
 	FOREIGN KEY (`group_id`) REFERENCES `groups`(`id`) ON UPDATE no action ON DELETE cascade,

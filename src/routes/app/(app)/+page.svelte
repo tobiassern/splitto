@@ -15,47 +15,17 @@
 </script>
 
 <svelte:window bind:scrollY />
-<PageTitle text="My dashboard" />
+<PageTitle text="My groups" />
 
-<main class="mx-auto grid w-full max-w-7xl grid-cols-12 items-start gap-4 p-4 sm:p-6 md:gap-8 pt-[calc(env(safe-area-inset-top)_+_1rem)]">
-	<header class="sticky top-[calc(env(safe-area-inset-top)_+_1rem)] z-50 col-span-12 text-right sm:top-6">
+<main
+	class="mx-auto w-full max-w-7xl flex flex-col gap-4 p-4 pt-[calc(env(safe-area-inset-top)_+_1rem)] sm:p-6 md:gap-8"
+>
+	<header
+		class="sticky top-[calc(env(safe-area-inset-top)_+_1rem)] z-50 col-span-12 text-right sm:top-6"
+	>
 		<UserNav user={data.user} class={cn('transition-shadow', isScrolled && 'shadow-lg')} />
 	</header>
-	<div class="col-span-12 grid grid-cols-12 gap-4 md:gap-8">
-		<div class="col-span-12 lg:col-span-3">
-			<BudgetReport
-				title="Average daily spending"
-				budget_type="average daily budget"
-				set_budget_link="/profile"
-				amount={data.total_month?.amount
-					? Number(data.total_month?.amount) / data.daysSinceFirst
-					: 0}
-				budget={data.user?.budget_average_daily}
-				currency={data.user?.default_currency ?? ''}
-			/>
-		</div>
-		<div class="col-span-12 lg:col-span-3">
-			<BudgetReport
-				title="This Week"
-				budget_type="weekly budget"
-				amount={data.total_week?.amount}
-				budget={data.user?.budget_weekly}
-				set_budget_link="/profile"
-				currency={data.user?.default_currency ?? ''}
-			/>
-		</div>
-		<div class="col-span-12 lg:col-span-3">
-			<BudgetReport
-				title="This Month"
-				budget_type="monthly budget"
-				amount={data.total_month?.amount}
-				budget={data.user?.budget_monthly}
-				set_budget_link="/profile"
-				currency={data.user?.default_currency ?? ''}
-			/>
-		</div>
-	</div>
-	<Card.Root class="col-span-12">
+	<Card.Root class="w-full max-w-lg mx-auto">
 		<Card.Header class="flex flex-col items-start justify-between sm:flex-row sm:items-center">
 			<div class="grid flex-1 gap-2">
 				<Card.Title>Groups</Card.Title>

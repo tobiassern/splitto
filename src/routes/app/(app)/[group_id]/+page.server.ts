@@ -60,7 +60,6 @@ export const load: PageServerLoad = async (event) => {
 		total_month,
 		tags_amount: await event.locals.db
 			.select({
-				monthly_budget: tagsTable.monthly_budget,
 				id: tagsTable.id,
 				label: tagsTable.label,
 				amount: sum(transactionSplitsTable.amount)

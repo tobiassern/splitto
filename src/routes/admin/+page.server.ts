@@ -1,14 +1,20 @@
 import { isSuperAdmin } from '$lib/helpers';
 import { error, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { groupsTable, userTable } from '$lib/schema';
-import { eq } from 'drizzle-orm';
+import { groupsTable, sessionTable, userTable } from '$lib/schema';
+import { eq, gte } from 'drizzle-orm';
 
 export const load: PageServerLoad = async (event) => {
 	isSuperAdmin(event);
-
+	console.log(Date.now());
 	return {
-		users: await event.locals.db.query.userTable.findMany(),
+		users: await event.locals.db.query.userTable.findMany({
+			with: {
+				sessions: {
+					where: gte(sessionTable.expiresAt, Math.floor(Date.now() / 1000))
+				}
+			}
+		}),
 		groups: await event.locals.db.query.groupsTable.findMany({
 			with: { owner: true }
 		})
@@ -39,6 +45,13 @@ export const actions: Actions = {
 		if (!group_id) error(400, 'No group ID provided');
 
 		await event.locals.db.delete(groupsTable).where(eq(groupsTable.id, Number(group_id)));
+
+		return { success: true };
+	},
+	'delete-expired-sessions': async (event) => {
+		isSuperAdmin(event);
+
+		await event.locals.lucia.deleteExpiredSessions();
 
 		return { success: true };
 	}

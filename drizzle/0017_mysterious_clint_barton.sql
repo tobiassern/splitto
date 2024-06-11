@@ -1,1 +1,0 @@
-ALTER TABLE user ADD `budget_average_daily` real;

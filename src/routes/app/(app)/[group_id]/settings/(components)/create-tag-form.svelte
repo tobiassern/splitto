@@ -32,8 +32,6 @@
 	});
 
 	const { form: formData, enhance, errors, delayed } = form;
-
-	const budgetProxy = numberProxy(form, 'monthly_budget', { empty: 'null' });
 </script>
 
 <Dialog.Root bind:open>
@@ -57,13 +55,6 @@
 				<Form.Control let:attrs>
 					<Form.Label>Label</Form.Label>
 					<Input {...attrs} bind:value={$formData.label} placeholder="My tag" />
-				</Form.Control>
-				<Form.FieldErrors />
-			</Form.Field>
-			<Form.Field {form} name="monthly_budget">
-				<Form.Control let:attrs>
-					<Form.Label>Monthly budget</Form.Label>
-					<Input {...attrs} bind:value={$budgetProxy} type="number" />
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>

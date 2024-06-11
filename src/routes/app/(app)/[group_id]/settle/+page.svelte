@@ -13,15 +13,15 @@
 <div class="col-span-12">
 	<h3 class="font-semibold leading-none tracking-tight">Balances</h3>
 	<ul class="-mx-3 flex snap-x gap-4 overflow-x-scroll px-3 py-2">
-		{#each data.balances as balance}
+		{#each data.group_members as group_member}
 			<Card.Root class="w-full min-w-56 max-w-56 snap-center">
 				<Card.Header class="pb-2">
-					<Card.Description>{balance.name}</Card.Description>
+					<Card.Description>{group_member.name}</Card.Description>
 					<Card.Title class="text-2xl"
 						>{Intl.NumberFormat('sv-SE', {
 							currency: data.group.currency,
 							style: 'currency'
-						}).format(Number(balance.amount ?? 0))}</Card.Title
+						}).format(Number(group_member.balance ?? 0))}</Card.Title
 					>
 				</Card.Header>
 				<Card.Footer></Card.Footer>

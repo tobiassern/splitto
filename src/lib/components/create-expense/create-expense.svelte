@@ -11,7 +11,7 @@
 	import * as Form from '$lib/components/ui/form';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { create_expense_schema } from '$lib/schema';
+	import { create_transaction_schema } from '$lib/schema';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import FormErrors from '$lib/components/form-errors/form-errors.svelte';
 	import * as Select from '$lib/components/ui/select/index.js';
@@ -23,11 +23,12 @@
 	import autoAnimate from '@formkit/auto-animate';
 	import { Switch } from '$lib/components/ui/switch/index.js';
 
-	export let data: SuperValidated<Infer<typeof create_expense_schema>>;
+	export let data: SuperValidated<Infer<typeof create_transaction_schema>>;
 
 	const form = superForm(data, {
 		dataType: 'json',
-		validators: zodClient(create_expense_schema),
+		validators: zodClient(create_transaction_schema),
+		id: 'create-expense-form',
 		onResult: ({ result }) => {
 			if (result.type === 'success') {
 				toast.success('Expense added');
@@ -153,7 +154,7 @@
 							{#if $page.data.group?.tags}
 								{#each $page.data.group?.tags as tag}
 									<Select.Item value={tag.id} label={tag.label} />
-									{:else}
+								{:else}
 									<div class="text-xs py-1.5 px-2 text-muted-foreground">No tags created</div>
 								{/each}
 							{/if}
@@ -196,21 +197,17 @@
 				</div>
 				<div use:autoAnimate class="grid gap-2">
 					{#each $formData.splits as split, i}
+						{@const { name, email } = $page.data.group?.members.find(
+							(member) => member.id === split.group_member_id
+						) || { name: null, email: null }}
 						<div class="-mx-3 rounded-md border px-3 py-2">
 							<p class="text-sm">
-								{split.name}{#if split.email}
-									<span class="ml-1 text-muted-foreground">({split.email})</span>
+								{name}{#if email}
+									<span class="ml-1 text-muted-foreground">({email})</span>
 								{/if}
 							</p>
 							<div class="mt-2 flex items-start justify-between gap-2">
-								<Form.ElementField
-									class="flex-1"
-									{form}
-									name="splits[{i}].amount"
-									on:change={(data) => {
-										console.log(data);
-									}}
-								>
+								<Form.ElementField class="flex-1" {form} name="splits[{i}].amount">
 									<Form.Control let:attrs>
 										<Input
 											{...attrs}
@@ -256,9 +253,11 @@
 				<Separator></Separator>
 			</Form.Fieldset>
 			<FormErrors errors={$errors._errors} />
-			<Form.Button type="submit" class="flex w-full gap-1"
-				>Add expense{#if $delayed}<LoaderCircle class="size-4 animate-spin" />{/if}</Form.Button
-			>
+			<div class="sticky -bottom-6 -mx-6 -mb-6 bg-background/60 p-6 backdrop-blur">
+				<Form.Button type="submit" class="flex w-full gap-1"
+					>Add expense{#if $delayed}<LoaderCircle class="size-4 animate-spin" />{/if}</Form.Button
+				>
+			</div>
 		</form>
 	</Dialog.Content>
 </Dialog.Root>

@@ -4,17 +4,16 @@
 	import * as Table from '$lib/components/ui/table/index.js';
 	import UserActions from './(components)/user-actions.svelte';
 	import GroupActions from './(components)/group-actions.svelte';
-
+	import { Button } from '$lib/components/ui/button';
+	import { enhance } from '$app/forms';
 	export let data;
 </script>
 
 <main class="mx-auto grid w-full max-w-7xl grid-cols-12 gap-4 px-4 py-6 md:px-6 lg:gap-8 lg:px-8">
 	<Card.Root class="col-span-12">
-		<Card.Header class="flex flex-row items-center">
-			<div class="grid gap-2">
-				<Card.Title>Users</Card.Title>
-				<Card.Description>All registered users.</Card.Description>
-			</div>
+		<Card.Header>
+			<Card.Title>Users</Card.Title>
+			<Card.Description>All registered users.</Card.Description>
 		</Card.Header>
 		<Card.Content>
 			<Table.Root>
@@ -23,6 +22,7 @@
 						<Table.Head>Name</Table.Head>
 						<Table.Head>Email</Table.Head>
 						<Table.Head>Created</Table.Head>
+						<Table.Head>Active sessions</Table.Head>
 						<Table.Head><span class="sr-only">Actions</span></Table.Head>
 					</Table.Row>
 				</Table.Header>
@@ -41,6 +41,7 @@
 									>{/if}
 							</Table.Cell>
 							<Table.Cell>{user.created_at?.toLocaleString('sv-SE')}</Table.Cell>
+							<Table.Cell>{user.sessions.length}</Table.Cell>
 							<Table.Cell class="text-right">
 								<UserActions {user} />
 							</Table.Cell>
@@ -51,11 +52,9 @@
 		</Card.Content>
 	</Card.Root>
 	<Card.Root class="col-span-12">
-		<Card.Header class="flex flex-row items-center">
-			<div class="grid gap-2">
-				<Card.Title>Groups</Card.Title>
-				<Card.Description>All groups created.</Card.Description>
-			</div>
+		<Card.Header>
+			<Card.Title>Groups</Card.Title>
+			<Card.Description>All groups created.</Card.Description>
 		</Card.Header>
 		<Card.Content>
 			<Table.Root>
@@ -82,6 +81,17 @@
 					{/each}
 				</Table.Body>
 			</Table.Root>
+		</Card.Content>
+	</Card.Root>
+	<Card.Root class="col-span-12">
+		<Card.Header>
+			<Card.Title>Actions</Card.Title>
+			<Card.Description></Card.Description>
+		</Card.Header>
+		<Card.Content>
+			<form method="POST" action="?/delete-expired-sessions" use:enhance>
+				<Button type="submit" variant="destructive">Delete expired sessions</Button>
+			</form>
 		</Card.Content>
 	</Card.Root>
 </main>

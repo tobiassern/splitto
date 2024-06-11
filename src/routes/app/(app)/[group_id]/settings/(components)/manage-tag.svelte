@@ -41,8 +41,6 @@
 		$formData.id = tag.id;
 		$formData.label = tag.label;
 	});
-
-	const monthlyBudgetProxy = numberProxy(form, 'monthly_budget', { empty: 'null' });
 </script>
 
 <form bind:this={deleteFormEl} method="POST" action="?/delete-tag" use:skEnhance hidden>
@@ -56,14 +54,6 @@
 		<DropdownMenu.Group>
 			<DropdownMenu.Label>
 				<p>{tag.label}</p>
-				<p class="text-xs font-normal">
-					Budget: {#if tag.monthly_budget}{Intl.NumberFormat('sv-SE', {
-							currency: $page.data.group?.currency ?? undefined,
-							style: 'currency'
-						}).format(Number(tag.monthly_budget ?? 0))}{:else}<span
-							class="italic text-muted-foreground">Not set</span
-						>{/if}
-				</p>
 			</DropdownMenu.Label>
 			<DropdownMenu.Separator />
 			<DropdownMenu.Item href="/{$page.data.group?.id}/expenses?tag={tag.id}"
@@ -81,13 +71,7 @@
 							</Form.Control>
 							<Form.FieldErrors />
 						</Form.Field>
-						<Form.Field {form} name="monthly_budget">
-							<Form.Control let:attrs>
-								<Form.Label>Monthly budget</Form.Label>
-								<Input {...attrs} bind:value={$monthlyBudgetProxy} placeholder="0.00" />
-							</Form.Control>
-							<Form.FieldErrors />
-						</Form.Field>
+
 						<Form.Button size="sm" class="gap-1" disabled={$submitting}
 							>Update{#if $delayed}<LoaderCircle class="size-4 animate-spin" />{/if}</Form.Button
 						>

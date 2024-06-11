@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
-	import { update_user_budget_schema } from '$lib/schema';
+	import { update_default_currency_schema } from '$lib/schema';
 	import { type SuperValidated, type Infer, superForm, numberProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
@@ -10,13 +10,13 @@
 	import { currencies } from '$lib/currencies';
 	import * as Select from '$lib/components/ui/select/index.js';
 	import * as Card from '$lib/components/ui/card';
-	export let data: SuperValidated<Infer<typeof update_user_budget_schema>>;
+	export let data: SuperValidated<Infer<typeof update_default_currency_schema>>;
 
 	const form = superForm(data, {
-		validators: zodClient(update_user_budget_schema),
+		validators: zodClient(update_default_currency_schema),
 		onResult: ({ result }) => {
 			if (result.type === 'success') {
-				toast.success('Budget updated');
+				toast.success('Default currency updated');
 			} else {
 				toast.error('An error occurred');
 			}
@@ -25,10 +25,6 @@
 	});
 
 	const { form: formData, enhance, delayed, errors } = form;
-
-	const budgetAverageDailyProxy = numberProxy(form, 'budget_average_daily', { empty: 'null' });
-	const budgetWeeklyProxy = numberProxy(form, 'budget_weekly', { empty: 'null' });
-	const budgetMonthlyProxy = numberProxy(form, 'budget_monthly', { empty: 'null' });
 
 	$: selectedCurrency = $formData.default_currency
 		? {
@@ -40,35 +36,12 @@
 		: undefined;
 </script>
 
-<form method="POST" use:enhance class="contents" action="?/update-budget">
+<form method="POST" use:enhance class="contents" action="?/update-default-currency">
 	<Card.Root>
 		<Card.Header>
-			<Card.Title>Budget</Card.Title>
+			<Card.Title>Default currency</Card.Title>
 		</Card.Header>
 		<Card.Content>
-			<Form.Field {form} name="budget_average_daily">
-				<Form.Control let:attrs>
-					<Form.Label>Budget average daily</Form.Label>
-					<Input {...attrs} bind:value={$budgetAverageDailyProxy} type="number" class="max-w-sm" />
-				</Form.Control>
-				<Form.FieldErrors />
-			</Form.Field>
-
-			<Form.Field {form} name="budget_weekly">
-				<Form.Control let:attrs>
-					<Form.Label>Budget weekly</Form.Label>
-					<Input {...attrs} bind:value={$budgetWeeklyProxy} type="number" class="max-w-sm" />
-				</Form.Control>
-				<Form.FieldErrors />
-			</Form.Field>
-
-			<Form.Field {form} name="budget_monthly">
-				<Form.Control let:attrs>
-					<Form.Label>Budget monthly</Form.Label>
-					<Input {...attrs} bind:value={$budgetMonthlyProxy} type="number" class="max-w-sm" />
-				</Form.Control>
-				<Form.FieldErrors />
-			</Form.Field>
 
 			<Form.Field {form} name="default_currency">
 				<Form.Control let:attrs>
@@ -90,8 +63,7 @@
 					</Select.Root>
 					<input hidden bind:value={$formData.default_currency} name={attrs.name} />
 					<Form.Description class="max-w-sm"
-						>Only expenses from groups with the same currency will be calculated towards your
-						budget.</Form.Description
+						>Default currency used when creating new groups.</Form.Description
 					>
 				</Form.Control>
 				<Form.FieldErrors />

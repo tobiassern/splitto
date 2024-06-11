@@ -12,6 +12,7 @@
 	import CheckIcon from 'lucide-svelte/icons/check';
 	import { setMode, mode } from 'mode-watcher';
 	import { cn } from '$lib/utils';
+	import Plus from 'lucide-svelte/icons/plus';
 	export let user: import('lucia').User | null;
 	let clazz: string = '';
 	export { clazz as class };
@@ -51,12 +52,12 @@
 				</div>
 			</DropdownMenu.Label>
 			<DropdownMenu.Separator />
-			<DropdownMenu.Item href="/">My dashboard</DropdownMenu.Item>
-			{#if $page.data.groups?.length}
-				<DropdownMenu.Sub>
-					<DropdownMenu.SubTrigger>Groups</DropdownMenu.SubTrigger>
 
-					<DropdownMenu.SubContent>
+			<DropdownMenu.Sub>
+				<DropdownMenu.SubTrigger>Groups</DropdownMenu.SubTrigger>
+
+				<DropdownMenu.SubContent>
+					{#if $page.data.groups}
 						{#each $page.data.groups as group}
 							{@const active = $page.params.group_id && group.id === Number($page.params.group_id)}
 							<DropdownMenu.Item href="/{group.id}" class="items-center gap-2"
@@ -65,9 +66,10 @@
 									/>{/if}</DropdownMenu.Item
 							>
 						{/each}
-					</DropdownMenu.SubContent>
-				</DropdownMenu.Sub>
-			{/if}
+						<DropdownMenu.Item class="whitespace-nowrap" href="/?create-group=true">Create group<Plus class="size-4 ml-2"/></DropdownMenu.Item>
+					{/if}
+				</DropdownMenu.SubContent>
+			</DropdownMenu.Sub>
 			<DropdownMenu.Item href="/profile">Profile</DropdownMenu.Item>
 			<DropdownMenu.Sub>
 				<DropdownMenu.SubTrigger

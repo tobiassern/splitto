@@ -38,7 +38,8 @@ export const groupMembersTable = sqliteTable(
 			onDelete: 'cascade'
 		}),
 		name: text('name').notNull(),
-		email: text('email')
+		email: text('email'),
+		balance: real('balance').notNull().default(0)
 	},
 	(t) => ({
 		unq: unique().on(t.group_id, t.email),

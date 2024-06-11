@@ -2,7 +2,8 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import UpdateUserName from './(components)/update-user-name.svelte';
-	import UpdateUserBudget from './(components)/update-user-budget.svelte';
+	import PushNotifications from './(components)/push-notifications.svelte';
+	import UpdateUserDefaultCurrency from './(components)/update-user-default-currency.svelte';
 	import UpdateUserEmail from './(components)/update-user-email.svelte';
 	import { Badge } from '$lib/components/ui/badge';
 	import { enhance, applyAction } from '$app/forms';
@@ -44,7 +45,8 @@
 	<div class="col-span-12 flex flex-col gap-4 md:gap-8 lg:col-span-7">
 		<UpdateUserName data={data.update_user_name_form} />
 		<UpdateUserEmail data={data.update_user_email_form} />
-		<UpdateUserBudget data={data.update_user_budget_form} />
+		<UpdateUserDefaultCurrency data={data.update_default_currency_form} />
+		<PushNotifications />
 		<DeleteUser />
 	</div>
 	<Card.Root class="col-span-12 lg:col-span-5">
