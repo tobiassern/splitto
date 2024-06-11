@@ -1,3 +1,4 @@
+import { PUBLIC_APP_HOSTNAME } from '$env/static/public';
 import type { RequestEvent, ServerLoadEvent } from '@sveltejs/kit';
 import { redirect, error } from '@sveltejs/kit';
 
@@ -9,8 +10,11 @@ import { redirect, error } from '@sveltejs/kit';
  */
 export const isAuthenticated = (event: ServerLoadEvent | RequestEvent) => {
 	if (!event.locals.user || !event.locals.session) {
-		console.log("NOT LOGGED IN")
-		redirect(302, `/sign-in?redirect_to=${encodeURIComponent(event.url.pathname)}`);
+		const url = new URL(event.url);
+		if (url.hostname !== PUBLIC_APP_HOSTNAME) url.hostname = PUBLIC_APP_HOSTNAME;
+		url.pathname = '/sign-in';
+		url.searchParams.set('redirect_to', event.url.hostname === PUBLIC_APP_HOSTNAME ? event.url.pathname : event.url.toString());
+		redirect(302, url);
 	}
 
 	return { user: event.locals.user, session: event.locals.session };

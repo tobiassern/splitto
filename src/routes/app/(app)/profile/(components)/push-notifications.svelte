@@ -14,6 +14,9 @@
 	import { onMount } from 'svelte';
 	import { PUBLIC_VAPID_KEY } from '$env/static/public';
 	import { enhance } from '$app/forms';
+	import { Button } from '$lib/components/ui/button';
+	import * as Card from '$lib/components/ui/card';
+	import { dev, browser } from '$app/environment';
 	let permissionGranted: boolean | null = null;
 	let isSubscribed: boolean = false;
 
@@ -67,8 +70,6 @@
 					applicationServerKey: PUBLIC_VAPID_KEY
 				});
 				isSubscribed = true;
-				console.log('Subscription:', JSON.stringify(subscription));
-				console.log(subscription);
 				sendSubscriptionToServer(subscription);
 			} catch (err) {
 				console.error('Error subscribing:', err);
@@ -99,43 +100,52 @@
 	});
 </script>
 
-<div>
-	{#if permissionGranted === null}
-		<p>Checking permissions...</p>
-	{:else if permissionGranted === false}
-		<button class="button" type="button" on:click={requestNotificationPermission}
-			>Enable notifications</button
+<Card.Root>
+	<Card.Header>
+		<Card.Title>Push notifications</Card.Title>
+		<Card.Description
+			>{#if permissionGranted === null}
+				Checking permissions...
+			{:else if permissionGranted === false}
+				You have not granted permission to use push notifications.
+			{:else}
+				<p>
+					You have enabled notification permissions. Remove the permission in your browser settings.
+				</p>
+				<p>Subscribed to push notifications: <b>{isSubscribed}</b></p>
+			{/if}</Card.Description
 		>
-	{:else}
-		<p>
-			You have enabled notification permissions. Remove the permission in your browser settings...
-		</p>
-		<p>Subscribed to push notifications: <b>{isSubscribed}</b></p>
-		{#if isSubscribed}
-			<!--
-		<div class="mt-4">
-			<form method="post" action="?/testNotification">
-				<button class="button" type="submit">Test Notification</button>
-			</form>
-		</div> -->
-			<div>
-				<button class="button" type="button" on:click={unsubscribe}>Unsubscribe</button>
-			</div>
-			<div class="mt-4">
-				<form
-					method="post"
-					action="?/testNotification"
-					use:enhance={() => {
-						return async ({ result, update }) => {
-							console.log(result);
-						};
-					}}
-				>
-					<button class="button" type="submit">Test Notification</button>
-				</form>
-			</div>
-		{:else}
-			<button on:click={subscribeUser}>Subscribe</button>
+	</Card.Header>
+	<Card.Footer class="justify-end gap-3">
+		{#if browser}
+			{#if 'PushManager' in window}
+				{#if permissionGranted === false}
+					<Button class="button" type="button" on:click={requestNotificationPermission}
+						>Enable notifications</Button
+					>
+				{:else if isSubscribed}
+					<div>
+						<Button class="button" type="button" on:click={unsubscribe}>Unsubscribe</Button>
+					</div>
+					{#if dev}
+						<form
+							method="post"
+							action="?/testNotification"
+							use:enhance={() => {
+								return async ({ result, update }) => {
+									console.log(result);
+								};
+							}}
+						>
+							<Button class="button" type="submit">Test Notification</Button>
+						</form>
+					{/if}
+				{:else}
+					<Button on:click={subscribeUser}>Subscribe</Button>
+				{/if}
+			{:else}
+				This browser doesn't support push notifications. Try install a different browser or install this website as a PWA.
+			{/if}
 		{/if}
-	{/if}
-</div>
+	</Card.Footer>
+</Card.Root>
