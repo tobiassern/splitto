@@ -48,17 +48,12 @@ export const actions: Actions = {
 			setError(form, '', 'Failed to generate OTP code');
 		}
 
-		if (dev && (!RESEND_API_KEY || !EMAIL_DOMAIN)) {
-			redirect(
-				302,
-				`/sign-in/verify-email?email=${emailVerificationToken.email}&code=${emailVerificationToken.code}`
-			);
-		} else {
-			await sendEmailLoginOTP({
-				to: emailVerificationToken.email,
-				otp: emailVerificationToken.code
-			});
-			redirect(302, `/sign-in/verify-email?email=${emailVerificationToken.email}`);
-		}
+
+		await sendEmailLoginOTP({
+			to: emailVerificationToken.email,
+			otp: emailVerificationToken.code
+		});
+		redirect(302, `/sign-in/verify-email?email=${emailVerificationToken.email}`);
+
 	}
 };
